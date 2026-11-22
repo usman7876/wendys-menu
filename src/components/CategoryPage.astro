@@ -29,8 +29,7 @@ const photo = photoItem ? itemPhoto(photoItem.name) : null;
     <p class="board-sub">{statsParts.join(' · ')} — all figures from the verified data, checked 22 Nov 2026 at one restaurant only: 799 S. High St, Columbus, OH.</p>
     {photo && (
       <figure class="hero-photo tilt" tabindex="0">
-        <img src={photo} alt={`${photoItem.name} — original AI-generated image, not an official photo`} width="1920" height="1280" loading="lazy" decoding="async" />
-        <figcaption>{photoItem.name} · Original AI-generated image — not an official photo</figcaption>
+        <img src={photo} alt={photoItem.name} width="1920" height="1280" loading="lazy" decoding="async" />
       </figure>
     )}
     <p class="basis">Prices are for <strong>one restaurant only — 799 S. High St, Columbus, OH, 22 Nov 2026</strong>. Wendy's publishes no national price list, so your local restaurant may charge more or less. Anything not verified says “Not verified yet”.</p>

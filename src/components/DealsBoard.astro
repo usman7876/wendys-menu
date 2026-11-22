@@ -2,7 +2,9 @@
 // Deals board: every deal, bundle and offer, rendered from menu.json.
 // Prices are from the same one Columbus restaurant as the menu, checked
 // 22 Nov 2026. A bundle with no total calories shown says so honestly.
-import { formatPrice } from '../utils/menuStats.js';
+// Every food product here has a photo — bundles and combos get their own
+// photo (sandwich + fries + drink), never the single sandwich's photo.
+import { formatPrice, dealPhoto } from '../utils/menuStats.js';
 const { deals, priceBasis } = Astro.props;
 const { biggie_bites: bites, biggie_bags: bags, biggie_bundle: bundle } = deals;
 const money = (p) => (p !== null && p !== undefined ? formatPrice(p) : 'Not verified yet');
@@ -11,39 +13,41 @@ const choiceCal = (c) =>
   c.calories !== undefined && c.calories !== null
     ? `${c.calories} Cal`
     : `${c.calories_low}–${c.calories_high} Cal`;
+const photo = (name) => dealPhoto(name);
 ---
 <h3>Biggie Deals</h3>
 <p class="board-sub">Checked 22 Nov 2026 · {priceBasis} · {deals.biggie_note}</p>
 
-<div class="menu-line" data-name="biggie bites" data-category="Deals">
-  <div>
-    <span class="name">{bites.name} — {bites.description}</span>
-    <span class="cal">Bundle total calories: {bites.bundle_calories_note}</span>
+<article class="deal-card">
+  <img src={photo(bites.name)} alt={bites.name} width="1920" height="1280" loading="lazy" decoding="async" />
+  <div class="deal-card-body">
+    <p class="deal-name">{bites.name} — {bites.description}</p>
+    <p class="deal-price">{money(bites.price)}</p>
+    <p class="cal">Bundle total calories: {bites.bundle_calories_note}</p>
+    <p><strong>First pick, one of:</strong> {bites.first_choices.map((c) => `${c.name} (${choiceCal(c)})`).join(', ')}.</p>
+    <p><strong>Second pick, one of:</strong> {bites.second_choices.map((c) => `${c.name} (${choiceCal(c)})`).join(', ')}.</p>
   </div>
-  <span class="dots" aria-hidden="true"></span>
-  <span class="price">{money(bites.price)}</span>
-</div>
-<p><strong>First pick, one of:</strong> {bites.first_choices.map((c) => `${c.name} (${choiceCal(c)})`).join(', ')}.</p>
-<p><strong>Second pick, one of:</strong> {bites.second_choices.map((c) => `${c.name} (${choiceCal(c)})`).join(', ')}.</p>
+</article>
 
 {[...bags, bundle].map((bag) => (
-  <div class="menu-line" data-name={bag.name.toLowerCase()} data-category="Deals">
-    <div>
-      <span class="name">{bag.name}</span>
-      <span class="cal">{bag.contents} · Calories: Not verified yet — no total shown for the bundle</span>
+  <article class="deal-card">
+    <img src={photo(bag.name)} alt={bag.name} width="1920" height="1280" loading="lazy" decoding="async" />
+    <div class="deal-card-body">
+      <p class="deal-name">{bag.name}</p>
+      <p class="deal-price">{money(bag.price)}</p>
+      <p class="cal">{bag.contents} · Calories: Not verified yet — no total shown for the bundle</p>
     </div>
-    <span class="dots" aria-hidden="true"></span>
-    <span class="price">{money(bag.price)}</span>
-  </div>
+  </article>
 ))}
 
 <h3>Everyday Value</h3>
 <p class="board-sub">No end date shown.</p>
 <table>
-  <thead><tr><th>Item</th><th>Price</th><th>Calories</th></tr></thead>
+  <thead><tr><th>Photo</th><th>Item</th><th>Price</th><th>Calories</th></tr></thead>
   <tbody>
     {deals.everyday_value.map((d) => (
       <tr>
+        <td data-label="Photo"><img class="table-thumb" src={photo(d.name)} alt={d.name} width="1920" height="1280" loading="lazy" decoding="async" /></td>
         <td data-label="Item"><strong>{d.name}</strong></td>
         <td data-label="Price">{money(d.price)}</td>
         <td data-label="Calories">{cal(d.calories)}</td>
@@ -57,10 +61,11 @@ const choiceCal = (c) =>
 <h3>Combos</h3>
 <p class="board-sub">No calories shown on the Combos category page, so every combo's calories say “Not verified yet”. No limited-time wording shown.</p>
 <table>
-  <thead><tr><th>Combo</th><th>Price</th><th>Calories</th></tr></thead>
+  <thead><tr><th>Photo</th><th>Combo</th><th>Price</th><th>Calories</th></tr></thead>
   <tbody>
     {deals.combos.map((d) => (
       <tr>
+        <td data-label="Photo"><img class="table-thumb" src={photo(d.name)} alt={d.name} width="1920" height="1280" loading="lazy" decoding="async" /></td>
         <td data-label="Combo"><strong>{d.name}</strong>{d.contents ? <><br />{d.contents}</> : ''}</td>
         <td data-label="Price">{money(d.price)}</td>
         <td data-label="Calories">Not verified yet</td>
@@ -71,7 +76,8 @@ const choiceCal = (c) =>
 <p>{deals.combos_note} <a href={deals.combos_source_url} target="_blank" rel="noopener">Combos on order.wendys.com ↗</a></p>
 
 <h3>Other offers</h3>
-<div class="menu-line" data-name="frosty key tag" data-category="Deals">
+<div class="menu-line deal-line">
+  <img class="line-thumb" src={photo(deals.key_tag.name)} alt={deals.key_tag.name} width="1920" height="1280" loading="lazy" decoding="async" />
   <div>
     <span class="name">{deals.key_tag.name}</span>
     <span class="cal">{deals.key_tag.offer}. Sold {deals.key_tag.sold}. {deals.key_tag.charity}.</span>
@@ -79,7 +85,15 @@ const choiceCal = (c) =>
   <span class="dots" aria-hidden="true"></span>
   <span class="price">{money(deals.key_tag.price)}</span>
 </div>
+<div class="menu-line deal-line">
+  <img class="line-thumb" src={photo('Holiday Box')} alt="Holiday Box" width="1920" height="1280" loading="lazy" decoding="async" />
+  <div>
+    <span class="name">Holiday Box</span>
+    <span class="cal">{deals.holiday_box.contents}. Price: Not verified yet — {deals.holiday_box.note}</span>
+  </div>
+  <span class="dots" aria-hidden="true"></span>
+  <span class="price">Not verified yet</span>
+</div>
 <p><strong>{deals.new_user_banner}</strong></p>
 <p><strong>National offers page:</strong> {deals.national_offers.headline} {deals.national_offers.app_offers_total} app offers listed in total, with no end dates shown — {deals.national_offers.app_offers_named.join('; ')}. {deals.national_offers.app_offers_note} <a href={deals.national_offers.source_url} target="_blank" rel="noopener">Offers on wendys.com ↗</a></p>
 <p><strong>4 for $4:</strong> {deals.four_for_four}</p>
-<p><strong>Holiday Box:</strong> {deals.holiday_box.contents}. Price: Not verified yet — {deals.holiday_box.note}</p>

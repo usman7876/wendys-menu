@@ -9,7 +9,6 @@ const { item, avgCalories } = Astro.props;
 const price = formatPriceRange(item);
 const calLabel = caloriesLabel(item);
 const photo = itemPhoto(item.name);
-const PHOTO_CAPTION = 'Original AI-generated image — not an official photo';
 const cell = (v, unit) => (v !== null && v !== undefined ? `${v} ${unit}` : 'Not verified yet');
 // Only nutrients Wendy's actually listed are shown as rows; if none were
 // listed for this item, one short line says so instead of four repeats.
@@ -23,8 +22,7 @@ const nutrients = [
 <article class="menu-card tilt" id={`item-${itemSlug(item.name)}`} data-name={item.name.toLowerCase()} data-category={item.category} tabindex="0">
   {photo && (
     <figure class="card-photo">
-      <img src={photo} alt={`${item.name} — ${PHOTO_CAPTION}`} width="1920" height="1280" loading="lazy" decoding="async" />
-      <figcaption>{PHOTO_CAPTION}</figcaption>
+      <img src={photo} alt={item.name} width="1920" height="1280" loading="lazy" decoding="async" />
     </figure>
   )}
   <div class="card-body">
