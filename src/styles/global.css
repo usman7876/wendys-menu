@@ -1,0 +1,308 @@
+/* Wendy's Menu — restaurant menu-board look.
+   Light by default; dark mode follows the system setting and the
+   toggle in the header (html.dark). No framework, plain CSS. */
+
+:root {
+  --bg: #fdf8f1;
+  --board-bg: #fffdf8;
+  --ink: #232323;
+  --muted: #6b6259;
+  --teal: #0F766E;
+  --teal-dark: #0B5E57;
+  --gold: #f3e8d3;
+  --line: #e7ded2;
+  --card: #ffffff;
+  --chip: #f3eefb;
+  --accent: #5e2b97;
+}
+
+html.dark {
+  --bg: #1c1917;
+  --board-bg: #292524;
+  --ink: #f5f0ea;
+  --muted: #b8aea2;
+  --teal: #2DD4BF;
+  --teal-dark: #5EEAD4;
+  --gold: #3a332c;
+  --line: #44403c;
+  --card: #292524;
+  --chip: #3b2f4a;
+  --accent: #c4a5e8;
+}
+
+* { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: Georgia, "Times New Roman", serif;
+  line-height: 1.55;
+}
+
+a { color: var(--teal); }
+a:hover { color: var(--teal-dark); }
+
+.wrap { max-width: 960px; margin: 0 auto; padding: 0 16px; }
+
+/* Top notice bar */
+.top-notice {
+  background: var(--teal);
+  color: #fff;
+  text-align: center;
+  font-size: 0.85rem;
+  padding: 8px 12px;
+  font-family: system-ui, -apple-system, sans-serif;
+}
+.top-notice strong { font-weight: 700; }
+
+/* Header */
+.site-header {
+  background: var(--card);
+  border-bottom: 3px double var(--line);
+  position: sticky;
+  top: 0;
+  z-index: 20;
+}
+.site-header .wrap {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+  padding-top: 12px;
+  padding-bottom: 12px;
+}
+.brand {
+  font-size: 1.5rem;
+  font-weight: 800;
+  color: var(--teal);
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+.brand small {
+  display: block;
+  font-size: 0.7rem;
+  letter-spacing: 3px;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+.site-header nav { display: flex; flex-wrap: wrap; gap: 4px 16px; margin-left: auto; }
+.site-header nav a {
+  color: var(--ink);
+  text-decoration: none;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 600;
+}
+.site-header nav a:hover { color: var(--teal); text-decoration: underline; }
+.theme-toggle {
+  border: 1px solid var(--line);
+  background: var(--board-bg);
+  color: var(--ink);
+  border-radius: 6px;
+  padding: 6px 10px;
+  cursor: pointer;
+  font-size: 0.85rem;
+}
+
+/* Menu boards */
+.board {
+  background: var(--board-bg);
+  border: 2px solid var(--ink);
+  outline: 1px solid var(--line);
+  outline-offset: 5px;
+  border-radius: 4px;
+  padding: 28px 24px;
+  margin: 32px 0;
+}
+.board h2 {
+  text-align: center;
+  font-size: 1.7rem;
+  margin: 0 0 4px;
+  letter-spacing: 1px;
+}
+.board .board-sub {
+  text-align: center;
+  color: var(--muted);
+  font-style: italic;
+  margin: 0 0 20px;
+}
+.board h3 {
+  text-align: center;
+  font-size: 1.15rem;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  border-bottom: 1px solid var(--line);
+  padding-bottom: 8px;
+  margin: 28px 0 8px;
+}
+.basis {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: center;
+  margin: 8px 0 20px;
+}
+.basis strong { color: var(--ink); }
+
+/* Dotted leader lines: name .... price */
+.menu-line {
+  display: flex;
+  align-items: baseline;
+  gap: 6px;
+  padding: 10px 0;
+  border-bottom: 1px dotted var(--line);
+}
+.menu-line .name { font-weight: 700; font-size: 1.05rem; }
+.menu-line .dots { flex: 1; border-bottom: 2px dotted var(--muted); transform: translateY(-4px); }
+.menu-line .price { font-weight: 800; font-size: 1.05rem; white-space: nowrap; }
+.menu-line .cal {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--muted);
+  font-style: italic;
+}
+.menu-line .item-note {
+  display: block;
+  font-size: 0.85rem;
+  color: var(--ink);
+  font-style: normal;
+  border-left: 3px solid var(--teal);
+  padding-left: 8px;
+  margin-top: 4px;
+}
+
+/* Flag boxes: Wendy's own pages disagree — shown, never smoothed over */
+.flag {
+  border: 1px solid var(--teal);
+  border-left: 4px solid var(--teal);
+  background: var(--card);
+  padding: 12px 14px;
+  margin: 16px 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.92rem;
+}
+.flag strong { color: var(--teal); }
+.not-verified { color: var(--teal); font-weight: 700; font-style: normal; }
+
+/* Search + chips */
+.search-box { margin: 20px 0 8px; }
+.search-box input {
+  width: 100%;
+  padding: 12px 14px;
+  font-size: 1rem;
+  border: 2px solid var(--ink);
+  border-radius: 6px;
+  background: var(--card);
+  color: var(--ink);
+  font-family: system-ui, -apple-system, sans-serif;
+}
+.chips {
+  position: sticky;
+  top: 64px;
+  z-index: 10;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  padding: 10px 0;
+  background: var(--bg);
+}
+.chip {
+  border: 1px solid var(--line);
+  background: var(--card);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 6px 14px;
+  cursor: pointer;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.9rem;
+}
+.chip[aria-pressed="true"] { background: var(--teal); color: #fff; border-color: var(--teal); }
+
+/* Tables */
+table { width: 100%; border-collapse: collapse; font-family: system-ui, -apple-system, sans-serif; font-size: 0.92rem; }
+th, td { text-align: left; padding: 9px 8px; border-bottom: 1px solid var(--line); vertical-align: top; }
+th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; color: var(--muted); }
+@media (max-width: 600px) {
+  table, tbody, tr, td { display: block; }
+  thead { display: none; }
+  tr { border: 1px solid var(--line); border-radius: 6px; margin-bottom: 10px; padding: 6px 10px; }
+  td { border: none; padding: 3px 0; }
+  td::before { content: attr(data-label) ": "; font-weight: 700; color: var(--muted); }
+}
+
+/* FAQ */
+.faq-item { border-bottom: 1px solid var(--line); padding: 12px 0; }
+.faq-item summary { cursor: pointer; font-weight: 700; font-size: 1.05rem; }
+.faq-item p { margin: 8px 0 0; }
+
+/* Ad slots: empty reserved spaces, no ad code */
+.ad-slot {
+  border: 1px dashed var(--muted);
+  color: var(--muted);
+  text-align: center;
+  padding: 28px 12px;
+  margin: 24px 0;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.85rem;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Food photos: original AI-generated images, captioned on the page */
+.hero-photo { margin: 0 0 20px; }
+.hero-photo img, .photo-grid img { display: block; width: 100%; height: auto; border-radius: 8px; }
+.photo-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+  gap: 14px;
+  margin: 16px 0 8px;
+}
+.photo-grid figure, .hero-photo { margin: 0; }
+.photo-grid figcaption, .hero-photo figcaption {
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.8rem;
+  color: var(--muted);
+  text-align: center;
+  margin-top: 6px;
+}
+/* Cursor-move animation: lift + slight tilt toward the cursor, image zooms gently */
+.tilt { transition: transform 0.25s ease, box-shadow 0.25s ease; will-change: transform; }
+.tilt img { transition: transform 0.35s ease; }
+.tilt:hover, .tilt:focus-within { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18); }
+.tilt:hover img, .tilt:focus-within img { transform: scale(1.04); }
+@media (prefers-reduced-motion: reduce) {
+  .tilt, .tilt img { transition: none; }
+  .tilt:hover, .tilt:focus-within { transform: none; box-shadow: none; }
+  .tilt:hover img, .tilt:focus-within img { transform: none; }
+}
+
+/* Stats row */
+.stats { display: flex; flex-wrap: wrap; gap: 12px; margin: 20px 0; }
+.stat {
+  flex: 1 1 140px;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  padding: 14px;
+  text-align: center;
+}
+.stat b { display: block; font-size: 1.6rem; color: var(--teal); }
+.stat span { font-size: 0.85rem; color: var(--muted); font-family: system-ui, sans-serif; }
+
+.hours { text-align: center; font-size: 1.05rem; }
+.hours b { color: var(--teal); }
+
+footer.site-footer {
+  border-top: 3px double var(--line);
+  margin-top: 40px;
+  padding: 28px 0 40px;
+  font-family: system-ui, -apple-system, sans-serif;
+  font-size: 0.9rem;
+  color: var(--muted);
+}
+footer.site-footer nav { display: flex; flex-wrap: wrap; gap: 4px 18px; margin-bottom: 16px; }
+footer.site-footer nav a { color: var(--ink); text-decoration: none; font-weight: 600; }
+footer.site-footer nav a:hover { color: var(--teal); text-decoration: underline; }
+.sources-list { font-size: 0.85rem; word-break: break-all; }
+.sources-list li { margin-bottom: 6px; }
