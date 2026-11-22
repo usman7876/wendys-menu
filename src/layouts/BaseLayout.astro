@@ -11,7 +11,7 @@ const {
 } = Astro.props;
 ---
 <!doctype html>
-<html lang="en">
+<html lang="en" data-theme="cream">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -20,13 +20,21 @@ const {
     <meta name="robots" content="index, follow" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <script>
-      // Dark mode: remember the visitor's choice, otherwise follow the system.
+      // Theme: two looks — warm cream + tomato-red, and dark charcoal + teal.
+      // Remember the visitor's choice; otherwise follow their system setting.
+      // "Theme" here means the site's colour look, not Wendy's branding.
       try {
         const saved = localStorage.getItem('wendys-theme');
-        if (saved === 'dark' || (!saved && matchMedia('(prefers-color-scheme: dark)').matches)) {
-          document.documentElement.classList.add('dark');
-        }
-      } catch (e) {}
+        const theme =
+          saved === 'cream' || saved === 'charcoal'
+            ? saved
+            : matchMedia('(prefers-color-scheme: dark)').matches
+              ? 'charcoal'
+              : 'cream';
+        document.documentElement.setAttribute('data-theme', theme);
+      } catch (e) {
+        document.documentElement.setAttribute('data-theme', 'cream');
+      }
     </script>
   </head>
   <body>
