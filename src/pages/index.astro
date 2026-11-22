@@ -38,7 +38,7 @@ const catCards = Object.entries(byCategory).map(([category, catItems]) => {
 ---
 <BaseLayout
   title="Wendy's Menu with Prices 2026 (USA)"
-  description="Independent Wendy's menu reference (USA). Prices from one restaurant only — 799 S. High St, Columbus, OH, checked 22 Nov 2026."
+  description="Wendy's menu with prices and calories for all 150 items — checked 22 Nov 2026 at one Columbus restaurant. Search the menu and filter by category."
   itemCount={items.length}
   path="/"
   isHome
@@ -47,7 +47,7 @@ const catCards = Object.entries(byCategory).map(([category, catItems]) => {
 >
   <section class="hero" aria-labelledby="page-title">
     <h1 id="page-title">Wendy's Menu with Prices 2026 (USA)</h1>
-    <p class="lede">Look up a Wendy's menu item and see its price and calories in one place — every figure on this page was checked on Wendy's official online menu on 22 November 2026.</p>
+    <p class="lede">This is the Wendy's menu with prices and calories for all 150 items — every price checked 22 Nov 2026 at one restaurant in Columbus, Ohio, on Wendy's official online menu.</p>
     <figure class="hero-photo tilt" tabindex="0">
       <img src="/images/hero.webp" alt="Cheeseburger, fries and a chocolate Frosty" width="1920" height="1280" decoding="async" fetchpriority="high" />
     </figure>
@@ -126,7 +126,7 @@ const catCards = Object.entries(byCategory).map(([category, catItems]) => {
     <h2 id="faq-heading">Questions people ask</h2>
     <p class="board-sub">Every answer below is worked out from the same verified data list as the menu, so the numbers here can never disagree with the tables.</p>
     <Faq items={items} priceBasis={meta.price_basis} stage5={stage5} limit={3} />
-    <p class="basis"><a href="/wendys-hours">Breakfast and restaurant hours →</a> · <a href="/wendys-nutrition">Nutrition and calories →</a></p>
+    <p class="basis"><a href="/wendys-hours">Wendy's breakfast hours and menu →</a> · <a href="/wendys-nutrition">Wendy's nutrition and calories →</a></p>
   </section>
 </BaseLayout>
 

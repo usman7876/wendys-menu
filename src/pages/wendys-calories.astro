@@ -14,7 +14,7 @@ const highest = highestCalorie(items);
 ---
 <BaseLayout
   title="Wendy's Calories 2026 | Lowest & Highest Items"
-  description="Wendy's calories by category: ranges, averages, and the lowest- and highest-calorie items in each part of the menu, from Wendy's official online menu."
+  description="How many calories in a Baconator? 890 Cal. Wendy's calories by category — ranges, averages and lowest- and highest-calorie items, from the official menu."
   itemCount={items.length}
   path="/wendys-calories"
   crumbs={[{ label: 'Home', href: '/' }, { label: 'Calories' }]}
@@ -22,7 +22,7 @@ const highest = highestCalorie(items);
   <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Calories' }]} />
   <section class="board page-head" aria-labelledby="page-title">
     <h1 id="page-title">Wendy's Calories 2026</h1>
-    <p class="board-sub">{verifiedCal} of {items.length} items have a verified calorie count · every figure from Wendy's official online menu, checked 22 Nov 2026.</p>
+    <p class="board-sub">{verifiedCal} of {items.length} items have a verified calorie count — a Baconator has 890 Cal, a Dave's Single 560 Cal — every figure from Wendy's official online menu, checked 22 Nov 2026.</p>
     <p class="basis">Averages are worked out from the data: where Wendy's shows a calorie range instead of one figure (for example Coca-Cola Freestyle, 0–434 Cal), the range's middle is used for the average, and the low and high ends are used for the range. Nothing is guessed.</p>
   </section>
 
@@ -62,9 +62,9 @@ const highest = highestCalorie(items);
 
   <AdSlot />
   <RelatedLinks links={[
-    { href: '/wendys-nutrition', label: 'Nutrition — protein, fat, carbs and sodium' },
-    { href: '/wendys-menu-prices', label: 'Full menu — all 150 items with prices' },
-    { href: '/wendys-breakfast-menu', label: 'Breakfast menu — hours and the 6 morning items' },
+    { href: '/wendys-nutrition', label: "Wendy's nutrition — protein, fat, carbs and sodium" },
+    { href: '/wendys-menu-prices', label: "Wendy's full menu — all 150 items with prices" },
+    { href: '/wendys-breakfast-menu', label: "Wendy's breakfast menu — hours and the 6 morning items" },
     { href: '/wendys-vs-mcdonalds', label: "Wendy's vs McDonald's — calories compared" },
   ]} />
 </BaseLayout>

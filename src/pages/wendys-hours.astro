@@ -11,8 +11,8 @@ const hours = menuData.hours;
 const thursday = hours.restaurant_hours.find((d) => d.day === 'Thursday');
 ---
 <BaseLayout
-  title="Wendy's Hours 2026 | Columbus Restaurant Times"
-  description="Opening hours for Wendy's, 799 S. High St, Columbus, OH: restaurant and drive-thru hours, breakfast hours, and the Thursday closure as listed."
+  title="Wendy's Hours 2026 | Open, Close & Drive-Thru"
+  description="Wendy's hours for one Columbus restaurant: opens 7:00 AM most days, closes 3:00 AM, drive-thru the same — Thursday listed Closed. Checked 22 Nov 2026."
   itemCount={items.length}
   path="/wendys-hours"
   crumbs={[{ label: 'Home', href: '/' }, { label: 'Hours' }]}
@@ -21,7 +21,7 @@ const thursday = hours.restaurant_hours.find((d) => d.day === 'Thursday');
   <section class="board page-head" aria-labelledby="page-title">
     <h1 id="page-title">Wendy's Hours 2026</h1>
     <p class="board-sub">{hours.restaurant} · Phone {hours.phone} · from locations.wendys.com, checked 22 Nov 2026.</p>
-    <p class="basis">Hours vary by restaurant — always check your local Wendy's. These hours are for this one Columbus restaurant only.</p>
+    <p class="basis">What time does this Wendy's open and close? 7:00 AM to 3:00 AM most days (7:30 AM Saturdays and Sundays), restaurant and drive-thru the same — Thursday is listed Closed. Hours vary by restaurant, so check your local Wendy's.</p>
   </section>
 
   <section class="board" aria-labelledby="hours-heading">
@@ -32,9 +32,9 @@ const thursday = hours.restaurant_hours.find((d) => d.day === 'Thursday');
 
   <AdSlot />
   <RelatedLinks links={[
-    { href: '/wendys-breakfast-menu', label: 'Breakfast menu — hours and the 6 morning items' },
-    { href: '/wendys-menu-prices', label: 'Full menu — all 150 items with prices' },
-    { href: '/wendys-deals', label: 'Deals — Biggie Bags, Everyday Value and combos' },
+    { href: '/wendys-breakfast-menu', label: "Wendy's breakfast menu — hours and the 6 morning items" },
+    { href: '/wendys-menu-prices', label: "Wendy's full menu — all 150 items with prices" },
+    { href: '/wendys-deals', label: "Wendy's deals — Biggie Bags, Everyday Value and combos" },
     { href: '/how-we-source-prices', label: 'How we source prices' },
   ]} />
 </BaseLayout>

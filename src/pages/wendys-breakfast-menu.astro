@@ -17,7 +17,7 @@ const thisRest = hours.breakfast_this_restaurant;
 ---
 <BaseLayout
   title="Wendy's Breakfast Menu 2026 | Hours & Prices"
-  description="Wendy's breakfast menu: 6 morning items with verified calories, breakfast hours for one Columbus restaurant, and national hours from the official FAQ."
+  description="Wendy's breakfast menu: 6 morning items with verified calories. Most start at 6:30 AM, breakfast ends 10:30 AM at the latest. Prices not verified yet."
   itemCount={items.length}
   path="/wendys-breakfast-menu"
   crumbs={[{ label: 'Home', href: '/' }, { label: 'Menu', href: '/wendys-menu-prices' }, { label: 'Breakfast' }]}
@@ -27,7 +27,7 @@ const thisRest = hours.breakfast_this_restaurant;
   <section class="board page-head" aria-labelledby="page-title">
     <h1 id="page-title">Wendy's Breakfast Menu 2026</h1>
     <p class="board-sub">{breakfastItems.length} breakfast items · calories from Wendy's official national item pages · prices “Not verified yet”.</p>
-    <p class="basis"><strong>Breakfast prices are “Not verified yet”.</strong> The one Columbus restaurant used for prices was checked after 6 PM on 22 Nov 2026, after breakfast had ended, and its online menu had no Breakfast category at that time. Prices are never guessed — they stay “Not verified yet” until the same restaurant can be checked during breakfast hours.</p>
+    <p class="basis">What time does Wendy's stop serving breakfast? At the latest 10:30 AM, according to Wendy's official breakfast FAQ — this Columbus restaurant's page says 11:00 AM today. <strong>Breakfast prices are “Not verified yet”.</strong> The one Columbus restaurant used for prices was checked after 6 PM on 22 Nov 2026, after breakfast had ended, and its online menu had no Breakfast category at that time. Prices are never guessed — they stay “Not verified yet” until the same restaurant can be checked during breakfast hours.</p>
   </section>
 
   <section class="board" aria-labelledby="breakfast-hours-heading">
@@ -49,10 +49,10 @@ const thisRest = hours.breakfast_this_restaurant;
 
   <AdSlot />
   <RelatedLinks links={[
-    { href: '/wendys-menu-prices', label: 'Full menu — all 150 items with prices' },
-    { href: '/wendys-hours', label: 'Hours — restaurant, drive-thru and breakfast' },
-    { href: '/wendys-calories', label: 'Calories — lowest and highest per category' },
-    { href: '/wendys-nutrition', label: 'Nutrition — protein, fat, carbs and sodium' },
+    { href: '/wendys-menu-prices', label: "Wendy's full menu — all 150 items with prices" },
+    { href: '/wendys-hours', label: "Wendy's hours — restaurant, drive-thru and breakfast" },
+    { href: '/wendys-calories', label: "Wendy's calories — lowest and highest per category" },
+    { href: '/wendys-nutrition', label: "Wendy's nutrition — protein, fat, carbs and sodium" },
     { href: '/how-we-source-prices', label: 'How we source prices' },
   ]} />
 </BaseLayout>
