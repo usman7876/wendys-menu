@@ -3,12 +3,84 @@ import '../styles/global.css';
 import TopNotice from '../components/TopNotice.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
+import { itemSlug } from '../utils/menuStats.js';
 
+// The site URL lives in exactly ONE place: astro.config.mjs `site`.
+// Every absolute URL below (canonical, og:url, og:image, JSON-LD) is
+// derived from Astro.site, never hard-coded — so connecting a custom
+// domain later means changing that one line only.
 const {
   title = "Wendy's Menu with Prices 2026 (USA)",
   description = "Independent Wendy's menu reference (USA). Prices from one restaurant only — 799 S. High St, Columbus, OH, checked 22 Nov 2026.",
   itemCount,
+  path = '/',
+  crumbs = null,
+  faqs = null,
+  itemList = null,
+  isHome = false,
 } = Astro.props;
+
+const site = Astro.site;
+const canonical = new URL(path === '/' ? '/' : `${path}/`, site).href;
+const ogImage = new URL('/images/og-image.jpg', site).href;
+const abs = (href) => new URL(href === '/' ? '/' : `${href}/`, site).href;
+
+// Structured data (JSON-LD) — only facts that are visible on this page:
+// Organization + WebSite on the homepage; BreadcrumbList matching the
+// visible breadcrumbs; FAQPage from the exact FAQs shown on the page;
+// ItemList naming only the dishes actually shown on the page.
+const jsonLd = [];
+if (isHome) {
+  jsonLd.push({
+    '@context': 'https://schema.org',
+    '@type': 'Organization',
+    name: "Wendy's Menu with Prices (USA)",
+    url: canonical,
+    description:
+      "An independent fan site with Wendy's menu prices and calories for the USA. Not affiliated with or endorsed by Wendy's.",
+  });
+  jsonLd.push({
+    '@context': 'https://schema.org',
+    '@type': 'WebSite',
+    name: "Wendy's Menu with Prices (USA)",
+    url: canonical,
+  });
+}
+if (crumbs) {
+  jsonLd.push({
+    '@context': 'https://schema.org',
+    '@type': 'BreadcrumbList',
+    itemListElement: crumbs.map((c, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: c.label,
+      item: c.href ? abs(c.href) : canonical,
+    })),
+  });
+}
+if (faqs) {
+  jsonLd.push({
+    '@context': 'https://schema.org',
+    '@type': 'FAQPage',
+    mainEntity: faqs.map((f) => ({
+      '@type': 'Question',
+      name: f.q,
+      acceptedAnswer: { '@type': 'Answer', text: f.a },
+    })),
+  });
+}
+if (itemList) {
+  jsonLd.push({
+    '@context': 'https://schema.org',
+    '@type': 'ItemList',
+    itemListElement: itemList.map((item, i) => ({
+      '@type': 'ListItem',
+      position: i + 1,
+      name: item.name,
+      url: `${canonical}#item-${itemSlug(item.name)}`,
+    })),
+  });
+}
 ---
 <!doctype html>
 <html lang="en" data-theme="cream">
@@ -18,7 +90,22 @@ const {
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonical} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:url" content={canonical} />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content={title} />
+    <meta name="twitter:description" content={description} />
+    <meta name="twitter:image" content={ogImage} />
+    <meta name="theme-color" content="#FFF8F0" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    {jsonLd.map((data) => (
+      <script type="application/ld+json" set:html={JSON.stringify(data)} />
+    ))}
     <script>
       // Theme: two looks — warm cream + tomato-red, and dark charcoal + teal.
       // Remember the visitor's choice; otherwise follow their system setting.
