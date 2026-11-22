@@ -25,8 +25,8 @@ const photo = photoItem ? itemPhoto(photoItem.name) : null;
 <BaseLayout title={title} description={description} itemCount={items.length} path={pagePath} crumbs={crumbs} itemList={items}>
   <Breadcrumbs crumbs={crumbs} />
   <section class="board page-head" aria-labelledby="page-title">
-    <h1 id="page-title">{category} Menu</h1>
-    <p class="board-sub">{statsParts.join(' · ')} — all figures from the verified data, checked 22 Nov 2026 at one restaurant only: 799 S. High St, Columbus, OH.</p>
+    <h1 id="page-title">Wendy's {category} Menu Prices</h1>
+    <p class="board-sub">Wendy's {category.toLowerCase()} menu prices and calories — {statsParts.join(' · ')} — checked 22 Nov 2026 at one restaurant only: 799 S. High St, Columbus, OH.</p>
     {photo && (
       <figure class="hero-photo tilt" tabindex="0">
         <img src={photo} alt={photoItem.name} width="1920" height="1280" loading="lazy" decoding="async" />
