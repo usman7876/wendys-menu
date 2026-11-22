@@ -402,6 +402,31 @@ h3 { font-size: clamp(1.1rem, 3vw, 1.3rem); font-weight: 700; }
   margin-top: 4px;
 }
 
+/* Deal cards: bundle/combo photo beside the details */
+.deal-card {
+  display: flex;
+  gap: 14px;
+  align-items: flex-start;
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  padding: 12px;
+  margin: 12px 0;
+  background: var(--card);
+}
+.deal-card img { width: 240px; flex: none; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 12px; }
+.deal-card-body p { margin: 4px 0; }
+.deal-name { font-weight: 700; font-size: 1.05rem; }
+.deal-price { font-weight: 800; font-size: 1.05rem; }
+@media (max-width: 600px) {
+  .deal-card { flex-direction: column; }
+  .deal-card img { width: 100%; }
+}
+
+/* Photos inside deal tables and deal rows */
+.table-thumb { width: 120px; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 8px; display: block; }
+.deal-line { align-items: center; }
+.line-thumb { width: 96px; flex: none; aspect-ratio: 3 / 2; object-fit: cover; border-radius: 8px; }
+
 /* "Not verified yet" is subtle: muted, not bold colour */
 .not-verified { color: var(--muted); font-weight: 600; font-style: italic; }
 
@@ -472,7 +497,7 @@ th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; color:
 }
 @media (min-width: 700px) { .ad-slot { height: 250px; } }
 
-/* Food photos: original AI-generated images, captioned on the page */
+/* Food photos: hover tilt on cards (the AI-photo disclosure lives on the About page) */
 .tilt { transition: transform 0.25s ease, box-shadow 0.25s ease; will-change: transform; }
 .tilt img { transition: transform 0.35s ease; }
 .tilt:hover, .tilt:focus-within { transform: translateY(-4px); box-shadow: 0 10px 24px rgba(0, 0, 0, 0.18); }
