@@ -12,6 +12,8 @@ const { meta, items } = menuData;
   title="Wendy's Deals 2026 | Biggie Bags & Value Menu"
   description="Wendy's deals checked 22 Nov 2026 at one Columbus restaurant: Biggie Bags, Biggie Bundle, Everyday Value, combos, Frosty Key Tag and app offers."
   itemCount={items.length}
+  path="/wendys-deals"
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Deals' }]}
 >
   <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Deals' }]} />
   <section class="board page-head" aria-labelledby="page-title">

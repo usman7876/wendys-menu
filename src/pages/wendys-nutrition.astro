@@ -12,6 +12,8 @@ const { items } = menuData;
   title="Wendy's Nutrition 2026 | Protein, Fat & Sodium"
   description="Wendy's nutrition table for the USA: calories, protein, fat, carbs and sodium per item, copied from Wendy's official item pages, checked 22 Nov 2026."
   itemCount={items.length}
+  path="/wendys-nutrition"
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Nutrition' }]}
 >
   <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Nutrition' }]} />
   <section class="board page-head" aria-labelledby="page-title">

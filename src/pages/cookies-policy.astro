@@ -11,6 +11,8 @@ const { items } = menuData;
   title="Cookies Policy | Wendy's Menu Fan Site"
   description="Cookies policy: this site currently sets no tracking cookies of its own. Your theme choice is stored locally in your own browser."
   itemCount={items.length}
+  path="/cookies-policy"
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Cookies Policy' }]}
 >
   <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Cookies Policy' }]} />
   <section class="board page-head" aria-labelledby="page-title">

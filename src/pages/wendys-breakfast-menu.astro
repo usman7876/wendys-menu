@@ -19,6 +19,9 @@ const thisRest = hours.breakfast_this_restaurant;
   title="Wendy's Breakfast Menu 2026 | Hours & Prices"
   description="Wendy's breakfast menu: 6 morning items with verified calories, breakfast hours for one Columbus restaurant, and national hours from the official FAQ."
   itemCount={items.length}
+  path="/wendys-breakfast-menu"
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Menu', href: '/wendys-menu-prices' }, { label: 'Breakfast' }]}
+  itemList={breakfastItems}
 >
   <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Menu', href: '/wendys-menu-prices' }, { label: 'Breakfast' }]} />
   <section class="board page-head" aria-labelledby="page-title">

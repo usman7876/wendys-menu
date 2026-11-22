@@ -26,6 +26,9 @@ function statsLine(category) {
   title="Wendy's Menu Prices 2026 (USA) | Full List"
   description="The full verified Wendy's menu with prices and calories — 150 items, checked 22 Nov 2026 at one Columbus restaurant. Search and filter."
   itemCount={items.length}
+  path="/wendys-menu-prices"
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Full menu' }]}
+  itemList={items}
 >
   <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Full menu' }]} />
   <section class="board page-head" aria-labelledby="page-title">

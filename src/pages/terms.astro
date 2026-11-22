@@ -11,6 +11,8 @@ const { items } = menuData;
   title="Terms of Use | Wendy's Menu Fan Site"
   description="Terms for using this independent Wendy's menu reference: prices are a dated snapshot, calories come from Wendy's official menu, no orders here."
   itemCount={items.length}
+  path="/terms"
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Terms' }]}
 >
   <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Terms' }]} />
   <section class="board page-head" aria-labelledby="page-title">

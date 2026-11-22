@@ -5,7 +5,8 @@ import Faq from '../components/Faq.astro';
 import AdSlot from '../components/AdSlot.astro';
 import TiltScript from '../components/TiltScript.astro';
 import menuData from '../data/menu.json';
-import { itemsByCategory, countVerifiedPrices, countVerifiedCalories, categoryStats, formatPrice, itemPhoto, categorySlug } from '../utils/menuStats.js';
+import { itemsByCategory, countVerifiedPrices, countVerifiedCalories, categoryStats, formatPrice, itemPhoto, categorySlug, popularItems } from '../utils/menuStats.js';
+import { buildFaqs } from '../utils/faqData.js';
 
 // Landing page only: hero, search, popular cards, category cards, deals
 // teaser, trust strip, FAQ teaser. The full menu, breakfast board,
@@ -39,12 +40,16 @@ const catCards = Object.entries(byCategory).map(([category, catItems]) => {
   title="Wendy's Menu with Prices 2026 (USA)"
   description="Independent Wendy's menu reference (USA). Prices from one restaurant only — 799 S. High St, Columbus, OH, checked 22 Nov 2026."
   itemCount={items.length}
+  path="/"
+  isHome
+  faqs={buildFaqs(items, meta.price_basis, stage5).slice(0, 3)}
+  itemList={popularItems(items)}
 >
   <section class="hero" aria-labelledby="page-title">
     <h1 id="page-title">Wendy's Menu with Prices 2026 (USA)</h1>
     <p class="lede">Look up a Wendy's menu item and see its price and calories in one place — every figure on this page was checked on Wendy's official online menu on 22 November 2026.</p>
     <figure class="hero-photo tilt" tabindex="0">
-      <img src="/images/hero.jpg" alt="Cheeseburger, fries and a chocolate Frosty — original AI-generated image, not an official photo" width="1920" height="1280" fetchpriority="high" />
+      <img src="/images/hero.webp" alt="Cheeseburger, fries and a chocolate Frosty — original AI-generated image, not an official photo" width="1920" height="1280" decoding="async" fetchpriority="high" />
       <figcaption>Cheeseburger, fries and a chocolate Frosty · Original AI-generated image — not an official photo</figcaption>
     </figure>
     <div class="stats">

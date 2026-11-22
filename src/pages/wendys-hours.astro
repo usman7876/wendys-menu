@@ -14,6 +14,8 @@ const thursday = hours.restaurant_hours.find((d) => d.day === 'Thursday');
   title="Wendy's Hours 2026 | Columbus Restaurant Times"
   description="Opening hours for Wendy's, 799 S. High St, Columbus, OH: restaurant and drive-thru hours, breakfast hours, and the Thursday closure as listed."
   itemCount={items.length}
+  path="/wendys-hours"
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Hours' }]}
 >
   <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Hours' }]} />
   <section class="board page-head" aria-labelledby="page-title">

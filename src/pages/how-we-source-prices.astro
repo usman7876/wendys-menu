@@ -11,6 +11,8 @@ const { meta, items } = menuData;
   title="How We Source Wendy's Prices | Method"
   description="How this site checks Wendy's prices: one named restaurant, checked 22 Nov 2026 on order.wendys.com. No national price list exists; no third-party sites used."
   itemCount={items.length}
+  path="/how-we-source-prices"
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'How we source prices' }]}
 >
   <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'How we source prices' }]} />
   <section class="board page-head" aria-labelledby="page-title">

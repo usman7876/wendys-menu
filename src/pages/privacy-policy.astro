@@ -11,6 +11,8 @@ const { items } = menuData;
   title="Privacy Policy | Wendy's Menu Fan Site"
   description="Privacy policy for this independent Wendy's menu reference: no accounts, no orders, no payment, no tracking of your own. Last updated 22 Nov 2026."
   itemCount={items.length}
+  path="/privacy-policy"
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Privacy Policy' }]}
 >
   <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Privacy Policy' }]} />
   <section class="board page-head" aria-labelledby="page-title">

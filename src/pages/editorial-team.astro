@@ -11,6 +11,8 @@ const { items } = menuData;
   title="Editorial Team | Wendy's Menu Fan Site"
   description="This independent Wendy's menu reference is run by a small fan team. No personal names or photos are published here."
   itemCount={items.length}
+  path="/editorial-team"
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Editorial team' }]}
 >
   <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Editorial team' }]} />
   <section class="board page-head" aria-labelledby="page-title">

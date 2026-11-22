@@ -11,6 +11,8 @@ const { items } = menuData;
   title="About This Wendy's Menu Site | Fan Reference"
   description="An independent, fan-run Wendy's menu reference for the USA. Not affiliated with Wendy's, no orders, no official photos. Data checked 22 Nov 2026."
   itemCount={items.length}
+  path="/about"
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'About' }]}
 >
   <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'About' }]} />
   <section class="board page-head" aria-labelledby="page-title">

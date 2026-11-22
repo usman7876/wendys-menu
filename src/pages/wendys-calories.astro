@@ -16,6 +16,8 @@ const highest = highestCalorie(items);
   title="Wendy's Calories 2026 | Lowest & Highest Items"
   description="Wendy's calories by category: ranges, averages, and the lowest- and highest-calorie items in each part of the menu, from Wendy's official online menu."
   itemCount={items.length}
+  path="/wendys-calories"
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Calories' }]}
 >
   <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Calories' }]} />
   <section class="board page-head" aria-labelledby="page-title">

@@ -12,6 +12,8 @@ const itemNames = items.map((i) => i.name);
   title="Contact Us | Report a Wrong Wendy's Price"
   description="Found a wrong price or calorie count? Fill in the report form — it prepares a report you can copy. No contact email yet; nothing is sent automatically."
   itemCount={items.length}
+  path="/contact"
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Contact' }]}
 >
   <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Contact' }]} />
   <section class="board page-head" aria-labelledby="page-title">
