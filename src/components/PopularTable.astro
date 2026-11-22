@@ -1,23 +1,13 @@
 ---
 import ItemCard from './ItemCard.astro';
-import { categoryStats } from '../utils/menuStats.js';
+import { categoryStats, popularItems } from '../utils/menuStats.js';
 // Popular prices: the six items people ask about most, shown as the same
 // cards as the full menu, taken from the same verified data list.
 // All prices are for one restaurant only — 799 S. High St, Columbus, OH,
 // 22 Nov 2026 (stated once in the section intro, not on every card).
 const { items } = Astro.props;
 const stats = categoryStats(items);
-const popularNames = [
-  "Dave's Single",
-  'Baconator',
-  'Spicy Chicken Sandwich',
-  'Chicken Nuggets — 6 pc',
-  'Classic Chocolate Frosty — Small',
-  'Natural-Cut Fries — Medium',
-];
-const popular = popularNames
-  .map((name) => items.find((i) => i.name === name))
-  .filter(Boolean);
+const popular = popularItems(items);
 ---
 <div class="menu-grid">
   {popular.map((item) => (

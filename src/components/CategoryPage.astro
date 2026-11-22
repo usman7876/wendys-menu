@@ -9,9 +9,11 @@ import ItemCard from './ItemCard.astro';
 import AdSlot from './AdSlot.astro';
 import RelatedLinks from './RelatedLinks.astro';
 import TiltScript from './TiltScript.astro';
-import { categoryStats, formatPrice, itemPhoto } from '../utils/menuStats.js';
+import { categoryStats, formatPrice, itemPhoto, categorySlug } from '../utils/menuStats.js';
 
 const { category, items, title, description, related } = Astro.props;
+const pagePath = `/${categorySlug(category)}`;
+const crumbs = [{ label: 'Home', href: '/' }, { label: 'Menu', href: '/wendys-menu-prices' }, { label: category }];
 const stats = categoryStats(items);
 const s = stats[category];
 const statsParts = [`${s.count} items`];
@@ -20,8 +22,8 @@ if (s.avgCalories !== null) statsParts.push(`avg ${s.avgCalories} cal`);
 const photoItem = items.find((i) => itemPhoto(i.name) !== null);
 const photo = photoItem ? itemPhoto(photoItem.name) : null;
 ---
-<BaseLayout title={title} description={description} itemCount={items.length}>
-  <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Menu', href: '/wendys-menu-prices' }, { label: category }]} />
+<BaseLayout title={title} description={description} itemCount={items.length} path={pagePath} crumbs={crumbs} itemList={items}>
+  <Breadcrumbs crumbs={crumbs} />
   <section class="board page-head" aria-labelledby="page-title">
     <h1 id="page-title">{category} Menu</h1>
     <p class="board-sub">{statsParts.join(' · ')} — all figures from the verified data, checked 22 Nov 2026 at one restaurant only: 799 S. High St, Columbus, OH.</p>

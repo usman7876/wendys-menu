@@ -1,5 +1,5 @@
 ---
-import { formatPriceRange, caloriesLabel, itemPhoto } from '../utils/menuStats.js';
+import { formatPriceRange, caloriesLabel, itemPhoto, itemSlug } from '../utils/menuStats.js';
 // Menu item card: photo (only when it matches the dish exactly), name,
 // price (a range when low/high exist, the single price otherwise), calories,
 // one short source + date line, and an expandable "Nutrition and compare"
@@ -20,7 +20,7 @@ const nutrients = [
   { label: 'Sodium', value: cell(item.sodium_mg, 'mg') },
 ].filter((n) => n.value !== 'Not verified yet');
 ---
-<article class="menu-card tilt" data-name={item.name.toLowerCase()} data-category={item.category} tabindex="0">
+<article class="menu-card tilt" id={`item-${itemSlug(item.name)}`} data-name={item.name.toLowerCase()} data-category={item.category} tabindex="0">
   {photo && (
     <figure class="card-photo">
       <img src={photo} alt={`${item.name} — ${PHOTO_CAPTION}`} width="1920" height="1280" loading="lazy" decoding="async" />
