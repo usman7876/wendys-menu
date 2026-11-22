@@ -77,6 +77,68 @@ export function caloriesByCategory(items) {
 // so every item still shows its single verified price. When a range exists,
 // it renders "$low–$high" with the median after it; a missing price stays
 // null and the page renders "Not verified yet".
+export function categorySlug(category) {
+  const slugs = {
+    Burgers: 'wendys-burgers-menu',
+    Chicken: 'wendys-chicken-menu',
+    Breakfast: 'wendys-breakfast-menu',
+    Sides: 'wendys-sides-menu',
+    Desserts: 'wendys-desserts-menu',
+    Drinks: 'wendys-drinks-menu',
+  };
+  return slugs[category] || 'wendys-menu-prices';
+}
+
+// Single calorie figure for an item, or null: a range counts as its
+// midpoint for averages, and as its low/high ends for min/max.
+export function calorieLow(item) {
+  if (item.calories !== null && item.calories !== undefined) return item.calories;
+  if (item.calories_low !== undefined) return item.calories_low;
+  return null;
+}
+export function calorieHigh(item) {
+  if (item.calories !== null && item.calories !== undefined) return item.calories;
+  if (item.calories_high !== undefined) return item.calories_high;
+  return null;
+}
+export function calorieMid(item) {
+  const lo = calorieLow(item);
+  const hi = calorieHigh(item);
+  if (lo === null || hi === null) return null;
+  return (lo + hi) / 2;
+}
+
+// Per-category calorie overview, computed from the data only: verified
+// count, range (lowest low to highest high), average of midpoints, and
+// the lowest- and highest-calorie items in the category.
+export function categoryCalorieStats(items) {
+  const out = {};
+  for (const cat of categories(items)) {
+    const inCat = items.filter((i) => i.category === cat);
+    const lows = inCat.map(calorieLow).filter((c) => c !== null);
+    const highs = inCat.map(calorieHigh).filter((c) => c !== null);
+    const mids = inCat.map(calorieMid).filter((c) => c !== null);
+    const lowestItem = inCat
+      .filter((i) => calorieLow(i) !== null)
+      .reduce((a, b) => (calorieLow(b) < calorieLow(a) ? b : a), inCat.find((i) => calorieLow(i) !== null));
+    const highestItem = inCat
+      .filter((i) => calorieHigh(i) !== null)
+      .reduce((a, b) => (calorieHigh(b) > calorieHigh(a) ? b : a), inCat.find((i) => calorieHigh(i) !== null));
+    out[cat] = {
+      count: inCat.length,
+      verified: lows.length,
+      minCalories: lows.length ? Math.min(...lows) : null,
+      maxCalories: highs.length ? Math.max(...highs) : null,
+      avgCalories: mids.length
+        ? Math.round(mids.reduce((a, b) => a + b, 0) / mids.length)
+        : null,
+      lowest: lowestItem ?? null,
+      highest: highestItem ?? null,
+    };
+  }
+  return out;
+}
+
 export function formatPriceRange(item) {
   if (item.price_low !== null && item.price_low !== undefined &&
       item.price_high !== null && item.price_high !== undefined) {
