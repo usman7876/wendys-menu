@@ -1,3 +1,3 @@
 User-agent: *
 Allow: /
-Sitemap: https://wendys-menu.example/sitemap-index.xml
+Sitemap: https://wendys-menu-eight.vercel.app/sitemap-index.xml
