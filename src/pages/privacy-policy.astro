@@ -1,0 +1,40 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import AdSlot from '../components/AdSlot.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import menuData from '../data/menu.json';
+
+const { items } = menuData;
+---
+<BaseLayout
+  title="Privacy Policy | Wendy's Menu Fan Site"
+  description="Privacy policy for this independent Wendy's menu reference: no accounts, no orders, no payment, no tracking of your own. Last updated 22 Nov 2026."
+  itemCount={items.length}
+>
+  <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Privacy Policy' }]} />
+  <section class="board page-head" aria-labelledby="page-title">
+    <h1 id="page-title">Privacy Policy</h1>
+    <p class="board-sub">Last updated 22 November 2026.</p>
+  </section>
+
+  <section class="board" aria-labelledby="privacy-heading">
+    <h2 id="privacy-heading">What this site collects — almost nothing</h2>
+    <p><strong>No accounts, no orders:</strong> this site has no sign-up, no login, no checkout and no order form. It never asks for your name, address, payment details or password.</p>
+    <p><strong>Search stays on your device:</strong> the menu search box filters the list inside your own browser. What you type there is not sent to this site or stored anywhere.</p>
+    <p><strong>Theme choice stays on your device:</strong> if you switch between the cream and charcoal looks, that choice is stored in your own browser (local storage) so the site remembers it next time. It is never sent to this site or to anyone else.</p>
+    <p><strong>Report form:</strong> the “Report a wrong price” form on the <a href="/contact">Contact</a> page does not send anything anywhere. It builds a report on your screen for you to copy. Nothing you type there leaves your browser.</p>
+    <p><strong>No ad code yet:</strong> the boxes labelled “Advertisement” on this site are empty reserved spaces. There is no advertising code, and no advertiser tracking, on this site at the time of writing. If ads are added later, this policy will be updated first to say which ad service is used and what it collects.</p>
+    <p><strong>External links:</strong> this site links out to Wendy's official pages (order.wendys.com, wendys.com and locations.wendys.com) and to mcdonalds.com. Once you follow one of those links, you are on that site and its own privacy policy applies — this site cannot see what you do there.</p>
+    <p><strong>Children:</strong> this is a general menu reference with no accounts and no data collection features aimed at children.</p>
+    <p><strong>Changes:</strong> if this policy changes, the new version will replace this page and the “last updated” date above will change.</p>
+  </section>
+
+  <AdSlot />
+  <RelatedLinks links={[
+    { href: '/cookies-policy', label: 'Cookies policy' },
+    { href: '/terms', label: 'Terms of use' },
+    { href: '/contact', label: 'Contact — report a wrong price' },
+    { href: '/about', label: 'About this site' },
+  ]} />
+</BaseLayout>

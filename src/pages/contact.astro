@@ -1,0 +1,117 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import AdSlot from '../components/AdSlot.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import menuData from '../data/menu.json';
+
+const { items } = menuData;
+const itemNames = items.map((i) => i.name);
+---
+<BaseLayout
+  title="Contact Us | Report a Wrong Wendy's Price"
+  description="Found a wrong price or calorie count? Fill in the report form — it prepares a report you can copy. No contact email yet; nothing is sent automatically."
+  itemCount={items.length}
+>
+  <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Contact' }]} />
+  <section class="board page-head" aria-labelledby="page-title">
+    <h1 id="page-title">Contact — Report a Wrong Price</h1>
+    <p class="board-sub">Found a wrong price or calorie count? That is the most helpful message you can send.</p>
+  </section>
+
+  <section class="board" aria-labelledby="form-heading">
+    <h2 id="form-heading">Report a wrong price</h2>
+    <p class="board-sub">Check the Sources list first, then fill in the form. Nothing here is sent anywhere on its own — pressing the button shows your report on this page, ready to copy.</p>
+    <p class="flag"><strong>No contact email yet.</strong> The site owner still needs to add a contact email address. Until then, this form prepares a report you can copy and keep — it does not send anything, and no email address is published here.</p>
+    <form class="report-form" id="report-form">
+      <div>
+        <label for="report-item">Menu item</label>
+        <input id="report-item" name="item" type="text" list="menu-items" required autocomplete="off" placeholder="e.g. Dave's Single" />
+        <datalist id="menu-items">
+          {itemNames.map((n) => <option value={n}></option>)}
+        </datalist>
+      </div>
+      <div>
+        <label for="report-restaurant">Restaurant (or official page) where you saw it</label>
+        <input id="report-restaurant" name="restaurant" type="text" required autocomplete="off" placeholder="e.g. Wendy's, 799 S. High St, Columbus, OH" />
+      </div>
+      <div>
+        <label for="report-price">Price you saw</label>
+        <input id="report-price" name="price" type="text" required autocomplete="off" placeholder="e.g. $5.99" />
+      </div>
+      <div>
+        <label for="report-date">Date you saw it</label>
+        <input id="report-date" name="date" type="date" required />
+      </div>
+      <div>
+        <button class="btn" type="submit">Show my report</button>
+      </div>
+    </form>
+
+    <div id="report-result" hidden>
+      <h3>Your report — copy it and keep it</h3>
+      <pre class="report-output" id="report-output"></pre>
+      <p><button class="btn btn-secondary" type="button" id="copy-report">Copy report</button> <span id="copy-status" role="status"></span></p>
+      <p class="basis">A figure is only changed when it can be checked on an official Wendy's page. Reports based on other menu websites are not used — see <a href="/how-we-source-prices">How we source prices</a>.</p>
+    </div>
+  </section>
+
+  <section class="board" aria-labelledby="other-heading">
+    <h2 id="other-heading">Please do not send</h2>
+    <p>Orders, complaints about a restaurant visit, or job applications. This is a fan reference site with no connection to any restaurant — for those, contact Wendy's directly through its official website, wendys.com.</p>
+    <p><strong>Response time:</strong> this is a small fan-run site, checked and updated by hand. Reports are read when the data is next re-checked against the official menu, and the data date at the top of the page always shows when that last happened (22 Nov 2026).</p>
+  </section>
+
+  <AdSlot />
+  <RelatedLinks links={[
+    { href: '/how-we-source-prices', label: 'How we source prices' },
+    { href: '/wendys-menu-prices', label: 'Full menu — all 150 items with prices' },
+    { href: '/about', label: 'About this site' },
+    { href: '/editorial-team', label: 'Editorial team' },
+  ]} />
+</BaseLayout>
+
+<script>
+  // The form sends nothing anywhere: it builds a formatted report on the
+  // page, with a copy button. There is no contact email yet, so the visitor
+  // keeps the report until the site owner adds one.
+  const form = document.getElementById('report-form');
+  const result = document.getElementById('report-result');
+  const output = document.getElementById('report-output');
+  const copyBtn = document.getElementById('copy-report');
+  const copyStatus = document.getElementById('copy-status');
+
+  form.addEventListener('submit', (e) => {
+    e.preventDefault();
+    const item = document.getElementById('report-item').value.trim();
+    const restaurant = document.getElementById('report-restaurant').value.trim();
+    const price = document.getElementById('report-price').value.trim();
+    const date = document.getElementById('report-date').value;
+    output.textContent =
+      'Wrong price report — Wendy\'s Menu (fan site)\n' +
+      'Menu item: ' + item + '\n' +
+      'Restaurant / official page: ' + restaurant + '\n' +
+      'Price seen: ' + price + '\n' +
+      'Date seen: ' + date + '\n' +
+      'Figure shown on this site: see /wendys-menu-prices (data checked 22 Nov 2026).\n' +
+      'Note: corrections are only made from an official Wendy\'s page.';
+    result.hidden = false;
+    copyStatus.textContent = '';
+    result.scrollIntoView({ behavior: 'smooth', block: 'start' });
+  });
+
+  copyBtn.addEventListener('click', async () => {
+    const text = output.textContent;
+    try {
+      await navigator.clipboard.writeText(text);
+      copyStatus.textContent = 'Copied.';
+    } catch (e) {
+      const range = document.createRange();
+      range.selectNodeContents(output);
+      const sel = getSelection();
+      sel.removeAllRanges();
+      sel.addRange(range);
+      copyStatus.textContent = 'Report selected — press Ctrl+C / Cmd+C to copy.';
+    }
+  });
+</script>

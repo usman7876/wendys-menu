@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import AdSlot from '../components/AdSlot.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import menuData from '../data/menu.json';
+
+const { items } = menuData;
+---
+<BaseLayout
+  title="Editorial Team | Wendy's Menu Fan Site"
+  description="This independent Wendy's menu reference is run by a small fan team. No personal names or photos are published here."
+  itemCount={items.length}
+>
+  <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Editorial team' }]} />
+  <section class="board page-head" aria-labelledby="page-title">
+    <h1 id="page-title">Editorial Team</h1>
+    <p class="board-sub">A small, independent fan team — not Wendy's, not a franchisee.</p>
+  </section>
+
+  <section class="board" aria-labelledby="team-heading">
+    <h2 id="team-heading">Who runs this site</h2>
+    <p>This site is run by an independent fan team. No personal names, biographies or photos of team members are published here, and none are invented for this page.</p>
+    <p><strong>What the team does:</strong> checks prices, calories and hours on Wendy's official pages (wendys.com, order.wendys.com and locations.wendys.com), keeps the one verified data list behind every page up to date, and flags — never smooths over — the places where Wendy's own pages disagree with each other.</p>
+    <p><strong>What the team does not do:</strong> take orders, sell food, speak for Wendy's or any restaurant, or publish a figure that has not been checked on an official page. Anything not verified says “Not verified yet”.</p>
+    <p><strong>How corrections work:</strong> a figure is only changed when it can be checked on an official Wendy's page. Reports based on other menu websites are not used. See <a href="/contact">Contact — report a wrong price</a>.</p>
+    <p><strong>Contact:</strong> there is no contact email on this site yet — the site owner still needs to add one. The <a href="/contact">report form</a> prepares a report you can copy; it does not send anything on its own.</p>
+  </section>
+
+  <AdSlot />
+  <RelatedLinks links={[
+    { href: '/about', label: 'About this site' },
+    { href: '/contact', label: 'Contact — report a wrong price' },
+    { href: '/how-we-source-prices', label: 'How we source prices' },
+    { href: '/wendys-menu-prices', label: 'Full menu — all 150 items with prices' },
+  ]} />
+</BaseLayout>

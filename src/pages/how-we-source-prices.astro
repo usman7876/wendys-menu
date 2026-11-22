@@ -1,0 +1,46 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import AdSlot from '../components/AdSlot.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import menuData from '../data/menu.json';
+
+const { meta, items } = menuData;
+---
+<BaseLayout
+  title="How We Source Wendy's Prices | Method"
+  description="How this site checks Wendy's prices: one named restaurant, checked 22 Nov 2026 on order.wendys.com. No national price list exists; no third-party sites used."
+  itemCount={items.length}
+>
+  <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'How we source prices' }]} />
+  <section class="board page-head" aria-labelledby="page-title">
+    <h1 id="page-title">How We Source Prices</h1>
+    <p class="board-sub">Short and plain: where every figure on this site comes from, and what we do when a figure cannot be checked.</p>
+  </section>
+
+  <section class="board" aria-labelledby="method-heading">
+    <h2 id="method-heading">The method, in short</h2>
+    <ol>
+      <li><strong>Wendy's publishes no national price list.</strong> There is no single official price for a Dave's Single that applies across the USA. Wendy's itself says pricing may vary by location, and that to see prices you should visit order.wendys.com or the Wendy's app after selecting a location.</li>
+      <li><strong>So every price here comes from one named restaurant.</strong> All prices are for <strong>one restaurant only — Wendy's, 799 S. High Street, Columbus, OH 43206, Carryout</strong> — checked on <strong>22 Nov 2026</strong> on Wendy's official online ordering menu, order.wendys.com. Your local restaurant may charge more or less.</li>
+      <li><strong>Breakfast prices could not be checked — so they say “Not verified yet”.</strong> The Columbus restaurant was checked after 6 PM local time, after breakfast had ended, and its online menu had no Breakfast category at that time. Rather than guess, every breakfast price is left as “Not verified yet” until the same restaurant can be checked during breakfast hours.</li>
+      <li><strong>Calories come from Wendy's official item pages.</strong> Each item's calories (and protein, fat, carbs and sodium, where listed) were copied from that item's own page on order.wendys.com, including Wendy's official national item pages for breakfast items.</li>
+      <li><strong>Third-party price sites were NOT used.</strong> Other menu and price websites were not used as a source for any figure, because their prices disagree with each other and are rarely dated or tied to a named restaurant. Only wendys.com, order.wendys.com, locations.wendys.com and mcdonalds.com (for the comparison) were used.</li>
+      <li><strong>UK nutrition PDFs were NOT used.</strong> Wendy's publishes nutrition documents for the United Kingdom. Those are for the UK menu, not the USA menu — recipes, sizes and figures can differ — so nothing on this USA site was taken from them.</li>
+      <li><strong>If it is not on the official site, it is not on this site.</strong> The Oatmeal Bar was not found at all on Wendy's official site on 22 Nov 2026 — no price, no calories, not listed, and its national item page returned a 404 error — so it was removed as a menu item rather than filled in from another site. Frosty-ccino was not found at this restaurant either, and needs a morning re-check because it is a breakfast item and every check so far was in the evening.</li>
+      <li><strong>Where Wendy's own pages disagree, both figures are shown.</strong> Family Chili (1,370 Cal on the tile vs 530 Cal on the item page), the nuggets listed as sides, the Deals calorie differences, the 5 for $5 Cookie Bundle (1,670 Cal shown vs 5 × 330 = 1,650 Cal), and the breakfast end time (11:00 AM today at this restaurant vs 10:30 AM latest nationally) are all flagged in place, never smoothed over.</li>
+      <li><strong>Hours come from the restaurant's own location page.</strong> The hours are for Wendy's, 799 S. High Street, Columbus, OH, from locations.wendys.com, checked 22 Nov 2026. Thursday is listed as “Closed” there, with no reason given, so no reason is printed. Delivery and holiday hours are not shown on that page, so they say “Not verified yet”.</li>
+      <li><strong>The McDonald's comparison is calories only.</strong> No McDonald's prices were found on mcdonalds.com for any item — the site sends visitors to its app for prices — so every McDonald's price says “Not verified yet — price only in the McDonald's app” and no price winner is named.</li>
+      <li><strong>Corrections only come from an official page.</strong> If a visitor reports a wrong price, a figure is only changed when it can be checked on an official Wendy's page. Reports based on other menu websites are not used.</li>
+    </ol>
+    <p><strong>Data date:</strong> 22 November 2026. <strong>Price basis:</strong> {meta.price_basis}.</p>
+  </section>
+
+  <AdSlot />
+  <RelatedLinks links={[
+    { href: '/wendys-menu-prices', label: 'Full menu — all 150 items with prices' },
+    { href: '/contact', label: 'Contact — report a wrong price' },
+    { href: '/about', label: 'About this site' },
+    { href: '/wendys-hours', label: 'Hours — restaurant, drive-thru and breakfast' },
+  ]} />
+</BaseLayout>

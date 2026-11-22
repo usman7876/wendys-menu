@@ -1,0 +1,68 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import AdSlot from '../components/AdSlot.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import menuData from '../data/menu.json';
+import { categoryCalorieStats, caloriesLabel, countVerifiedCalories, lowestCalorie, highestCalorie } from '../utils/menuStats.js';
+
+const { items } = menuData;
+const perCat = categoryCalorieStats(items);
+const verifiedCal = countVerifiedCalories(items);
+const lowest = lowestCalorie(items);
+const highest = highestCalorie(items);
+---
+<BaseLayout
+  title="Wendy's Calories 2026 | Lowest & Highest Items"
+  description="Wendy's calories by category: ranges, averages, and the lowest- and highest-calorie items in each part of the menu, from Wendy's official online menu."
+  itemCount={items.length}
+>
+  <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Calories' }]} />
+  <section class="board page-head" aria-labelledby="page-title">
+    <h1 id="page-title">Wendy's Calories 2026</h1>
+    <p class="board-sub">{verifiedCal} of {items.length} items have a verified calorie count · every figure from Wendy's official online menu, checked 22 Nov 2026.</p>
+    <p class="basis">Averages are worked out from the data: where Wendy's shows a calorie range instead of one figure (for example Coca-Cola Freestyle, 0–434 Cal), the range's middle is used for the average, and the low and high ends are used for the range. Nothing is guessed.</p>
+  </section>
+
+  <section class="board" aria-labelledby="overview-heading">
+    <h2 id="overview-heading">Calories by category</h2>
+    <table>
+      <thead><tr><th>Category</th><th>Items</th><th>Calorie range</th><th>Average</th></tr></thead>
+      <tbody>
+        {Object.entries(perCat).map(([cat, s]) => (
+          <tr>
+            <td data-label="Category"><strong>{cat}</strong></td>
+            <td data-label="Items">{s.verified} of {s.count} verified</td>
+            <td data-label="Calorie range">{s.minCalories !== null ? `${s.minCalories}–${s.maxCalories} Cal` : 'Not verified yet'}</td>
+            <td data-label="Average">{s.avgCalories !== null ? `${s.avgCalories} Cal` : 'Not verified yet'}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  </section>
+
+  <section class="board" aria-labelledby="extremes-heading">
+    <h2 id="extremes-heading">Lowest and highest in each category</h2>
+    <table>
+      <thead><tr><th>Category</th><th>Lowest-calorie item</th><th>Highest-calorie item</th></tr></thead>
+      <tbody>
+        {Object.entries(perCat).map(([cat, s]) => (
+          <tr>
+            <td data-label="Category"><strong>{cat}</strong></td>
+            <td data-label="Lowest-calorie item">{s.lowest ? `${s.lowest.name} — ${caloriesLabel(s.lowest)}` : 'Not verified yet'}</td>
+            <td data-label="Highest-calorie item">{s.highest ? `${s.highest.name} — ${caloriesLabel(s.highest)}` : 'Not verified yet'}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="basis">Across the whole menu, the lowest-calorie item with a single verified figure is <strong>{lowest.name} at {lowest.calories} Cal</strong>, and the highest is <strong>{highest.name} at {highest.calories} Cal</strong> — both from Wendy's official online menu.</p>
+  </section>
+
+  <AdSlot />
+  <RelatedLinks links={[
+    { href: '/wendys-nutrition', label: 'Nutrition — protein, fat, carbs and sodium' },
+    { href: '/wendys-menu-prices', label: 'Full menu — all 150 items with prices' },
+    { href: '/wendys-breakfast-menu', label: 'Breakfast menu — hours and the 6 morning items' },
+    { href: '/wendys-vs-mcdonalds', label: "Wendy's vs McDonald's — calories compared" },
+  ]} />
+</BaseLayout>

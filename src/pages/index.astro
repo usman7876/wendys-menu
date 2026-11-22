@@ -1,30 +1,20 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
-import SearchBox from '../components/SearchBox.astro';
-import CategoryChips from '../components/CategoryChips.astro';
-import ItemCard from '../components/ItemCard.astro';
 import PopularTable from '../components/PopularTable.astro';
-import GlanceTable from '../components/GlanceTable.astro';
 import Faq from '../components/Faq.astro';
-import Sources from '../components/Sources.astro';
 import AdSlot from '../components/AdSlot.astro';
-import DealsBoard from '../components/DealsBoard.astro';
-import ComparisonBoard from '../components/ComparisonBoard.astro';
-import HoursBoard from '../components/HoursBoard.astro';
+import TiltScript from '../components/TiltScript.astro';
 import menuData from '../data/menu.json';
-import { itemsByCategory, countVerifiedPrices, countVerifiedCalories, categoryStats, formatPrice, itemPhoto } from '../utils/menuStats.js';
+import { itemsByCategory, countVerifiedPrices, countVerifiedCalories, categoryStats, formatPrice, itemPhoto, categorySlug } from '../utils/menuStats.js';
 
-// ONE data file is the source of truth: menu.json now holds the items plus
-// the deals, comparison and hours that used to live in stage5.json.
+// Landing page only: hero, search, popular cards, category cards, deals
+// teaser, trust strip, FAQ teaser. The full menu, breakfast board,
+// nutrition table, comparison and hours now live on their own pages.
 const { meta, items } = menuData;
 const stage5 = { deals: menuData.deals, comparison: menuData.comparison, hours: menuData.hours };
 const byCategory = itemsByCategory(items);
-const breakfastItems = items.filter((i) => i.category === 'Breakfast');
 const stats = categoryStats(items);
 
-// One header line per category, e.g. "22 items · $2.89–$13.29 · avg 857 cal".
-// Every figure is computed from the data; a category with no verified
-// prices or no verified calories simply leaves that part out.
 function statsLine(category) {
   const s = stats[category];
   const parts = [`${s.count} items`];
@@ -39,14 +29,17 @@ const bundlePrice = menuData.deals.biggie_bundle.price;
 const evMin = Math.min(...menuData.deals.everyday_value.map((d) => d.price));
 
 // Category card photo: the first dish in the category that has an
-// exactly-matching photo. Categories are linked to their group in the
-// full menu below.
+// exactly-matching photo. Cards link to the category's own page.
 const catCards = Object.entries(byCategory).map(([category, catItems]) => {
   const withPhoto = catItems.find((i) => itemPhoto(i.name) !== null);
-  return { category, photo: withPhoto ? itemPhoto(withPhoto.name) : null, photoAlt: withPhoto ? withPhoto.name : '' };
+  return { category, slug: categorySlug(category), photo: withPhoto ? itemPhoto(withPhoto.name) : null, photoAlt: withPhoto ? withPhoto.name : '' };
 });
 ---
-<BaseLayout itemCount={items.length}>
+<BaseLayout
+  title="Wendy's Menu with Prices 2026 (USA)"
+  description="Independent Wendy's menu reference (USA). Prices from one restaurant only — 799 S. High St, Columbus, OH, checked 22 Nov 2026."
+  itemCount={items.length}
+>
   <section class="hero" aria-labelledby="page-title">
     <h1 id="page-title">Wendy's Menu with Prices 2026 (USA)</h1>
     <p class="lede">Look up a Wendy's menu item and see its price and calories in one place — every figure on this page was checked on Wendy's official online menu on 22 November 2026.</p>
@@ -61,19 +54,23 @@ const catCards = Object.entries(byCategory).map(([category, catItems]) => {
       <div class="stat"><b>22 Nov 2026</b><span>data date</span></div>
     </div>
     <p class="basis">
-      <strong>Verified data only:</strong> all prices below are for <strong>{meta.price_basis}</strong>, Carryout, checked on order.wendys.com. This is <strong>not</strong> a national price list. Calories are labelled “from Wendy's official online menu”. Breakfast prices could not be checked (see below) and honestly say “Not verified yet”. No third-party menu site was used.
+      <strong>Verified data only:</strong> all prices below are for <strong>{meta.price_basis}</strong>, Carryout, checked on order.wendys.com. This is <strong>not</strong> a national price list. Calories are labelled “from Wendy's official online menu”. Breakfast prices could not be checked and honestly say “Not verified yet”. No third-party menu site was used.
     </p>
   </section>
 
   <div class="search-bar">
-    <SearchBox count={items.length} />
-    <CategoryChips items={items} />
+    <form class="search-box" action="/wendys-menu-prices" method="get" role="search">
+      <label for="menu-search" style="position:absolute;left:-9999px">Search the menu</label>
+      <input id="menu-search" name="q" type="search" placeholder={`Search ${items.length} items…`} autocomplete="off" />
+    </form>
+    <p class="basis">Type a dish name and press Enter — the full menu opens already filtered.</p>
   </div>
 
   <section class="board" aria-labelledby="popular-heading">
     <h2 id="popular-heading">Popular prices</h2>
-    <p class="board-sub">The items people ask about most, taken from the same verified data list as everything else on this page. All prices are for one restaurant only — 799 S. High St, Columbus, OH, 22 Nov 2026.</p>
+    <p class="board-sub">The items people ask about most, taken from the same verified data list as everything else on this site. All prices are for one restaurant only — 799 S. High St, Columbus, OH, 22 Nov 2026.</p>
     <PopularTable items={items} />
+    <p class="basis"><a href="/wendys-menu-prices">See the full menu — all {items.length} items →</a></p>
   </section>
 
   <AdSlot />
@@ -83,7 +80,7 @@ const catCards = Object.entries(byCategory).map(([category, catItems]) => {
     <p class="board-sub">Six parts of the menu, each with its own count, price range and average calories — all worked out from the verified data.</p>
     <div class="cat-grid">
       {catCards.map((c) => (
-        <a class="cat-card tilt" href={`#menu-${c.category.toLowerCase()}`} tabindex="0">
+        <a class="cat-card tilt" href={`/${c.slug}`} tabindex="0">
           {c.photo && <img src={c.photo} alt={`${c.photoAlt} — original AI-generated image, not an official photo`} width="1920" height="1280" loading="lazy" decoding="async" />}
           <div class="cat-card-body">
             <h3 class="cat-card-name">{c.category}</h3>
@@ -94,75 +91,18 @@ const catCards = Object.entries(byCategory).map(([category, catItems]) => {
     </div>
   </section>
 
-  <section class="board" id="breakfast" aria-labelledby="breakfast-heading">
-    <h2 id="breakfast-heading">Wendy's Breakfast Menu</h2>
-    <p class="board-sub">The morning menu on its own board, built from the same one data list as the full menu.</p>
-    <p class="basis">Breakfast calories below are from Wendy's official national item pages. Breakfast prices are “Not verified yet” — see “How we source prices” for why.</p>
-    <div class="hours">
-      <p><strong>Breakfast hours</strong> — most Wendy's start at <b>6:30 AM</b> and breakfast ends at the latest at <b>10:30 AM</b> (official breakfast FAQ, wendys.com). At this Columbus restaurant, the location page says breakfast ends at <b>11:00 AM today</b> — see the Hours section for the flag.</p>
-    </div>
-    <div class="menu-grid">
-      {breakfastItems.map((item) => <ItemCard item={item} avgCalories={stats['Breakfast'].avgCalories} />)}
-    </div>
-  </section>
-
-  <section class="board" id="menu" aria-labelledby="menu-heading">
-    <h2 id="menu-heading">Full menu</h2>
-    <p class="board-sub">The whole verified menu as cards, grouped by category. All prices are for one restaurant only — 799 S. High St, Columbus, OH, 22 Nov 2026. Type part of an item's name and the cards filter as you type, or tap a category button.</p>
-    <p id="no-match" hidden>No items match that search. Try a shorter word, or clear the search box to see everything again.</p>
-    <div id="menu-board">
-      {Object.entries(byCategory).map(([category, catItems]) => (
-        <div class="menu-group" data-category={category} id={`menu-${category.toLowerCase()}`}>
-          <h3>{category}</h3>
-          <p class="cat-stats">{statsLine(category)}</p>
-          <div class="menu-grid">
-            {catItems.map((item) => <ItemCard item={item} avgCalories={stats[category].avgCalories} />)}
-          </div>
-        </div>
-      ))}
-    </div>
-    <p class="basis">Every verified item in the data list, grouped by category.</p>
-  </section>
-
-  <AdSlot />
-
   <section class="board" id="deals" aria-labelledby="deals-heading">
     <h2 id="deals-heading">Deals</h2>
     <p class="board-sub">Biggie Deals and Everyday Value — checked 22 Nov 2026 at the same one Columbus restaurant.</p>
     <ul class="teaser-list">
       <li><b>{bagPrice !== null ? formatPrice(bagPrice) : 'Not verified yet'}</b>Biggie Bags — a sandwich, 4 PC Nuggets, a Jr. Fry and a Small Soft Drink.</li>
       <li><b>{formatPrice(bundlePrice)}</b>Biggie Bundle — 2 sandwiches, a Jr. Fry and a Small Soft Drink.</li>
-      <li><b>from {formatPrice(evMin)}</b>Everyday Value — 8 low-priced items, no end date shown.</li>
+      <li><b>from {formatPrice(evMin)}</b>Everyday Value — low-priced items, no end date shown.</li>
     </ul>
-    <details class="board-details">
-      <summary>All deals, combos and offers</summary>
-      <DealsBoard deals={stage5.deals} priceBasis={meta.price_basis} />
-    </details>
+    <p class="basis"><a href="/wendys-deals">See all deals, combos and offers →</a></p>
   </section>
 
-  <section class="board" id="nutrition" aria-labelledby="nutrition-heading">
-    <h2 id="nutrition-heading">Nutrition and calories</h2>
-    <p class="board-sub">Every nutrition figure comes from the same verified data list as the menu. Calories are from Wendy's official online menu. Where Wendy's item page did not list protein, fat, carbs or sodium for that exact size, the table honestly says “Not verified yet” — figures are never borrowed from a different size.</p>
-    <GlanceTable items={items} />
-  </section>
-
-  <section class="board" id="comparison" aria-labelledby="comparison-heading">
-    <h2 id="comparison-heading">Wendy's vs McDonald's</h2>
-    <p class="board-sub">Calories only — McDonald's prices were not found on mcdonalds.com, so no price winner is named. Wendy's figures are from the same verified data list as the menu above.</p>
-    <details class="board-details">
-      <summary>See the comparison tables</summary>
-      <ComparisonBoard items={items} comparison={stage5.comparison} priceBasis={meta.price_basis} />
-    </details>
-  </section>
-
-  <section class="board" id="hours" aria-labelledby="hours-heading">
-    <h2 id="hours-heading">Hours</h2>
-    <p class="board-sub">This one Columbus restaurant, from locations.wendys.com, checked 22 Nov 2026. Hours vary by restaurant — always check your local Wendy's.</p>
-    <details class="board-details">
-      <summary>See the full hours table</summary>
-      <HoursBoard hours={stage5.hours} />
-    </details>
-  </section>
+  <AdSlot />
 
   <section class="board" id="how-we-source-prices">
     <h2>How we source prices</h2>
@@ -172,137 +112,15 @@ const catCards = Object.entries(byCategory).map(([category, catItems]) => {
       <li>Anything not verified says “Not verified yet” — figures are never guessed or borrowed from other sites.</li>
       <li>No third-party menu or price site was used for any figure on this page.</li>
     </ul>
-    <details class="board-details">
-      <summary>Read the full sourcing method</summary>
-    <ol>
-      <li><strong>Wendy's publishes no national price list.</strong> There is no single official price for a Dave's Single that applies across the USA. Wendy's itself says pricing may vary by location, and that to see prices you should visit order.wendys.com or the Wendy's app after selecting a location. Any site showing one “national” price without naming a restaurant is not showing you an official figure.</li>
-      <li><strong>So every price here comes from one named restaurant.</strong> All prices on this page are for <strong>one restaurant only — Wendy's, 799 S. High Street, Columbus, OH 43206, Carryout</strong> — checked on <strong>22 Nov 2026</strong> on Wendy's official online ordering menu, order.wendys.com. That is why every price carries the label “one restaurant only — 799 S. High St, Columbus, OH, 22 Nov 2026”. Your local restaurant may charge more or less.</li>
-      <li><strong>Breakfast prices could not be checked — so they say “Not verified yet”.</strong> The Columbus restaurant was checked after 6 PM local time, after breakfast had ended at 10:30 AM, and its online menu had no Breakfast category at that time. Rather than guess, every breakfast price on this page is left as “Not verified yet” until the same restaurant can be checked during breakfast hours.</li>
-      <li><strong>Calories come from Wendy's official item pages.</strong> Each item's calories (and protein, fat, carbs and sodium, where listed) were copied from that item's own page on order.wendys.com, including Wendy's official national item pages for breakfast items. That is why calories are labelled “from Wendy's official online menu”. Where Wendy's own national list and the item page disagree slightly, the item-page value is used — the three cases found are listed in the Nutrition section above.</li>
-      <li><strong>UK nutrition PDFs were NOT used.</strong> Wendy's publishes nutrition documents for the United Kingdom. Those are for the UK menu, not the USA menu — recipes, sizes and figures can differ — so nothing on this USA page was taken from them.</li>
-      <li><strong>Third-party price sites were NOT used.</strong> Other menu and price websites were not used as a source for any figure on this page, because their prices disagree with each other and are rarely dated or tied to a named restaurant. Only wendys.com and order.wendys.com were used.</li>
-      <li><strong>If it is not on the official site, it is not on this page.</strong> The Oatmeal Bar is the clearest example: it was not found at all on Wendy's official site on 22 Nov 2026 — no price, no calories, not listed, and its national item page returned a 404 error — so it was removed as a menu item rather than filled in from another site.</li>
-      <li><strong>Breakfast hours come from Wendy's own FAQ.</strong> The hours printed on the Breakfast board (most restaurants start at 6:30 AM, breakfast ends at the latest at 10:30 AM, delivery for most begins at 8:00 AM local time) are from the official breakfast FAQ on wendys.com, checked 22 Nov 2026.</li>
-      <li><strong>Stage 5 was checked the same way, on 22 Nov 2026.</strong> Deals, Frosty Fusion and Swirl, drinks, sides, the McDonald's comparison and the restaurant hours were all checked on official pages only — order.wendys.com and wendys.com for Wendy's, locations.wendys.com for this restaurant's hours, and mcdonalds.com for the comparison. No third-party site was used for any of them.</li>
-      <li><strong>Deals are bundles, not single items.</strong> Biggie Bags, the Biggie Bundle and combos have no total calories shown on Wendy's site, so their totals say “Not verified yet” — only the per-component calories in the builders are shown. Everyday Value and Biggie Bites show different calories for the same item on different Wendy's pages; each figure is printed exactly as on its own page, and the disagreement is flagged in the Deals section rather than reconciled.</li>
-      <li><strong>Calorie ranges are shown as ranges.</strong> Coca-Cola Freestyle has no single calorie figure — the site shows 0–434 Cal, because it depends on the drink and flavour chosen. National-only drinks show the calorie range from the national menu, and their price says “Not verified yet” because the national menu shows no prices and they are not sold as standalone items at this restaurant.</li>
-      <li><strong>Where Wendy's own pages disagree, both figures are shown.</strong> Family Chili (1,370 Cal on the tile vs 530 Cal on the item page), the nuggets listed as sides, the Deals calorie differences, the 5 for $5 Cookie Bundle (1,670 Cal shown vs 5 × 330 = 1,650 Cal), and the breakfast end time (11:00 AM today at this restaurant vs 10:30 AM latest nationally) are all flagged in place, never smoothed over.</li>
-      <li><strong>Hours come from the restaurant's own location page.</strong> The hours in the Hours section are for Wendy's, 799 S. High Street, Columbus, OH, from locations.wendys.com, checked 22 Nov 2026. Thursday is listed as “Closed” there, with no reason given, so no reason is printed. Delivery and holiday hours are not shown on that page, so they say “Not verified yet”.</li>
-      <li><strong>The McDonald's comparison is calories only.</strong> No McDonald's prices were found on mcdonalds.com for any item — the site sends visitors to its app for prices — so every McDonald's price says “Not verified yet — price only in the McDonald's app” and no price winner is named. McDonald's calories are from its national product pages, and the tables compare similar types only, stating that the products, sizes and recipes differ.</li>
-      <li><strong>Not found means not listed.</strong> Frosty-ccino was not found at this restaurant (not in the Frosty or Coffee categories), no standalone iced tea was found, and Seasoned Potatoes were not listed at this restaurant — so none of them carries an invented price. Frosty-ccino needs a morning re-check, because it is a breakfast item and every check so far was in the evening.</li>
-    </ol>
-    </details>
+    <p class="basis"><a href="/how-we-source-prices">Read the full sourcing method →</a></p>
   </section>
 
   <section class="board" aria-labelledby="faq-heading">
     <h2 id="faq-heading">Questions people ask</h2>
     <p class="board-sub">Every answer below is worked out from the same verified data list as the menu, so the numbers here can never disagree with the tables.</p>
     <Faq items={items} priceBasis={meta.price_basis} stage5={stage5} limit={3} />
+    <p class="basis"><a href="/wendys-hours">Breakfast and restaurant hours →</a> · <a href="/wendys-nutrition">Nutrition and calories →</a></p>
   </section>
-
-  <section class="board" id="sources">
-    <details class="board-details">
-      <summary>Sources — every figure's official page</summary>
-      <Sources items={items} stage5={stage5} />
-    </details>
-  </section>
-
-  <section class="board" id="about">
-    <details class="board-details">
-      <summary>About this site — what it is, and what it is not</summary>
-    <p><strong>What this site is:</strong> an independent, fan-run reference for people in the USA who want one quick answer — a price, a calorie count, or breakfast hours — before they visit a Wendy's restaurant.</p>
-    <p><strong>What it is not:</strong> it is not the official Wendy's website, it is not run by Wendy's or any franchisee, it does not sell food, and it does not take orders. You cannot buy anything here.</p>
-    <p><strong>How it works:</strong> every item, price, calorie count, table and FAQ answer on this page is built from one single verified data list, checked on Wendy's official online menu on 22 Nov 2026. Nothing is typed twice, so the numbers cannot contradict each other. If a figure has not been verified, the page says “Not verified yet” instead of guessing.</p>
-    <p><strong>Why prices carry a long label:</strong> Wendy's publishes no national price list, and each restaurant sets its own prices. Every price here is therefore labelled “one restaurant only — 799 S. High St, Columbus, OH, 22 Nov 2026”, so you always know exactly what a price means — and what it does not mean. The price at your local restaurant may be different.</p>
-    <p><strong>Images:</strong> this site uses no Wendy's logo and no official Wendy's food photos. The food photos on this page are original AI-generated images in a natural food-photography style, and every one is captioned “Original AI-generated image — not an official photo”, so no visitor mistakes them for official photos.</p>
-    </details>
-  </section>
-
-  <section class="board" id="privacy">
-    <details class="board-details">
-      <summary>Privacy Policy — last updated 22 November 2026</summary>
-    <p><strong>No accounts, no orders:</strong> this site has no sign-up, no login, no checkout and no order form. It never asks for your name, address, payment details or password.</p>
-    <p><strong>Search stays on your device:</strong> the menu search box filters the list inside your own browser. What you type there is not sent to this site or stored anywhere.</p>
-    <p><strong>No ad code yet:</strong> the boxes labelled “Advertisement” on this page are empty reserved spaces. There is no advertising code, and no advertiser tracking, on this page at the time of writing. If ads are added later, this policy will be updated first to say which ad service is used and what it collects.</p>
-    <p><strong>External links:</strong> this page links out to Wendy's official pages (order.wendys.com and wendys.com) in the Sources list. Once you follow one of those links, you are on Wendy's website and its own privacy policy applies — this site cannot see what you do there.</p>
-    <p><strong>Children:</strong> this is a general menu reference with no accounts and no data collection features aimed at children.</p>
-    <p><strong>Changes:</strong> if this policy changes, the new version will replace this section and the “last updated” date above will change.</p>
-    </details>
-  </section>
-
-  <section class="board" id="terms">
-    <details class="board-details">
-      <summary>Terms — the rules for using this reference</summary>
-    <p><strong>Reference only:</strong> this site is an independent, fan-run reference. It is not affiliated with, endorsed by, or sponsored by Wendy's or The Wendy's Company, and it does not take orders or sell food.</p>
-    <p><strong>Prices are a dated snapshot, not live prices:</strong> every price was checked on 22 Nov 2026 at one restaurant only — 799 S. High St, Columbus, OH — on Wendy's official online menu. Prices vary by restaurant and franchisee and may have changed since that date. Always confirm the price at the restaurant before you order.</p>
-    <p><strong>Calories and nutrition:</strong> calorie and nutrition figures are copied from Wendy's official online menu and are labelled “from Wendy's official online menu”. They describe the item as listed there; how an item is customised can change its figures. If you have an allergy or a medical need, rely on Wendy's official allergen and nutrition information, not on a fan site.</p>
-    <p><strong>Accuracy:</strong> figures are copied carefully and each one carries its source and date, but mistakes can happen. The “Report a wrong price” link in the footer is there so errors can be fixed — corrections are only made from an official Wendy's page.</p>
-    <p><strong>Trademarks:</strong> “Wendy's” and the item names on this page (such as Dave's Single, Baconator and Frosty) are trademarks of their respective owners. They are used here only to describe the brand and its menu.</p>
-    </details>
-  </section>
-
-  <section class="board" id="contact">
-    <details class="board-details">
-      <summary>Contact — report a wrong price</summary>
-    <p><strong>Found a wrong price or calorie count?</strong> That is the most helpful message you can send. Use the “Report a wrong price” link in the footer below: check the Sources list first, then note the item name, the figure shown here, the figure you saw, where you saw it (the restaurant or official page), and the date.</p>
-    <p><strong>How corrections are made:</strong> a figure is only changed when it can be checked on an official Wendy's page. Reports based on other menu websites are not used, because those sites disagree with each other — see “How we source prices”.</p>
-    <p><strong>Please do not send:</strong> orders, complaints about a restaurant visit, or job applications. This is a fan reference site with no connection to any restaurant — for those, contact Wendy's directly through its official website, wendys.com.</p>
-    <p><strong>Response time:</strong> this is a small fan-run site, checked and updated by hand. Reports are read when the data is next re-checked against the official menu, and the data date at the top of the page always shows when that last happened.</p>
-    <p>There is no contact email or form on this site yet — the footer note above is the way to report a wrong price. Do not invent a contact address.</p>
-    </details>
-  </section>
-
-  <AdSlot />
 </BaseLayout>
 
-<script>
-  // Search + category chips: filter the full-menu board in the browser.
-  const search = document.getElementById('menu-search');
-  const chips = document.querySelectorAll('.chip');
-  const noMatch = document.getElementById('no-match');
-  let activeCategory = 'All';
-
-  function applyFilter() {
-    const q = (search.value || '').trim().toLowerCase();
-    let visible = 0;
-    document.querySelectorAll('#menu-board .menu-card').forEach((el) => {
-      const name = el.getAttribute('data-name') || '';
-      const cat = el.getAttribute('data-category') || '';
-      const ok = (activeCategory === 'All' || cat === activeCategory) && (!q || name.includes(q));
-      el.style.display = ok ? '' : 'none';
-      if (ok) visible++;
-    });
-    document.querySelectorAll('#menu-board .menu-group').forEach((g) => {
-      const anyVisible = [...g.querySelectorAll('.menu-card')].some((el) => el.style.display !== 'none');
-      g.style.display = anyVisible ? '' : 'none';
-    });
-    noMatch.hidden = visible !== 0;
-  }
-
-  search.addEventListener('input', applyFilter);
-  chips.forEach((chip) => {
-    chip.addEventListener('click', () => {
-      activeCategory = chip.getAttribute('data-category');
-      chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
-      applyFilter();
-    });
-  });
-
-  // Cursor-move tilt on photos: the card tilts slightly toward the cursor
-  // and lifts, the photo zooms gently. Mouse/trackpad only, and off entirely
-  // for visitors who ask for reduced motion. Touch/keyboard users get the
-  // same lift from tap/focus through CSS (:hover / :focus-within).
-  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
-  const finePointer = matchMedia('(pointer: fine)').matches;
-  if (!reduceMotion && finePointer) {
-    document.querySelectorAll('.tilt').forEach((el) => {
-      el.addEventListener('pointermove', (e) => {
-        const r = el.getBoundingClientRect();
-        const x = (e.clientX - r.left) / r.width - 0.5;
-        const y = (e.clientY - r.top) / r.height - 0.5;
-        el.style.transform = `perspective(800px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-4px)`;
-      });
-      el.addEventListener('pointerleave', () => { el.style.transform = ''; });
-    });
-  }
-</script>
+<TiltScript />

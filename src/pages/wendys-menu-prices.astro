@@ -1,0 +1,108 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import SearchBox from '../components/SearchBox.astro';
+import CategoryChips from '../components/CategoryChips.astro';
+import ItemCard from '../components/ItemCard.astro';
+import AdSlot from '../components/AdSlot.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import TiltScript from '../components/TiltScript.astro';
+import menuData from '../data/menu.json';
+import { itemsByCategory, countVerifiedPrices, categoryStats, formatPrice } from '../utils/menuStats.js';
+
+const { meta, items } = menuData;
+const byCategory = itemsByCategory(items);
+const stats = categoryStats(items);
+
+function statsLine(category) {
+  const s = stats[category];
+  const parts = [`${s.count} items`];
+  if (s.minPrice !== null) parts.push(`${formatPrice(s.minPrice)}–${formatPrice(s.maxPrice)}`);
+  if (s.avgCalories !== null) parts.push(`avg ${s.avgCalories} cal`);
+  return parts.join(' · ');
+}
+---
+<BaseLayout
+  title="Wendy's Menu Prices 2026 (USA) | Full List"
+  description="The full verified Wendy's menu with prices and calories — 150 items, checked 22 Nov 2026 at one Columbus restaurant. Search and filter."
+  itemCount={items.length}
+>
+  <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Full menu' }]} />
+  <section class="board page-head" aria-labelledby="page-title">
+    <h1 id="page-title">Wendy's Menu Prices 2026 (USA)</h1>
+    <p class="board-sub">{items.length} verified items · {countVerifiedPrices(items)} with a verified price · all prices for one restaurant only — 799 S. High St, Columbus, OH, 22 Nov 2026.</p>
+    <p class="basis">Wendy's publishes no national price list, so every price here is labelled with the one restaurant it was checked at. Your local restaurant may charge more or less. Anything not verified says “Not verified yet”.</p>
+  </section>
+
+  <div class="search-bar">
+    <SearchBox count={items.length} />
+    <CategoryChips items={items} />
+  </div>
+
+  <p id="no-match" hidden>No items match that search. Try a shorter word, or clear the search box to see everything again.</p>
+  <div id="menu-board">
+    {Object.entries(byCategory).map(([category, catItems]) => (
+      <section class="board menu-group" data-category={category} id={`menu-${category.toLowerCase()}`}>
+        <h2>{category}</h2>
+        <p class="cat-stats">{statsLine(category)}</p>
+        {category === 'Breakfast' && (
+          <p class="basis">Breakfast prices are “Not verified yet” — the restaurant was checked after breakfast ended. <a href="/wendys-breakfast-menu">See the breakfast page, with hours →</a></p>
+        )}
+        <div class="menu-grid">
+          {catItems.map((item) => <ItemCard item={item} avgCalories={stats[category].avgCalories} />)}
+        </div>
+      </section>
+    ))}
+  </div>
+
+  <AdSlot />
+  <RelatedLinks links={[
+    { href: '/wendys-breakfast-menu', label: 'Breakfast menu — hours and the 6 morning items' },
+    { href: '/wendys-nutrition', label: 'Nutrition — protein, fat, carbs and sodium' },
+    { href: '/wendys-calories', label: 'Calories — lowest and highest per category' },
+    { href: '/wendys-deals', label: 'Deals — Biggie Bags, Everyday Value and combos' },
+    { href: '/how-we-source-prices', label: 'How we source prices' },
+  ]} />
+</BaseLayout>
+
+<TiltScript />
+
+<script>
+  // Search + category chips: filter the full-menu board in the browser.
+  // The homepage search jumps here with ?q=… — read it and pre-filter.
+  const search = document.getElementById('menu-search');
+  const chips = document.querySelectorAll('.chip');
+  const noMatch = document.getElementById('no-match');
+  let activeCategory = 'All';
+
+  function applyFilter() {
+    const q = (search.value || '').trim().toLowerCase();
+    let visible = 0;
+    document.querySelectorAll('#menu-board .menu-card').forEach((el) => {
+      const name = el.getAttribute('data-name') || '';
+      const cat = el.getAttribute('data-category') || '';
+      const ok = (activeCategory === 'All' || cat === activeCategory) && (!q || name.includes(q));
+      el.style.display = ok ? '' : 'none';
+      if (ok) visible++;
+    });
+    document.querySelectorAll('#menu-board .menu-group').forEach((g) => {
+      const anyVisible = [...g.querySelectorAll('.menu-card')].some((el) => el.style.display !== 'none');
+      g.style.display = anyVisible ? '' : 'none';
+    });
+    noMatch.hidden = visible !== 0;
+  }
+
+  const params = new URLSearchParams(location.search);
+  const q = params.get('q');
+  if (q) search.value = q;
+  applyFilter();
+
+  search.addEventListener('input', applyFilter);
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      activeCategory = chip.getAttribute('data-category');
+      chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+      applyFilter();
+    });
+  });
+</script>

@@ -1,0 +1,36 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import DealsBoard from '../components/DealsBoard.astro';
+import AdSlot from '../components/AdSlot.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import menuData from '../data/menu.json';
+
+const { meta, items } = menuData;
+---
+<BaseLayout
+  title="Wendy's Deals 2026 | Biggie Bags & Value Menu"
+  description="Wendy's deals checked 22 Nov 2026 at one Columbus restaurant: Biggie Bags, Biggie Bundle, Everyday Value, combos, Frosty Key Tag and app offers."
+  itemCount={items.length}
+>
+  <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Deals' }]} />
+  <section class="board page-head" aria-labelledby="page-title">
+    <h1 id="page-title">Wendy's Deals 2026</h1>
+    <p class="board-sub">Biggie Deals, Everyday Value, Combos, Frosty Key Tag and app offers — checked 22 Nov 2026 at one restaurant only: 799 S. High St, Columbus, OH.</p>
+    <p class="basis">Deals are bundles, not single items. Biggie Bags, the Biggie Bundle and combos have no total calories shown on Wendy's site, so their totals say “Not verified yet” — only the per-component calories in the builders are shown.</p>
+  </section>
+
+  <section class="board" aria-labelledby="deals-heading">
+    <h2 id="deals-heading">All deals, combos and offers</h2>
+    <DealsBoard deals={menuData.deals} priceBasis={meta.price_basis} />
+    <p class="flag"><strong>Flagged, not reconciled:</strong> Wendy's own pages show different calories for the same item — Jr. Cheeseburger 260 Cal (Biggie Bites builder) vs 270 Cal (Everyday Value), Jr. Bacon Cheeseburger 300 vs 350, Double Stack 370 vs 380, Crispy Chicken Sandwich 290 vs 340. Each figure is shown exactly as on its own page.</p>
+  </section>
+
+  <AdSlot />
+  <RelatedLinks links={[
+    { href: '/wendys-menu-prices', label: 'Full menu — all 150 items with prices' },
+    { href: '/wendys-vs-mcdonalds', label: "Wendy's vs McDonald's — calories compared" },
+    { href: '/wendys-nutrition', label: 'Nutrition — protein, fat, carbs and sodium' },
+    { href: '/how-we-source-prices', label: 'How we source prices' },
+  ]} />
+</BaseLayout>

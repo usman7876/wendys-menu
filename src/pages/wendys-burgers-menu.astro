@@ -1,0 +1,18 @@
+---
+import CategoryPage from '../components/CategoryPage.astro';
+import menuData from '../data/menu.json';
+const { items } = menuData;
+const catItems = items.filter((i) => i.category === 'Burgers');
+---
+<CategoryPage
+  category="Burgers"
+  items={catItems}
+  title="Wendy's Burgers Menu Prices 2026 (USA)"
+  description="Wendy's burgers menu with verified prices and calories — checked 22 Nov 2026 at one restaurant only, 799 S. High St, Columbus, OH."
+  related={[
+    { href: '/wendys-menu-prices', label: 'Full menu — all 150 items with prices' },
+    { href: '/wendys-nutrition', label: 'Nutrition — protein, fat, carbs and sodium' },
+    { href: '/wendys-calories', label: 'Calories — lowest and highest per category' },
+    { href: '/wendys-deals', label: 'Deals — Biggie Bags, Everyday Value and combos' },
+  ]}
+/>

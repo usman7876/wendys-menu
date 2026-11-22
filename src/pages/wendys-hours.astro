@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import HoursBoard from '../components/HoursBoard.astro';
+import AdSlot from '../components/AdSlot.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import menuData from '../data/menu.json';
+
+const { items } = menuData;
+const hours = menuData.hours;
+const thursday = hours.restaurant_hours.find((d) => d.day === 'Thursday');
+---
+<BaseLayout
+  title="Wendy's Hours 2026 | Columbus Restaurant Times"
+  description="Opening hours for Wendy's, 799 S. High St, Columbus, OH: restaurant and drive-thru hours, breakfast hours, and the Thursday closure as listed."
+  itemCount={items.length}
+>
+  <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Hours' }]} />
+  <section class="board page-head" aria-labelledby="page-title">
+    <h1 id="page-title">Wendy's Hours 2026</h1>
+    <p class="board-sub">{hours.restaurant} · Phone {hours.phone} · from locations.wendys.com, checked 22 Nov 2026.</p>
+    <p class="basis">Hours vary by restaurant — always check your local Wendy's. These hours are for this one Columbus restaurant only.</p>
+  </section>
+
+  <section class="board" aria-labelledby="hours-heading">
+    <h2 id="hours-heading">Restaurant and drive-thru hours</h2>
+    <HoursBoard hours={hours} />
+    <p class="flag"><strong>Thursday: {thursday.hours} — Needs verification.</strong> The official location page lists Thursday as “Closed” in both the restaurant and drive-thru tables, with no reason given. No reason is invented here, and the closure has not been confirmed by a second check — it is shown exactly as the location page states it.</p>
+  </section>
+
+  <AdSlot />
+  <RelatedLinks links={[
+    { href: '/wendys-breakfast-menu', label: 'Breakfast menu — hours and the 6 morning items' },
+    { href: '/wendys-menu-prices', label: 'Full menu — all 150 items with prices' },
+    { href: '/wendys-deals', label: 'Deals — Biggie Bags, Everyday Value and combos' },
+    { href: '/how-we-source-prices', label: 'How we source prices' },
+  ]} />
+</BaseLayout>

@@ -1,0 +1,37 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import AdSlot from '../components/AdSlot.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import menuData from '../data/menu.json';
+
+const { items } = menuData;
+---
+<BaseLayout
+  title="Cookies Policy | Wendy's Menu Fan Site"
+  description="Cookies policy: this site currently sets no tracking cookies of its own. Your theme choice is stored locally in your own browser."
+  itemCount={items.length}
+>
+  <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Cookies Policy' }]} />
+  <section class="board page-head" aria-labelledby="page-title">
+    <h1 id="page-title">Cookies Policy</h1>
+    <p class="board-sub">Last updated 22 November 2026.</p>
+  </section>
+
+  <section class="board" aria-labelledby="cookies-heading">
+    <h2 id="cookies-heading">Cookies, in plain words</h2>
+    <p><strong>This site currently sets no tracking cookies of its own.</strong> There is no advertising code, no analytics code and no third-party tracker on this site at the time of writing.</p>
+    <p><strong>Theme choice:</strong> if you switch between the cream and charcoal looks, that choice is stored locally in your own browser (local storage, under the name “wendys-theme”) so the site remembers it next time. It is not a cookie, it is never sent to this site or to anyone else, and you can clear it by clearing your browser's site data. If you never touch the theme button, nothing is stored at all.</p>
+    <p><strong>External links:</strong> this site links out to Wendy's official pages and to mcdonalds.com. Those sites may set their own cookies once you follow a link — their own cookie policies apply there, not this one.</p>
+    <p><strong>If ads are added later:</strong> any future advertising would change this page. Before ads go live, this policy will be updated to say which ad service is used, what cookies or similar storage it sets, and how to opt out — and the <a href="/privacy-policy">Privacy Policy</a> will be updated at the same time.</p>
+    <p><strong>Changes:</strong> if this policy changes, the new version will replace this page and the “last updated” date above will change.</p>
+  </section>
+
+  <AdSlot />
+  <RelatedLinks links={[
+    { href: '/privacy-policy', label: 'Privacy policy' },
+    { href: '/terms', label: 'Terms of use' },
+    { href: '/about', label: 'About this site' },
+    { href: '/contact', label: 'Contact — report a wrong price' },
+  ]} />
+</BaseLayout>

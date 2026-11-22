@@ -1,0 +1,56 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ItemCard from '../components/ItemCard.astro';
+import AdSlot from '../components/AdSlot.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import TiltScript from '../components/TiltScript.astro';
+import menuData from '../data/menu.json';
+import { categoryStats } from '../utils/menuStats.js';
+
+const { meta, items } = menuData;
+const hours = menuData.hours;
+const breakfastItems = items.filter((i) => i.category === 'Breakfast');
+const stats = categoryStats(items);
+const nat = hours.breakfast_national;
+const thisRest = hours.breakfast_this_restaurant;
+---
+<BaseLayout
+  title="Wendy's Breakfast Menu 2026 | Hours & Prices"
+  description="Wendy's breakfast menu: 6 morning items with verified calories, breakfast hours for one Columbus restaurant, and national hours from the official FAQ."
+  itemCount={items.length}
+>
+  <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Menu', href: '/wendys-menu-prices' }, { label: 'Breakfast' }]} />
+  <section class="board page-head" aria-labelledby="page-title">
+    <h1 id="page-title">Wendy's Breakfast Menu 2026</h1>
+    <p class="board-sub">{breakfastItems.length} breakfast items · calories from Wendy's official national item pages · prices “Not verified yet”.</p>
+    <p class="basis"><strong>Breakfast prices are “Not verified yet”.</strong> The one Columbus restaurant used for prices was checked after 6 PM on 22 Nov 2026, after breakfast had ended, and its online menu had no Breakfast category at that time. Prices are never guessed — they stay “Not verified yet” until the same restaurant can be checked during breakfast hours.</p>
+  </section>
+
+  <section class="board" aria-labelledby="breakfast-hours-heading">
+    <h2 id="breakfast-hours-heading">Breakfast hours</h2>
+    <h3>This restaurant</h3>
+    <p>The location page for Wendy's, 799 S. High St, Columbus, OH states only: “Breakfast ends at <strong>{thisRest.ends_today}</strong> Today” — that is <strong>{thisRest.ends_today_date}</strong>. {thisRest.note}</p>
+    <p>Breakfast start time for this restaurant: <strong class="not-verified">Not verified yet</strong>. Weekly breakfast hours for this restaurant: <strong class="not-verified">Not verified yet</strong>.</p>
+    <h3>National — not this restaurant's hours</h3>
+    <p class="board-sub"><a href={nat.source_url} target="_blank" rel="noopener">Breakfast FAQ on wendys.com ↗</a></p>
+    <p><strong>NATIONAL:</strong> most Wendy's start serving breakfast at <strong>{nat.start}</strong>. The latest breakfast end is <strong>{nat.latest_end}</strong>. Delivery for most begins at <strong>{nat.delivery_begins}</strong> local time. {nat.note}</p>
+    <p class="flag"><strong>Flagged, not reconciled:</strong> {hours.breakfast_discrepancy}</p>
+  </section>
+
+  <div class="menu-grid">
+    {breakfastItems.map((item) => <ItemCard item={item} avgCalories={stats['Breakfast'].avgCalories} />)}
+  </div>
+
+  <p class="basis"><a href="/wendys-menu-prices">← Back to the full menu</a> · <a href="/wendys-hours">See all restaurant and drive-thru hours →</a></p>
+
+  <AdSlot />
+  <RelatedLinks links={[
+    { href: '/wendys-menu-prices', label: 'Full menu — all 150 items with prices' },
+    { href: '/wendys-hours', label: 'Hours — restaurant, drive-thru and breakfast' },
+    { href: '/wendys-calories', label: 'Calories — lowest and highest per category' },
+    { href: '/wendys-nutrition', label: 'Nutrition — protein, fat, carbs and sodium' },
+    { href: '/how-we-source-prices', label: 'How we source prices' },
+  ]} />
+</BaseLayout>
+<TiltScript />

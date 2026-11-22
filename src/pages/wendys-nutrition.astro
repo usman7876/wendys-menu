@@ -1,0 +1,47 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import GlanceTable from '../components/GlanceTable.astro';
+import AdSlot from '../components/AdSlot.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import menuData from '../data/menu.json';
+
+const { items } = menuData;
+---
+<BaseLayout
+  title="Wendy's Nutrition 2026 | Protein, Fat & Sodium"
+  description="Wendy's nutrition table for the USA: calories, protein, fat, carbs and sodium per item, copied from Wendy's official item pages, checked 22 Nov 2026."
+  itemCount={items.length}
+>
+  <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Nutrition' }]} />
+  <section class="board page-head" aria-labelledby="page-title">
+    <h1 id="page-title">Wendy's Nutrition 2026</h1>
+    <p class="board-sub">Protein, fat, carbs and sodium for every verified item — as listed on Wendy's official item pages.</p>
+    <p class="basis">In plain words: every figure in the table below was copied from that item's own page on Wendy's official online menu (order.wendys.com), checked 22 Nov 2026. Where Wendy's item page did not list protein, fat, carbs or sodium for that exact size, the cell honestly says “Not verified yet” — figures are never borrowed from a different size. A Junior, Small, Medium and Large are different servings, so their figures are listed separately and never averaged.</p>
+  </section>
+
+  <section class="board" aria-labelledby="table-heading">
+    <h2 id="table-heading">Full nutrition table</h2>
+    <GlanceTable items={items} />
+  </section>
+
+  <section class="board" aria-labelledby="discrepancies-heading">
+    <h2 id="discrepancies-heading">Where Wendy's own pages disagree</h2>
+    <p>These are shown, never smoothed over. Both figures are printed where they belong:</p>
+    <ul>
+      <li><strong>Chicken nuggets (Sides list vs item page):</strong> the category list showed 4 PC Chicken Nuggets at 180 Cal, 6 PC Spicy at 310 Cal and 4 PC Spicy at 200 Cal, while each item page with no dipping sauce showed 170, 280 and 190 Cal.</li>
+      <li><strong>Family Chili:</strong> 1,370 Cal on the category tile vs 530 Cal on its item page.</li>
+      <li><strong>Cookie Bundle (5 for $5):</strong> shown as 1,670 Cal, although 5 × 330 Cal is 1,650 Cal.</li>
+      <li><strong>Deals pages:</strong> Jr. Cheeseburger 260 Cal in the Biggie Bites builder vs 270 Cal in Everyday Value; Jr. Bacon Cheeseburger 300 vs 350; Double Stack 370 vs 380; Crispy Chicken Sandwich 290 vs 340. Each figure is shown exactly as on its own page.</li>
+    </ul>
+    <p>None of these are reconciled here. If you have an allergy or a medical need, rely on Wendy's official allergen and nutrition information, not on a fan site.</p>
+  </section>
+
+  <AdSlot />
+  <RelatedLinks links={[
+    { href: '/wendys-calories', label: 'Calories — lowest and highest per category' },
+    { href: '/wendys-menu-prices', label: 'Full menu — all 150 items with prices' },
+    { href: '/wendys-vs-mcdonalds', label: "Wendy's vs McDonald's — calories compared" },
+    { href: '/how-we-source-prices', label: 'How we source prices' },
+  ]} />
+</BaseLayout>

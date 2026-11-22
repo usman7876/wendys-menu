@@ -1,0 +1,38 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import AdSlot from '../components/AdSlot.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import menuData from '../data/menu.json';
+
+const { items } = menuData;
+---
+<BaseLayout
+  title="Terms of Use | Wendy's Menu Fan Site"
+  description="Terms for using this independent Wendy's menu reference: prices are a dated snapshot, calories come from Wendy's official menu, no orders here."
+  itemCount={items.length}
+>
+  <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Terms' }]} />
+  <section class="board page-head" aria-labelledby="page-title">
+    <h1 id="page-title">Terms of Use</h1>
+    <p class="board-sub">Last updated 22 November 2026.</p>
+  </section>
+
+  <section class="board" aria-labelledby="terms-heading">
+    <h2 id="terms-heading">The rules for using this reference</h2>
+    <p><strong>Reference only:</strong> this site is an independent, fan-run reference. It is not affiliated with, endorsed by, or sponsored by Wendy's or The Wendy's Company, and it does not take orders or sell food.</p>
+    <p><strong>Prices are a dated snapshot, not live prices:</strong> every price was checked on 22 Nov 2026 at one restaurant only — 799 S. High St, Columbus, OH — on Wendy's official online menu. Prices vary by restaurant and franchisee and may have changed since that date. Always confirm the price at the restaurant before you order.</p>
+    <p><strong>Calories and nutrition:</strong> calorie and nutrition figures are copied from Wendy's official online menu and are labelled “from Wendy's official online menu”. They describe the item as listed there; how an item is customised can change its figures. If you have an allergy or a medical need, rely on Wendy's official allergen and nutrition information, not on a fan site.</p>
+    <p><strong>Accuracy:</strong> figures are copied carefully and each one carries its source and date, but mistakes can happen. The <a href="/contact">Report a wrong price</a> form is there so errors can be fixed — corrections are only made from an official Wendy's page.</p>
+    <p><strong>Trademarks:</strong> “Wendy's” and the item names on this site (such as Dave's Single, Baconator and Frosty) are trademarks of their respective owners. They are used here only to describe the brand and its menu.</p>
+    <p><strong>Changes:</strong> if these terms change, the new version will replace this page and the “last updated” date above will change.</p>
+  </section>
+
+  <AdSlot />
+  <RelatedLinks links={[
+    { href: '/privacy-policy', label: 'Privacy policy' },
+    { href: '/cookies-policy', label: 'Cookies policy' },
+    { href: '/about', label: 'About this site' },
+    { href: '/how-we-source-prices', label: 'How we source prices' },
+  ]} />
+</BaseLayout>
