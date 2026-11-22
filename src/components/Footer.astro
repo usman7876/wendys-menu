@@ -1,0 +1,36 @@
+---
+// Footer: trust links, the "report a wrong price" note, and trademarks.
+const { itemCount } = Astro.props;
+---
+<footer class="site-footer">
+  <div class="wrap">
+    <nav aria-label="Footer">
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+      <a href="#privacy">Privacy Policy</a>
+      <a href="#terms">Terms</a>
+      <a href="#how-we-source-prices">How we source prices</a>
+      <a href="#sources">Sources</a>
+      <a href="#hours">Hours</a>
+      <a href="#comparison">Wendy's vs McDonald's</a>
+    </nav>
+    <p>
+      <strong>Report a problem:</strong> spotted a price or calorie count that looks wrong?
+      Check the Sources list first, then note the item name, the figure shown here,
+      the figure you saw, where you saw it, and the date. Corrections are only made
+      from an official Wendy's page — never from a guess.
+    </p>
+    <p>
+      Prices on this page are a dated snapshot, not live prices. Prices vary by
+      restaurant and franchisee and may have changed since 22 Nov 2026. Always confirm
+      the price at the restaurant before ordering.
+    </p>
+    <p>
+      Wendy's, Dave's Single, Baconator and Frosty are trademarks of their respective
+      owners. This site uses the name “Wendy's” only to describe the brand and its menu.
+      This site is not affiliated with, endorsed by, or sponsored by Wendy's or
+      The Wendy's Company.
+    </p>
+    <p>Independent fan site · Data checked 22 November 2026 · {itemCount} verified items.</p>
+  </div>
+</footer>

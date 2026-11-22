@@ -1,0 +1,49 @@
+---
+// Hours board: this one Columbus restaurant, from locations.wendys.com,
+// checked 22 Nov 2026. National breakfast hours are labelled national and
+// kept separate — they are not this restaurant's hours.
+const { hours } = Astro.props;
+---
+<p class="board-sub">
+  {hours.restaurant} · Phone {hours.phone} ·
+  <a href={hours.location_url} target="_blank" rel="noopener">Location page ↗</a>
+</p>
+<p><strong>Services:</strong> {hours.services.join(', ')}. Also listed: {hours.also_listed.join(', ')}.</p>
+
+<h3>Restaurant hours</h3>
+<table>
+  <thead><tr><th>Day</th><th>Hours</th></tr></thead>
+  <tbody>{hours.restaurant_hours.map((d) => (
+    <tr>
+      <td data-label="Day"><strong>{d.day}</strong></td>
+      <td data-label="Hours">{d.hours}</td>
+    </tr>
+  ))}</tbody>
+</table>
+
+<h3>Drive-thru hours</h3>
+<p class="board-sub">{hours.hours_note}</p>
+<table>
+  <thead><tr><th>Day</th><th>Hours</th></tr></thead>
+  <tbody>{hours.drive_thru_hours.map((d) => (
+    <tr>
+      <td data-label="Day"><strong>{d.day}</strong></td>
+      <td data-label="Hours">{d.hours}</td>
+    </tr>
+  ))}</tbody>
+</table>
+<p class="flag"><strong>Thursday: Closed.</strong> {hours.thursday_note}</p>
+
+<h3>Breakfast — this restaurant</h3>
+<p>This Wendy's serves breakfast. The location page states only: “Breakfast ends at {hours.breakfast_this_restaurant.ends_today} Today” — that is {hours.breakfast_this_restaurant.ends_today_date}. {hours.breakfast_this_restaurant.note}</p>
+<p>Breakfast start time for this restaurant: <strong>Not verified yet</strong>. Weekly breakfast hours for this restaurant: <strong>Not verified yet</strong>.</p>
+
+<h3>Breakfast — national, not this restaurant</h3>
+<p class="board-sub"><a href={hours.breakfast_national.source_url} target="_blank" rel="noopener">Breakfast FAQ on wendys.com ↗</a></p>
+<p>Most Wendy's start serving breakfast at <b>{hours.breakfast_national.start}</b>. The latest is <b>{hours.breakfast_national.latest_end}</b>. Delivery for most begins at <b>{hours.breakfast_national.delivery_begins}</b> local time. {hours.breakfast_national.note}</p>
+<p class="flag"><strong>Flagged, not reconciled:</strong> {hours.breakfast_discrepancy}</p>
+
+<h3>Delivery and holidays</h3>
+<p><strong>Delivery hours:</strong> Not verified yet — {hours.delivery_note}</p>
+<p><strong>Holiday hours:</strong> Not verified yet — {hours.holiday_note}</p>
+<p>{hours.dining_room_note}</p>

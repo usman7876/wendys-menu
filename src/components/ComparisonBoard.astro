@@ -1,0 +1,79 @@
+---
+// Wendy's vs McDonald's: calories only. McDonald's prices were not found
+// anywhere on mcdonalds.com — the site sends you to the app for prices —
+// so no price winner is ever named. Wendy's figures come from menu.json;
+// McDonald's figures come from stage5.json.
+const { items, comparison, priceBasis } = Astro.props;
+const findWendys = (name) => items.find((i) => i.name === name);
+const findMc = (name) => comparison.items.find((i) => i.name === name);
+const cal = (item) =>
+  item && item.calories !== null && item.calories !== undefined
+    ? `${item.calories} Cal`
+    : 'Not verified yet';
+const price = (item, basis) =>
+  item && item.price !== null && item.price !== undefined
+    ? `$${item.price.toFixed(2)}`
+    : 'Not verified yet';
+const groups = [...new Set(comparison.pairs.map((p) => p.group))];
+---
+<p class="board-sub">McDonald's: {comparison.restaurant.name}, {comparison.restaurant.address}, {comparison.restaurant.phone}, {comparison.restaurant.hours}. <a href={comparison.restaurant.location_url} target="_blank" rel="noopener">Restaurant page ↗</a></p>
+<p class="flag"><strong>McDonald's prices: not found.</strong> {comparison.price_note}</p>
+<p>{comparison.pairs_note}</p>
+
+{groups.map((group) => (
+  <>
+    <h3>{group}</h3>
+    <table>
+      <thead><tr><th>Wendy's item</th><th>Wendy's price</th><th>Wendy's calories</th><th>McDonald's item</th><th>McDonald's price</th><th>McDonald's calories</th></tr></thead>
+      <tbody>
+        {comparison.pairs.filter((p) => p.group === group).map((p) => {
+          const w = findWendys(p.wendys);
+          const m = p.mcdonalds ? findMc(p.mcdonalds) : null;
+          return (
+            <tr>
+              <td data-label="Wendy's item"><strong>{p.wendys}</strong></td>
+              <td data-label="Wendy's price">{price(w)} {w && w.price !== null ? `(${priceBasis})` : ''}</td>
+              <td data-label="Wendy's calories">{cal(w)}</td>
+              <td data-label="McDonald's item"><strong>{p.mcdonalds ?? '—'}</strong>{p.note ? <><br />{p.note}</> : ''}</td>
+              <td data-label="McDonald's price">Not verified yet — price only in the McDonald's app</td>
+              <td data-label="McDonald's calories">{m ? cal(m) : '—'}</td>
+            </tr>
+          );
+        })}
+      </tbody>
+    </table>
+  </>
+))}
+
+<h3>McValue</h3>
+<p class="board-sub"><a href={comparison.mcvalue.source_url} target="_blank" rel="noopener">McValue menu on mcdonalds.com ↗</a> — no individual prices shown there.</p>
+<p><strong>{comparison.mcvalue.under_3_label}:</strong> {comparison.mcvalue.under_3.join(', ')}.</p>
+<p><strong>$4 Meal Deals (Breakfast):</strong> {comparison.mcvalue.meal_deals_breakfast.join(', ')}. {comparison.mcvalue.meal_deals_breakfast_note}</p>
+<table>
+  <thead><tr><th>Meal deal</th><th>Price</th><th>Calories</th></tr></thead>
+  <tbody>
+    {comparison.mcvalue.meal_deals.map((d) => (
+      <tr>
+        <td data-label="Meal deal"><strong>{d.name}</strong><br />{d.contents}</td>
+        <td data-label="Price">Not verified yet — price only in the McDonald's app</td>
+        <td data-label="Calories">{d.calories} Cal</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<h3>Extra Value Meals</h3>
+<p class="board-sub">No prices shown — every price says “Not verified yet”.</p>
+<table>
+  <thead><tr><th>Meal</th><th>Price</th><th>Calories</th></tr></thead>
+  <tbody>
+    {comparison.extra_value_meals.map((d) => (
+      <tr>
+        <td data-label="Meal"><strong>{d.name}</strong><br />{d.contents}</td>
+        <td data-label="Price">Not verified yet — price only in the McDonald's app</td>
+        <td data-label="Calories">{d.calories} Cal</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+<p>{comparison.items_source_note}</p>

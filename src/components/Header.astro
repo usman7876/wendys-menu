@@ -1,0 +1,29 @@
+---
+// Site header: brand, section links, and the light/dark toggle.
+---
+<header class="site-header">
+  <div class="wrap">
+    <a class="brand" href="/">Wendy's Menu<small>Prices USA</small></a>
+    <nav aria-label="Main">
+      <a href="#menu">Menu</a>
+      <a href="#breakfast">Breakfast</a>
+      <a href="#nutrition">Nutrition</a>
+      <a href="#deals">Deals</a>
+      <a href="#about">About</a>
+      <a href="#contact">Contact</a>
+    </nav>
+    <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Switch between light and dark mode">Dark mode</button>
+  </div>
+</header>
+<script>
+  const btn = document.getElementById('theme-toggle');
+  const updateLabel = () => {
+    btn.textContent = document.documentElement.classList.contains('dark') ? 'Light mode' : 'Dark mode';
+  };
+  updateLabel();
+  btn.addEventListener('click', () => {
+    const dark = document.documentElement.classList.toggle('dark');
+    try { localStorage.setItem('wendys-theme', dark ? 'dark' : 'light'); } catch (e) {}
+    updateLabel();
+  });
+</script>

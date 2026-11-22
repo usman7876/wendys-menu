@@ -1,0 +1,31 @@
+---
+import { formatPrice } from '../utils/menuStats.js';
+// Popular prices: the items people ask about most, taken from the same
+// verified data list as everything else. Every price carries its basis.
+const { items, priceBasis } = Astro.props;
+const popularNames = [
+  "Dave's Single",
+  'Baconator',
+  'Spicy Chicken Sandwich',
+  'Chicken Nuggets — 6 pc',
+  'Classic Chocolate Frosty — Small',
+];
+const popular = popularNames
+  .map((name) => items.find((i) => i.name === name))
+  .filter(Boolean);
+---
+<table>
+  <thead>
+    <tr><th>Item</th><th>Price</th><th>Calories</th><th>Price basis</th></tr>
+  </thead>
+  <tbody>
+    {popular.map((item) => (
+      <tr>
+        <td data-label="Item"><strong>{item.name}</strong></td>
+        <td data-label="Price">{item.price !== null ? formatPrice(item.price) : <span class="not-verified">Not verified yet</span>}</td>
+        <td data-label="Calories">{item.calories !== null ? `${item.calories} Cal` : 'Not verified yet'}</td>
+        <td data-label="Price basis">{item.price !== null ? priceBasis : 'Price: Not verified yet'}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>

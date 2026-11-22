@@ -1,0 +1,89 @@
+---
+// Deals board: every deal, bundle and offer, rendered from stage5.json.
+// Prices are from the same one Columbus restaurant as the menu, checked
+// 22 Nov 2026. A bundle with no total calories shown says so honestly.
+import { formatPrice } from '../utils/menuStats.js';
+const { deals, priceBasis } = Astro.props;
+const { biggie_bites: bites, biggie_bags: bags, biggie_bundle: bundle } = deals;
+const money = (p) => (p !== null && p !== undefined ? formatPrice(p) : 'Not verified yet');
+const cal = (c) => (c !== null && c !== undefined ? `${c} Cal` : 'Not verified yet');
+const choiceCal = (c) =>
+  c.calories !== undefined && c.calories !== null
+    ? `${c.calories} Cal`
+    : `${c.calories_low}–${c.calories_high} Cal`;
+---
+<h3>Biggie Deals</h3>
+<p class="board-sub">Checked 22 Nov 2026 · {priceBasis} · {deals.biggie_note}</p>
+
+<div class="menu-line" data-name="biggie bites" data-category="Deals">
+  <div>
+    <span class="name">{bites.name} — {bites.description}</span>
+    <span class="cal">Bundle total calories: {bites.bundle_calories_note}</span>
+    <span class="item-meta">{priceBasis} · <a href={bites.source_url} target="_blank" rel="noopener">Official source ↗</a></span>
+  </div>
+  <span class="dots" aria-hidden="true"></span>
+  <span class="price">{money(bites.price)}</span>
+</div>
+<p><strong>First pick, one of:</strong> {bites.first_choices.map((c) => `${c.name} (${choiceCal(c)})`).join(', ')}.</p>
+<p><strong>Second pick, one of:</strong> {bites.second_choices.map((c) => `${c.name} (${choiceCal(c)})`).join(', ')}.</p>
+
+{[...bags, bundle].map((bag) => (
+  <div class="menu-line" data-name={bag.name.toLowerCase()} data-category="Deals">
+    <div>
+      <span class="name">{bag.name}</span>
+      <span class="cal">{bag.contents} · Calories: Not verified yet — no total shown for the bundle</span>
+      <span class="item-meta">{priceBasis} · <a href={bag.source_url} target="_blank" rel="noopener">Official source ↗</a></span>
+    </div>
+    <span class="dots" aria-hidden="true"></span>
+    <span class="price">{money(bag.price)}</span>
+  </div>
+))}
+
+<h3>Everyday Value</h3>
+<p class="board-sub">No end date shown · {priceBasis}</p>
+<table>
+  <thead><tr><th>Item</th><th>Price</th><th>Calories</th><th>Price basis</th></tr></thead>
+  <tbody>
+    {deals.everyday_value.map((d) => (
+      <tr>
+        <td data-label="Item"><strong>{d.name}</strong></td>
+        <td data-label="Price">{money(d.price)}</td>
+        <td data-label="Calories">{cal(d.calories)}</td>
+        <td data-label="Price basis">{priceBasis}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+<p><a href={deals.everyday_value_source_url} target="_blank" rel="noopener">Everyday Value on order.wendys.com ↗</a></p>
+<p class="flag"><strong>Flagged, not reconciled:</strong> {deals.calorie_discrepancy}</p>
+
+<h3>Combos</h3>
+<p class="board-sub">No calories shown on the Combos category page, so every combo's calories say “Not verified yet”. No limited-time wording shown.</p>
+<table>
+  <thead><tr><th>Combo</th><th>Price</th><th>Calories</th></tr></thead>
+  <tbody>
+    {deals.combos.map((d) => (
+      <tr>
+        <td data-label="Combo"><strong>{d.name}</strong>{d.contents ? <><br />{d.contents}</> : ''}</td>
+        <td data-label="Price">{money(d.price)}</td>
+        <td data-label="Calories">Not verified yet</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+<p>{deals.combos_note} <a href={deals.combos_source_url} target="_blank" rel="noopener">Combos on order.wendys.com ↗</a></p>
+
+<h3>Other offers</h3>
+<div class="menu-line" data-name="frosty key tag" data-category="Deals">
+  <div>
+    <span class="name">{deals.key_tag.name}</span>
+    <span class="cal">{deals.key_tag.offer}. Sold {deals.key_tag.sold}. {deals.key_tag.charity}.</span>
+    <span class="item-meta">{priceBasis} · <a href={deals.key_tag.source_url} target="_blank" rel="noopener">Official source ↗</a></span>
+  </div>
+  <span class="dots" aria-hidden="true"></span>
+  <span class="price">{money(deals.key_tag.price)}</span>
+</div>
+<p><strong>{deals.new_user_banner}</strong></p>
+<p><strong>National offers page:</strong> {deals.national_offers.headline} {deals.national_offers.app_offers_total} app offers listed in total, with no end dates shown — {deals.national_offers.app_offers_named.join('; ')}. {deals.national_offers.app_offers_note} <a href={deals.national_offers.source_url} target="_blank" rel="noopener">Offers on wendys.com ↗</a></p>
+<p><strong>4 for $4:</strong> {deals.four_for_four}</p>
+<p><strong>Holiday Box:</strong> {deals.holiday_box.contents}. Price: Not verified yet — {deals.holiday_box.note}</p>

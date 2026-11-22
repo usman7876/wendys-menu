@@ -1,0 +1,45 @@
+---
+// Sources: only official sources were used, all checked on 22 Nov 2026:
+// wendys.com, order.wendys.com, locations.wendys.com and mcdonalds.com.
+// No third-party menu site was used. One line per menu item, then the
+// Stage 5 source pages (deals, comparison, hours) that are not single items.
+const { items, stage5 } = Astro.props;
+const extraSources = [
+  { label: 'Biggie Deals category', url: 'https://order.wendys.com/us/en/menu/129' },
+  { label: 'Everyday Value category', url: 'https://order.wendys.com/us/en/menu/104' },
+  { label: 'Combos category', url: 'https://order.wendys.com/us/en/menu/137' },
+  { label: 'Frosty Key Tag', url: 'https://order.wendys.com/us/en/menu/142' },
+  { label: 'National Meal Deals (Biggie Deals)', url: 'https://www.wendys.com/mealdeals' },
+  { label: 'National offers and coupons', url: 'https://www.wendys.com/offers-coupons' },
+  { label: 'National Beverages menu', url: 'https://order.wendys.com/us/en/national/menu/beverages' },
+  { label: 'National Coffee menu', url: 'https://order.wendys.com/us/en/national/menu/coffee' },
+  { label: 'National Fries & Sides menu', url: 'https://order.wendys.com/us/en/national/menu/fries-sides' },
+  { label: 'National Sides and Sweets menu', url: 'https://order.wendys.com/us/en/national/menu/sides-and-sweets' },
+  { label: 'This restaurant — location and hours', url: stage5.hours.location_url },
+  { label: 'National breakfast FAQ', url: 'https://www.wendys.com/breakfast' },
+  { label: "McDonald's restaurant, Columbus", url: stage5.comparison.restaurant.location_url },
+  { label: 'McValue menu', url: stage5.comparison.mcvalue.source_url },
+];
+---
+<p>Only official sources were used, all checked on 22 Nov 2026:
+<a href="https://www.wendys.com/breakfast" target="_blank" rel="noopener">wendys.com</a>
+(breakfast hours FAQ, Meal Deals, offers),
+<a href="https://order.wendys.com/us/en/menu" target="_blank" rel="noopener">order.wendys.com</a>
+(prices and calories),
+<a href="https://locations.wendys.com/united-states/oh/columbus/799-s-high-street" target="_blank" rel="noopener">locations.wendys.com</a>
+(this restaurant's hours) and
+<a href="https://www.mcdonalds.com" target="_blank" rel="noopener">mcdonalds.com</a>
+(the comparison only). No third-party menu site was used. One line per menu item:</p>
+<ul class="sources-list">
+  {items.map((item) => (
+    <li>{item.name} — <a href={item.source_url} target="_blank" rel="noopener">{item.source_url}</a></li>
+  ))}
+</ul>
+<p><strong>Stage 5 source pages</strong> (deals, comparison and hours — not single menu items):</p>
+<ul class="sources-list">
+  {extraSources.map((s) => (
+    <li>{s.label} — <a href={s.url} target="_blank" rel="noopener">{s.url}</a></li>
+  ))}
+</ul>
+<p><strong>About the Oatmeal Bar:</strong> it is <strong>not listed as a menu item on this page</strong> because it was <strong>not found at all on Wendy's official site on 22 Nov 2026</strong> — no price, no calories, not listed, and its national item page returned a 404 (page not found) error. It has not been filled in from any other site. If Wendy's lists it officially again, it will be added with its official figures and date.</p>
+<p><strong>About the Frosty-ccino:</strong> it is <strong>not listed as a menu item on this page</strong> because it was <strong>not found at this restaurant</strong> — not in the Frosty category, not in the Coffee category, and no US price or calories were found on wendys.com or order.wendys.com. It is a breakfast item and every check was in the evening, after breakfast ended, so a morning re-check is needed before it can be added.</p>

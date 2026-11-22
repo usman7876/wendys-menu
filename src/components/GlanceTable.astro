@@ -1,0 +1,62 @@
+---
+import { caloriesByCategory, caloriesLabel } from '../utils/menuStats.js';
+// Full nutrition table: one row per verified item. Where Wendy's item page
+// did not list protein, fat, carbs or sodium for that exact size, the cell
+// honestly says "Not verified yet" — figures are never borrowed from a
+// different size. Where Wendy's shows a calorie range instead of one figure
+// (Coca-Cola Freestyle, national-only drinks), the range is shown as given.
+const { items } = Astro.props;
+const byCat = caloriesByCategory(items);
+const cell = (v, unit) => (v !== null && v !== undefined ? `${v} ${unit}` : 'Not verified yet');
+const calCell = (item) => {
+  const label = caloriesLabel(item);
+  return label !== null ? label : 'Not verified yet';
+};
+---
+<table>
+  <thead>
+    <tr><th>Item</th><th>Category</th><th>Calories</th><th>Protein</th><th>Total fat</th><th>Carbs</th><th>Sodium</th></tr>
+  </thead>
+  <tbody>
+    {items.map((item) => (
+      <tr>
+        <td data-label="Item"><strong>{item.name}</strong></td>
+        <td data-label="Category">{item.category}</td>
+        <td data-label="Calories">{calCell(item)}</td>
+        <td data-label="Protein">{cell(item.protein_g, 'g')}</td>
+        <td data-label="Total fat">{cell(item.fat_g, 'g')}</td>
+        <td data-label="Carbs">{cell(item.carbs_g, 'g')}</td>
+        <td data-label="Sodium">{cell(item.sodium_mg, 'mg')}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<h3>Calories by category</h3>
+<p>How many items in each part of the menu have a verified calorie count. This is a count of checked items, not a calorie range.</p>
+<table>
+  <thead><tr><th>Category</th><th>Items with verified calories</th><th>Total items</th></tr></thead>
+  <tbody>
+    {byCat.map((row) => (
+      <tr>
+        <td data-label="Category">{row.category}</td>
+        <td data-label="Items with verified calories">{row.verified}</td>
+        <td data-label="Total items">{row.total}</td>
+      </tr>
+    ))}
+  </tbody>
+</table>
+
+<h3>Allergens and ingredients</h3>
+<p><strong>Not verified yet.</strong> No allergen or ingredient list is published on this page, because none has been verified item by item for the USA menu. If you have an allergy, check Wendy's official allergen information and ask the restaurant before you order.</p>
+
+<h3>Daily amounts, in plain words</h3>
+<p>Nutrition labels often compare a serving with a full day's food, using a general guide of 2,000 calories a day. That guide is only a rough reference — how much you need depends on you.</p>
+
+<p><strong>How to read this table:</strong> “Calories” is the energy in one serving as listed on Wendy's official online menu. Protein, fat and carbs are in grams (g) and sodium in milligrams (mg). A Junior, Small, Medium and Large are different servings, so their figures are listed separately and never averaged.</p>
+
+<p><strong>A note on Wendy's own lists:</strong> Wendy's national lists sometimes show a slightly different calorie count from the item's own page — Breakfast Baconator 630 Cal on one list vs 680 Cal on its item page; Bacon, Egg &amp; Cheese Biscuit 370 vs 420; Sausage, Egg &amp; Swiss Croissant 580 vs 590. This page always uses the item-page value.</p>
+
+<p><strong>More of Wendy's own disagreements, shown not smoothed over:</strong> the Deals pages show different calories for the same item in different places — Jr. Cheeseburger 260 Cal in the Biggie Bites builder vs 270 Cal in Everyday Value; Jr. Bacon Cheeseburger 300 vs 350; Double Stack 370 vs 380; Crispy Chicken Sandwich 290 vs 340. Each figure is shown exactly as on its own page. In Sides, the category list showed 4 PC Chicken Nuggets at 180 Cal, 6 PC Spicy at 310 Cal and 4 PC Spicy at 200 Cal, while each item page with no dipping sauce showed 170, 280 and 190 Cal. Family Chili showed 1,370 Cal on the category tile and 530 Cal on its item page. The 5 for $5 Cookie Bundle is shown as 1,670 Cal, although 5 × 330 Cal is 1,650 Cal. None of these are reconciled here — both figures are printed where they belong, with a flag.</p>
+
+<p><strong>How nutrition figures were checked:</strong> one item at a time, on Wendy's official online menu (order.wendys.com), on 22 Nov 2026. The calories and nutrients were copied exactly as printed for that item and size, and the official page for each item is listed in Sources below.</p>

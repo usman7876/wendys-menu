@@ -1,0 +1,22 @@
+---
+import { formatPrice, caloriesLabel } from '../utils/menuStats.js';
+const { item, priceBasis } = Astro.props;
+const price = formatPrice(item.price);
+const calLabel = caloriesLabel(item);
+---
+<div class="menu-line" data-name={item.name.toLowerCase()} data-category={item.category}>
+  <div>
+    <span class="name">{item.name}</span>
+    <span class="cal">
+      {calLabel !== null ? `${calLabel}, from Wendy's official online menu` : 'Calories: Not verified yet'}
+    </span>
+    {item.note && <span class="item-note">{item.note}</span>}
+    <span class="item-meta">
+      {item.price !== null ? priceBasis : 'Price: Not verified yet'}
+      {' · '}
+      <a href={item.source_url} target="_blank" rel="noopener">Official source ↗</a>
+    </span>
+  </div>
+  <span class="dots" aria-hidden="true"></span>
+  <span class="price">{price !== null ? price : <span class="not-verified">Not verified yet</span>}</span>
+</div>

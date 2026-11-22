@@ -1,0 +1,11 @@
+---
+import { categories } from '../utils/menuStats.js';
+const { items } = Astro.props;
+const cats = categories(items);
+---
+<div class="chips" role="group" aria-label="Filter menu by category">
+  <button class="chip" type="button" data-category="All" aria-pressed="true">All</button>
+  {cats.map((cat) => (
+    <button class="chip" type="button" data-category={cat} aria-pressed="false">{cat}</button>
+  ))}
+</div>
