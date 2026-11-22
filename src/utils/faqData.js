@@ -1,0 +1,105 @@
+// FAQ answers, worked out from the same verified data list as the menu,
+// so the numbers here can never disagree with the tables. Both the visible
+// FAQ section (Faq.astro) and the FAQPage structured data (BaseLayout) use
+// this one function — the JSON-LD can only ever repeat what the page shows.
+import { countVerifiedPrices, countVerifiedCalories, countBreakfast, lowestCalorie, highestCalorie } from './menuStats.js';
+
+export function buildFaqs(items, priceBasis, stage5) {
+// Every answer is worked out from the same verified data list as the menu,
+// so the numbers here can never disagree with the tables. `limit` shows
+// only the first few questions (homepage teaser); without it, all show.
+const total = items.length;
+const verifiedPrices = countVerifiedPrices(items);
+const verifiedCalories = countVerifiedCalories(items);
+const breakfastCount = countBreakfast(items);
+const lowest = lowestCalorie(items);
+const highest = highestCalorie(items);
+const cheapestFries = items
+  .filter((i) => i.name.includes('Fries') && i.price !== null)
+  .reduce((a, b) => (b.price < a.price ? b : a));
+const seasonedPotatoes = items.find((i) => i.name === 'Seasoned Potatoes — Small');
+
+const faqs = [
+  {
+    q: "How much is a Dave's Single?",
+    a: `$5.59 — ${priceBasis}, Carryout, checked on order.wendys.com. It has 560 Cal, from Wendy's official online menu. The price at your local restaurant may be different.`,
+  },
+  {
+    q: 'How many items are on this page right now?',
+    a: `There are ${total} verified items in the data list: ${verifiedPrices} with a verified price and ${breakfastCount} breakfast items with verified calories but no verified price yet.`,
+  },
+  {
+    q: "What time does Wendy's serve breakfast?",
+    a: "From Wendy's official breakfast FAQ on wendys.com: most Wendy's start serving breakfast at 6:30 AM, and breakfast ends at the latest at 10:30 AM. Delivery for most restaurants begins at 8:00 AM local time. Check your local Wendy's for its exact hours — and note the flag in the Hours section: this Columbus restaurant's own page says breakfast ends at 11:00 AM today, which disagrees with the national 10:30 AM latest end.",
+  },
+  {
+    q: "What time does Wendy's stop serving breakfast?",
+    a: "At the latest, 10:30 AM, according to Wendy's official breakfast FAQ on wendys.com — but this Columbus restaurant's own location page says breakfast ends at 11:00 AM today (Sunday, 22 Nov 2026). Both figures are shown in the Hours section and are not reconciled. Individual restaurants may stop earlier, so check your local Wendy's.",
+  },
+  {
+    q: 'Why do breakfast items have no price?',
+    a: 'The one Columbus restaurant used for prices on this page was checked after 6 PM on 22 Nov 2026, after breakfast had ended at 10:30 AM, and its online menu had no Breakfast category at that time. Breakfast prices therefore honestly say “Not verified yet” rather than being guessed.',
+  },
+  {
+    q: "Do Wendy's prices vary between restaurants?",
+    a: `Yes. Wendy's publishes no national price list, and each restaurant sets its own prices. That is why every price here is labelled “${priceBasis}” and is never presented as a national or live price.`,
+  },
+  {
+    q: 'Which verified item has the fewest calories?',
+    a: `Among the ${verifiedCalories} items with verified calories, the lowest is ${lowest.name} at ${lowest.calories} Cal, and the highest is ${highest.name} at ${highest.calories} Cal — both from Wendy's official online menu.`,
+  },
+  {
+    q: 'Is the Oatmeal Bar on the Wendy\'s menu?',
+    a: 'It was not found at all on Wendy\'s official site on 22 Nov 2026 — no price, no calories, not listed, and its national item page returned a 404 error — so it is not listed as a menu item on this page, and no figures for it have been taken from any other site.',
+  },
+  {
+    q: 'Does this page list allergens or ingredients?',
+    a: 'Not yet. Allergen information has not been verified item by item for the USA menu, so this page says “Not verified yet”. If you have an allergy, check Wendy\'s official allergen information and ask the restaurant before you order.',
+  },
+  {
+    q: 'Is this the official Wendy\'s website?',
+    a: "No. This is an independent fan site. It is not affiliated with or endorsed by Wendy's, it does not take orders, and it uses no Wendy's logo or official photos.",
+  },
+  {
+    q: 'What should I do if a price looks wrong?',
+    a: 'Use the “Report a wrong price” note in the footer. Say which item it is, the figure shown here, the figure you saw, where you saw it, and the date. Corrections are only made from an official Wendy\'s page.',
+  },
+  {
+    q: 'How much is a Biggie Bag?',
+    a: `Each Biggie Bag is $6.00 — ${priceBasis}, checked 22 Nov 2026: a sandwich, plus 4 PC Nuggets, a Jr. Fry and a Small Soft Drink. The Biggie Bundle is $8.00, and Biggie Bites is $4.00 for any 2 picks. No total calories are shown for any bundle, so bundle totals honestly say “Not verified yet”.`,
+  },
+  {
+    q: 'Why does the same item show different calories in different places?',
+    a: 'Because Wendy\'s own site disagrees with itself, and this page shows both figures instead of picking one. Jr. Cheeseburger is 260 Cal in the Biggie Bites builder but 270 Cal in Everyday Value; Jr. Bacon Cheeseburger 300 vs 350; Double Stack 370 vs 380; Crispy Chicken Sandwich 290 vs 340. Family Chili is 1,370 Cal on the category tile but 530 Cal on its item page. The nuggets listed as sides show 180 / 310 / 200 Cal in the list but 170 / 280 / 190 Cal with no dipping sauce on their item pages. None of these are reconciled here.',
+  },
+  {
+    q: 'How much is a Coca-Cola Freestyle, and how many calories does it have?',
+    a: `Small $2.29, Medium $2.89, Large $3.39 — ${priceBasis}. It has no single calorie number: the site shows a range of 0–434 Cal because it depends on the drink and flavour you pick. For example, plain Coca-Cola Small is 180 Cal and Diet Coke Small is 0 Cal.`,
+  },
+  {
+    q: 'Does Wendy\'s sell iced tea or a Frosty-ccino?',
+    a: 'Not at this restaurant, as far as the official site shows. No standalone iced tea was listed, no separate iced coffee other than Cold Brew, and no Frosty-ccino was found in the Frosty or Coffee categories — so all three say “Not verified yet” here. Frosty-ccino is a breakfast item and every check was in the evening, so it needs a morning re-check.',
+  },
+  {
+    q: 'What time does this Wendy\'s open and close?',
+    a: 'This is the one Columbus restaurant used for prices: Monday to Wednesday and Friday 7:00 AM to 3:00 AM, Saturday and Sunday 7:30 AM to 3:00 AM, for both the restaurant and the drive-thru. Thursday is listed as “Closed” on the official location page, with no reason given — see the Hours section.',
+  },
+  {
+    q: 'What time does breakfast end at this Wendy\'s?',
+    a: 'The location page for this restaurant says breakfast ends at 11:00 AM today (Sunday, 22 Nov 2026), but the national breakfast FAQ says the latest end for most Wendy\'s is 10:30 AM. Both are shown in the Hours section, labelled separately, and they are not reconciled. No breakfast start time is shown for this restaurant.',
+  },
+  {
+    q: 'Is McDonald\'s cheaper than Wendy\'s?',
+    a: 'This page cannot say — no McDonald\'s prices were found for any item on mcdonalds.com, at the Columbus restaurant or nationally. The official site sends you to the McDonald\'s app for prices, so every McDonald\'s price here says “Not verified yet — price only in the McDonald\'s app”, and no price winner is named. Calories are compared instead.',
+  },
+  {
+    q: 'What are the cheapest fries?',
+    a: `Among the fries on this page, the cheapest is ${cheapestFries.name} at $${cheapestFries.price.toFixed(2)} (${cheapestFries.calories} Cal) — ${priceBasis}.`,
+  },
+  {
+    q: 'How much are Seasoned Potatoes?',
+    a: `They were not listed at this Columbus restaurant, so their price here says “Not verified yet”. Nationally, only the Small is shown, at ${seasonedPotatoes.calories} Cal. The national category page shows a range of 280–510 Cal, but no larger size was shown on its item page.`,
+  },
+];
+  return faqs;
+}
