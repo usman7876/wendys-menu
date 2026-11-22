@@ -19,7 +19,6 @@ const choiceCal = (c) =>
   <div>
     <span class="name">{bites.name} — {bites.description}</span>
     <span class="cal">Bundle total calories: {bites.bundle_calories_note}</span>
-    <span class="item-meta">{priceBasis} · <a href={bites.source_url} target="_blank" rel="noopener">Official source ↗</a></span>
   </div>
   <span class="dots" aria-hidden="true"></span>
   <span class="price">{money(bites.price)}</span>
@@ -32,7 +31,6 @@ const choiceCal = (c) =>
     <div>
       <span class="name">{bag.name}</span>
       <span class="cal">{bag.contents} · Calories: Not verified yet — no total shown for the bundle</span>
-      <span class="item-meta">{priceBasis} · <a href={bag.source_url} target="_blank" rel="noopener">Official source ↗</a></span>
     </div>
     <span class="dots" aria-hidden="true"></span>
     <span class="price">{money(bag.price)}</span>
@@ -40,16 +38,15 @@ const choiceCal = (c) =>
 ))}
 
 <h3>Everyday Value</h3>
-<p class="board-sub">No end date shown · {priceBasis}</p>
+<p class="board-sub">No end date shown.</p>
 <table>
-  <thead><tr><th>Item</th><th>Price</th><th>Calories</th><th>Price basis</th></tr></thead>
+  <thead><tr><th>Item</th><th>Price</th><th>Calories</th></tr></thead>
   <tbody>
     {deals.everyday_value.map((d) => (
       <tr>
         <td data-label="Item"><strong>{d.name}</strong></td>
         <td data-label="Price">{money(d.price)}</td>
         <td data-label="Calories">{cal(d.calories)}</td>
-        <td data-label="Price basis">{priceBasis}</td>
       </tr>
     ))}
   </tbody>
@@ -78,7 +75,6 @@ const choiceCal = (c) =>
   <div>
     <span class="name">{deals.key_tag.name}</span>
     <span class="cal">{deals.key_tag.offer}. Sold {deals.key_tag.sold}. {deals.key_tag.charity}.</span>
-    <span class="item-meta">{priceBasis} · <a href={deals.key_tag.source_url} target="_blank" rel="noopener">Official source ↗</a></span>
   </div>
   <span class="dots" aria-hidden="true"></span>
   <span class="price">{money(deals.key_tag.price)}</span>

@@ -32,7 +32,7 @@ const groups = [...new Set(comparison.pairs.map((p) => p.group))];
           return (
             <tr>
               <td data-label="Wendy's item"><strong>{p.wendys}</strong></td>
-              <td data-label="Wendy's price">{price(w)} {w && w.price !== null ? `(${priceBasis})` : ''}</td>
+              <td data-label="Wendy's price">{price(w)}</td>
               <td data-label="Wendy's calories">{cal(w)}</td>
               <td data-label="McDonald's item"><strong>{p.mcdonalds ?? '—'}</strong>{p.note ? <><br />{p.note}</> : ''}</td>
               <td data-label="McDonald's price">Not verified yet — price only in the McDonald's app</td>

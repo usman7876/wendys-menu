@@ -13,6 +13,8 @@ const calCell = (item) => {
   return label !== null ? label : 'Not verified yet';
 };
 ---
+<details class="board-details">
+  <summary>Full nutrition table — one row per verified item ({items.length} items)</summary>
 <table>
   <thead>
     <tr><th>Item</th><th>Category</th><th>Calories</th><th>Protein</th><th>Total fat</th><th>Carbs</th><th>Sodium</th></tr>
@@ -31,6 +33,7 @@ const calCell = (item) => {
     ))}
   </tbody>
 </table>
+</details>
 
 <h3>Calories by category</h3>
 <p>How many items in each part of the menu have a verified calorie count. This is a count of checked items, not a calorie range.</p>
