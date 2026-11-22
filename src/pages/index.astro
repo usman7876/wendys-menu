@@ -13,48 +13,24 @@ import ComparisonBoard from '../components/ComparisonBoard.astro';
 import HoursBoard from '../components/HoursBoard.astro';
 import menuData from '../data/menu.json';
 import stage5Data from '../data/stage5.json';
-import { itemsByCategory, countVerifiedPrices, countVerifiedCalories } from '../utils/menuStats.js';
+import { itemsByCategory, countVerifiedPrices, countVerifiedCalories, categoryStats, formatPrice } from '../utils/menuStats.js';
 
 const { meta, items } = menuData;
 const stage5 = stage5Data;
 const byCategory = itemsByCategory(items);
 const breakfastItems = items.filter((i) => i.category === 'Breakfast');
+const stats = categoryStats(items);
 
-// Original AI-generated food photos (natural food photography, warm cream
-// background, no logos or brand text), one per key dish, grouped by category.
-const PHOTOS = {
-  Burgers: [
-    { src: '/images/daves-single.jpg', label: "Dave's Single" },
-    { src: '/images/baconator.jpg', label: 'Baconator' },
-  ],
-  Chicken: [
-    { src: '/images/spicy-chicken-sandwich.jpg', label: 'Spicy Chicken Sandwich' },
-    { src: '/images/classic-chicken-sandwich.jpg', label: 'Classic Chicken Sandwich' },
-    { src: '/images/chicken-nuggets.jpg', label: 'Chicken Nuggets' },
-  ],
-  Breakfast: [
-    { src: '/images/breakfast-baconator.jpg', label: 'Breakfast Baconator' },
-    { src: '/images/sausage-egg-cheese-biscuit.jpg', label: 'Sausage, Egg & Cheese Biscuit' },
-  ],
-  Sides: [
-    { src: '/images/natural-cut-fries.jpg', label: 'Natural-Cut Fries' },
-    { src: '/images/baconator-fries.jpg', label: 'Baconator Fries' },
-    { src: '/images/chili.jpg', label: 'Chili' },
-    { src: '/images/baked-potato.jpg', label: 'Baked Potato' },
-  ],
-  Desserts: [
-    { src: '/images/classic-chocolate-frosty.jpg', label: 'Classic Chocolate Frosty' },
-    { src: '/images/vanilla-frosty.jpg', label: 'Vanilla Frosty' },
-    { src: '/images/frosty-fusion.jpg', label: 'Frosty Fusion' },
-  ],
-  Drinks: [
-    { src: '/images/freestyle.jpg', label: 'Coca-Cola Freestyle' },
-    { src: '/images/lemonade.jpg', label: 'Lemonade' },
-    { src: '/images/cold-brew.jpg', label: 'Cold Brew' },
-    { src: '/images/hot-coffee.jpg', label: 'Hot Coffee' },
-  ],
-};
-const PHOTO_CAPTION = 'Original AI-generated image — not an official photo';
+// One header line per category, e.g. "22 items · $2.89–$13.29 · avg 857 cal".
+// Every figure is computed from the data; a category with no verified
+// prices or no verified calories simply leaves that part out.
+function statsLine(category) {
+  const s = stats[category];
+  const parts = [`${s.count} items`];
+  if (s.minPrice !== null) parts.push(`${formatPrice(s.minPrice)}–${formatPrice(s.maxPrice)}`);
+  if (s.avgCalories !== null) parts.push(`avg ${s.avgCalories} cal`);
+  return parts.join(' · ');
+}
 ---
 <BaseLayout itemCount={items.length}>
   <section class="board" aria-labelledby="intro-heading">
@@ -92,12 +68,14 @@ const PHOTO_CAPTION = 'Original AI-generated image — not an official photo';
     <div class="hours">
       <p><strong>Breakfast hours</strong> — most Wendy's start at <b>6:30 AM</b> and breakfast ends at the latest at <b>10:30 AM</b> (official breakfast FAQ, wendys.com). At this Columbus restaurant, the location page says breakfast ends at <b>11:00 AM today</b> — see the Hours section for the flag.</p>
     </div>
-    {breakfastItems.map((item) => <ItemCard item={item} priceBasis={meta.price_basis} />)}
+    <div class="menu-grid">
+      {breakfastItems.map((item) => <ItemCard item={item} priceBasis={meta.price_basis} />)}
+    </div>
   </section>
 
   <section class="board" id="menu" aria-labelledby="menu-heading">
     <h2 id="menu-heading">Full menu</h2>
-    <p class="board-sub">The whole verified menu on one board: one line per dish, name and calories on the left, price at the end of the dotted line. All prices are for one restaurant only — 799 S. High St, Columbus, OH, 22 Nov 2026. Type part of an item's name and the board filters as you type, or tap a category button.</p>
+    <p class="board-sub">The whole verified menu as cards, grouped by category. All prices are for one restaurant only — 799 S. High St, Columbus, OH, 22 Nov 2026. Type part of an item's name and the cards filter as you type, or tap a category button.</p>
     <SearchBox />
     <CategoryChips items={items} />
     <p id="no-match" hidden>No items match that search. Try a shorter word, or clear the search box to see everything again.</p>
@@ -105,17 +83,10 @@ const PHOTO_CAPTION = 'Original AI-generated image — not an official photo';
       {Object.entries(byCategory).map(([category, catItems]) => (
         <div class="menu-group" data-category={category}>
           <h3>{category}</h3>
-          {PHOTOS[category] && (
-            <div class="photo-grid">
-              {PHOTOS[category].map((p) => (
-                <figure class="tilt" tabindex="0">
-                  <img src={p.src} alt={`${p.label} — original AI-generated image, not an official photo`} width="1920" height="1280" loading="lazy" decoding="async" />
-                  <figcaption><b>{p.label}</b> · {PHOTO_CAPTION}</figcaption>
-                </figure>
-              ))}
-            </div>
-          )}
-          {catItems.map((item) => <ItemCard item={item} priceBasis={meta.price_basis} />)}
+          <p class="cat-stats">{statsLine(category)}</p>
+          <div class="menu-grid">
+            {catItems.map((item) => <ItemCard item={item} priceBasis={meta.price_basis} />)}
+          </div>
         </div>
       ))}
     </div>
@@ -244,7 +215,7 @@ const PHOTO_CAPTION = 'Original AI-generated image — not an official photo';
   function applyFilter() {
     const q = (search.value || '').trim().toLowerCase();
     let visible = 0;
-    document.querySelectorAll('#menu-board .menu-line').forEach((el) => {
+    document.querySelectorAll('#menu-board .menu-card').forEach((el) => {
       const name = el.getAttribute('data-name') || '';
       const cat = el.getAttribute('data-category') || '';
       const ok = (activeCategory === 'All' || cat === activeCategory) && (!q || name.includes(q));
@@ -252,7 +223,7 @@ const PHOTO_CAPTION = 'Original AI-generated image — not an official photo';
       if (ok) visible++;
     });
     document.querySelectorAll('#menu-board .menu-group').forEach((g) => {
-      const anyVisible = [...g.querySelectorAll('.menu-line')].some((el) => el.style.display !== 'none');
+      const anyVisible = [...g.querySelectorAll('.menu-card')].some((el) => el.style.display !== 'none');
       g.style.display = anyVisible ? '' : 'none';
     });
     noMatch.hidden = visible !== 0;
