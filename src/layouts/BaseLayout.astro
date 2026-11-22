@@ -1,5 +1,6 @@
 ---
 import '../styles/global.css';
+import Analytics from '@vercel/analytics/astro';
 import TopNotice from '../components/TopNotice.astro';
 import Header from '../components/Header.astro';
 import Footer from '../components/Footer.astro';
@@ -131,5 +132,6 @@ if (itemList) {
       <slot />
     </main>
     <Footer itemCount={itemCount} />
+    <Analytics />
   </body>
 </html>
