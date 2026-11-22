@@ -1,8 +1,10 @@
 ---
-// Search box — filters the menu board in the visitor's own browser.
-// What is typed here is never sent anywhere.
+// Search box — filters the menu cards in the visitor's own browser.
+// What is typed here is never sent anywhere. Short placeholder so it
+// is never cut off on a phone.
+const { count } = Astro.props;
 ---
 <div class="search-box">
   <label for="menu-search" style="position:absolute;left:-9999px">Search the menu</label>
-  <input id="menu-search" type="search" placeholder="Search the menu — try “baconator” or “frosty”" autocomplete="off" />
+  <input id="menu-search" type="search" placeholder={count ? `Search ${count} items…` : 'Search the menu…'} autocomplete="off" />
 </div>

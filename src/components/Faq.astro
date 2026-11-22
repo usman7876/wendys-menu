@@ -1,8 +1,9 @@
 ---
 import { countVerifiedPrices, countVerifiedCalories, countBreakfast, lowestCalorie, highestCalorie } from '../utils/menuStats.js';
 // Every answer is worked out from the same verified data list as the menu,
-// so the numbers here can never disagree with the tables.
-const { items, priceBasis, stage5 } = Astro.props;
+// so the numbers here can never disagree with the tables. `limit` shows
+// only the first few questions (homepage teaser); without it, all show.
+const { items, priceBasis, stage5, limit } = Astro.props;
 const total = items.length;
 const verifiedPrices = countVerifiedPrices(items);
 const verifiedCalories = countVerifiedCalories(items);
@@ -97,7 +98,7 @@ const faqs = [
   },
 ];
 ---
-{faqs.map((f) => (
+{(limit ? faqs.slice(0, limit) : faqs).map((f) => (
   <details class="faq-item">
     <summary>{f.q}</summary>
     <p>{f.a}</p>

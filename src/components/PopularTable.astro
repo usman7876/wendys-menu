@@ -1,30 +1,26 @@
 ---
-import { formatPrice } from '../utils/menuStats.js';
-// Popular prices: the items people ask about most, taken from the same
-// verified data list as everything else. Every price carries its basis.
-const { items, priceBasis } = Astro.props;
+import ItemCard from './ItemCard.astro';
+import { categoryStats } from '../utils/menuStats.js';
+// Popular prices: the six items people ask about most, shown as the same
+// cards as the full menu, taken from the same verified data list.
+// All prices are for one restaurant only — 799 S. High St, Columbus, OH,
+// 22 Nov 2026 (stated once in the section intro, not on every card).
+const { items } = Astro.props;
+const stats = categoryStats(items);
 const popularNames = [
   "Dave's Single",
   'Baconator',
   'Spicy Chicken Sandwich',
   'Chicken Nuggets — 6 pc',
   'Classic Chocolate Frosty — Small',
+  'Natural-Cut Fries — Medium',
 ];
 const popular = popularNames
   .map((name) => items.find((i) => i.name === name))
   .filter(Boolean);
 ---
-<table>
-  <thead>
-    <tr><th>Item</th><th>Price</th><th>Calories</th></tr>
-  </thead>
-  <tbody>
-    {popular.map((item) => (
-      <tr>
-        <td data-label="Item"><strong>{item.name}</strong></td>
-        <td data-label="Price">{item.price !== null ? formatPrice(item.price) : <span class="not-verified">Not verified yet</span>}</td>
-        <td data-label="Calories">{item.calories !== null ? `${item.calories} Cal` : 'Not verified yet'}</td>
-      </tr>
-    ))}
-  </tbody>
-</table>
+<div class="menu-grid">
+  {popular.map((item) => (
+    <ItemCard item={item} avgCalories={stats[item.category]?.avgCalories ?? null} />
+  ))}
+</div>

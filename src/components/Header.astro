@@ -1,10 +1,14 @@
 ---
-// Site header: brand, section links, and the light/dark toggle.
+// Site header: brand, hamburger menu on phones, section links, theme toggle.
+// The theme toggle switches between the warm cream look and the dark
+// charcoal look; the choice is saved in the visitor's own browser.
 ---
-<header class="site-header">
+<header class="site-header" id="site-header">
   <div class="wrap">
     <a class="brand" href="/">Wendy's Menu<small>Prices USA</small></a>
-    <nav aria-label="Main">
+    <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Switch colour theme">Charcoal theme</button>
+    <button class="hamburger" type="button" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav">☰</button>
+    <nav id="main-nav" aria-label="Main">
       <a href="#menu">Menu</a>
       <a href="#breakfast">Breakfast</a>
       <a href="#nutrition">Nutrition</a>
@@ -12,18 +16,37 @@
       <a href="#about">About</a>
       <a href="#contact">Contact</a>
     </nav>
-    <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Switch between light and dark mode">Dark mode</button>
   </div>
 </header>
 <script>
+  // Hamburger: on phones the nav hides behind this button.
+  const header = document.getElementById('site-header');
+  const navToggle = document.getElementById('nav-toggle');
+  navToggle.addEventListener('click', () => {
+    const open = header.classList.toggle('nav-open');
+    navToggle.setAttribute('aria-expanded', String(open));
+    navToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+  });
+  // Close the menu after tapping a link.
+  header.querySelectorAll('nav a').forEach((a) => {
+    a.addEventListener('click', () => {
+      header.classList.remove('nav-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      navToggle.setAttribute('aria-label', 'Open menu');
+    });
+  });
+
+  // Theme toggle: cream <-> charcoal, saved in the visitor's browser.
   const btn = document.getElementById('theme-toggle');
   const updateLabel = () => {
-    btn.textContent = document.documentElement.classList.contains('dark') ? 'Light mode' : 'Dark mode';
+    const theme = document.documentElement.getAttribute('data-theme');
+    btn.textContent = theme === 'charcoal' ? 'Cream theme' : 'Charcoal theme';
   };
   updateLabel();
   btn.addEventListener('click', () => {
-    const dark = document.documentElement.classList.toggle('dark');
-    try { localStorage.setItem('wendys-theme', dark ? 'dark' : 'light'); } catch (e) {}
+    const next = document.documentElement.getAttribute('data-theme') === 'charcoal' ? 'cream' : 'charcoal';
+    document.documentElement.setAttribute('data-theme', next);
+    try { localStorage.setItem('wendys-theme', next); } catch (e) {}
     updateLabel();
   });
 </script>

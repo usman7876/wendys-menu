@@ -1,48 +1,59 @@
 ---
-import { formatPrice, caloriesLabel } from '../utils/menuStats.js';
-const { item } = Astro.props;
-const price = formatPrice(item.price);
+import { formatPriceRange, caloriesLabel, itemPhoto } from '../utils/menuStats.js';
+// Menu item card: photo (only when it matches the dish exactly), name,
+// price (a range when low/high exist, the single price otherwise), calories,
+// one short source + date line, and an expandable "Nutrition and compare"
+// panel. The name is a <p>, not a heading, so the page keeps exactly one
+// <h1> and a clean h2/h3 order. A missing value renders "Not verified yet".
+const { item, avgCalories } = Astro.props;
+const price = formatPriceRange(item);
 const calLabel = caloriesLabel(item);
-
-// Photos match their dish exactly, by name. The order matters: the most
-// specific names are checked first (Baconator Fries before Baconator,
-// Baked Potato before Chili, so "Chili & Cheese Baked Potato" gets the
-// baked-potato photo). An item with no match gets the same card with no
-// photo — never a placeholder and never another dish's photo.
-const PHOTOS = [
-  { test: (n) => n.includes('Baked Potato'), src: '/images/baked-potato.jpg' },
-  { test: (n) => n.startsWith('Baconator Fries'), src: '/images/baconator-fries.jpg' },
-  { test: (n) => n.startsWith("Dave's Single"), src: '/images/daves-single.jpg' },
-  { test: (n) => n === 'Baconator', src: '/images/baconator.jpg' },
-  { test: (n) => n.startsWith('Spicy Chicken Sandwich'), src: '/images/spicy-chicken-sandwich.jpg' },
-  { test: (n) => n.startsWith('Classic Chicken Sandwich'), src: '/images/classic-chicken-sandwich.jpg' },
-  { test: (n) => n.startsWith('Chicken Nuggets'), src: '/images/chicken-nuggets.jpg' },
-  { test: (n) => n.startsWith('Natural-Cut Fries'), src: '/images/natural-cut-fries.jpg' },
-  { test: (n) => n.startsWith('Chili —'), src: '/images/chili.jpg' },
-  { test: (n) => n.startsWith('Breakfast Baconator'), src: '/images/breakfast-baconator.jpg' },
-  { test: (n) => n.startsWith('Sausage, Egg & Cheese Biscuit'), src: '/images/sausage-egg-cheese-biscuit.jpg' },
-  { test: (n) => n.startsWith('Classic Chocolate Frosty'), src: '/images/classic-chocolate-frosty.jpg' },
-  { test: (n) => n.startsWith('Vanilla Frosty'), src: '/images/vanilla-frosty.jpg' },
-  { test: (n) => n.includes('Frosty Fusion'), src: '/images/frosty-fusion.jpg' },
-  { test: (n) => n.startsWith('Coca-Cola Freestyle'), src: '/images/freestyle.jpg' },
-  { test: (n) => n.includes('Lemonade'), src: '/images/lemonade.jpg' },
-  { test: (n) => n.includes('Cold Brew'), src: '/images/cold-brew.jpg' },
-  { test: (n) => n.startsWith('Regular Hot Coffee'), src: '/images/hot-coffee.jpg' },
-];
-const photo = PHOTOS.find((p) => p.test(item.name));
+const photo = itemPhoto(item.name);
 const PHOTO_CAPTION = 'Original AI-generated image — not an official photo';
+const cell = (v, unit) => (v !== null && v !== undefined ? `${v} ${unit}` : 'Not verified yet');
+// Only nutrients Wendy's actually listed are shown as rows; if none were
+// listed for this item, one short line says so instead of four repeats.
+const nutrients = [
+  { label: 'Protein', value: cell(item.protein_g, 'g') },
+  { label: 'Total fat', value: cell(item.fat_g, 'g') },
+  { label: 'Carbs', value: cell(item.carbs_g, 'g') },
+  { label: 'Sodium', value: cell(item.sodium_mg, 'mg') },
+].filter((n) => n.value !== 'Not verified yet');
 ---
 <article class="menu-card tilt" data-name={item.name.toLowerCase()} data-category={item.category} tabindex="0">
   {photo && (
     <figure class="card-photo">
-      <img src={photo.src} alt={`${item.name} — ${PHOTO_CAPTION}`} width="1920" height="1280" loading="lazy" decoding="async" />
+      <img src={photo} alt={`${item.name} — ${PHOTO_CAPTION}`} width="1920" height="1280" loading="lazy" decoding="async" />
       <figcaption>{PHOTO_CAPTION}</figcaption>
     </figure>
   )}
   <div class="card-body">
-    <h4 class="card-name">{item.name}</h4>
+    <p class="card-name">{item.name}</p>
     <p class="card-price">{price !== null ? price : <span class="not-verified">Not verified yet</span>}</p>
     <p class="card-cal">{calLabel !== null ? calLabel : 'Calories: Not verified yet'}</p>
     {item.note && <p class="card-note">{item.note}</p>}
+    {item.price !== null && (
+      <p class="card-source">799 S. High St, Columbus, OH · 22 Nov 2026</p>
+    )}
+    <details class="card-nutrition">
+      <summary>Nutrition and compare</summary>
+      {nutrients.length > 0 ? (
+        <table>
+          <tbody>
+            {nutrients.map((n) => (
+              <tr><td>{n.label}</td><td>{n.value}</td></tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <p class="card-source">Protein, fat, carbs and sodium: Not verified yet.</p>
+      )}
+      <p class="card-source">
+        {avgCalories !== null && avgCalories !== undefined
+          ? `Category average: ${avgCalories} cal. `
+          : ''}
+        Calories from Wendy's official online menu.
+      </p>
+    </details>
   </div>
 </article>
