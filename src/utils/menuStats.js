@@ -72,10 +72,52 @@ export function caloriesByCategory(items) {
 
 // Per-category header stats, computed from the data only: item count,
 // verified price range (min/max of verified prices only) and the average
-// verified calories. For a calorie range (e.g. Coca-Cola Freestyle 0–434)
-// the midpoint stands in for the average. A category with no verified
-// prices gets minPrice/maxPrice null; one with no verified calories gets
-// avgCalories null. Nothing here is hard-coded or estimated from outside.
+// Price ranges: the data structure supports a low/high/median price collected
+// from many restaurants. All three are null for now (one restaurant only),
+// so every item still shows its single verified price. When a range exists,
+// it renders "$low–$high" with the median after it; a missing price stays
+// null and the page renders "Not verified yet".
+export function formatPriceRange(item) {
+  if (item.price_low !== null && item.price_low !== undefined &&
+      item.price_high !== null && item.price_high !== undefined) {
+    const range = `${formatPrice(item.price_low)}–${formatPrice(item.price_high)}`;
+    if (item.price_median !== null && item.price_median !== undefined) {
+      return `${range} · median ${formatPrice(item.price_median)}`;
+    }
+    return range;
+  }
+  return formatPrice(item.price);
+}
+
+// Photos match their dish exactly, by name. The order matters: the most
+// specific names are checked first (Baconator Fries before Baconator,
+// Baked Potato before Chili, so "Chili & Cheese Baked Potato" gets the
+// baked-potato photo). An item with no match gets null — the card is shown
+// with no photo, never a placeholder and never another dish's photo.
+const PHOTOS = [
+  { test: (n) => n.includes('Baked Potato'), src: '/images/baked-potato.jpg' },
+  { test: (n) => n.startsWith('Baconator Fries'), src: '/images/baconator-fries.jpg' },
+  { test: (n) => n.startsWith("Dave's Single"), src: '/images/daves-single.jpg' },
+  { test: (n) => n === 'Baconator', src: '/images/baconator.jpg' },
+  { test: (n) => n.startsWith('Spicy Chicken Sandwich'), src: '/images/spicy-chicken-sandwich.jpg' },
+  { test: (n) => n.startsWith('Classic Chicken Sandwich'), src: '/images/classic-chicken-sandwich.jpg' },
+  { test: (n) => n.startsWith('Chicken Nuggets'), src: '/images/chicken-nuggets.jpg' },
+  { test: (n) => n.startsWith('Natural-Cut Fries'), src: '/images/natural-cut-fries.jpg' },
+  { test: (n) => n.startsWith('Chili —'), src: '/images/chili.jpg' },
+  { test: (n) => n.startsWith('Breakfast Baconator'), src: '/images/breakfast-baconator.jpg' },
+  { test: (n) => n.startsWith('Sausage, Egg & Cheese Biscuit'), src: '/images/sausage-egg-cheese-biscuit.jpg' },
+  { test: (n) => n.startsWith('Classic Chocolate Frosty'), src: '/images/classic-chocolate-frosty.jpg' },
+  { test: (n) => n.startsWith('Vanilla Frosty'), src: '/images/vanilla-frosty.jpg' },
+  { test: (n) => n.includes('Frosty Fusion'), src: '/images/frosty-fusion.jpg' },
+  { test: (n) => n.startsWith('Coca-Cola Freestyle'), src: '/images/freestyle.jpg' },
+  { test: (n) => n.includes('Lemonade'), src: '/images/lemonade.jpg' },
+  { test: (n) => n.includes('Cold Brew'), src: '/images/cold-brew.jpg' },
+  { test: (n) => n.startsWith('Regular Hot Coffee'), src: '/images/hot-coffee.jpg' },
+];
+export function itemPhoto(name) {
+  const match = PHOTOS.find((p) => p.test(name));
+  return match ? match.src : null;
+}
 export function categoryStats(items) {
   const out = {};
   for (const cat of categories(items)) {
