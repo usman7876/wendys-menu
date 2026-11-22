@@ -21,20 +21,24 @@ const seasonedPotatoes = items.find((i) => i.name === 'Seasoned Potatoes — Sma
 
 const faqs = [
   {
-    q: "How much is a Dave's Single?",
+    q: "How much is a Baconator at Wendy's?",
+    a: `$7.89 — ${priceBasis}, Carryout, checked on order.wendys.com. It has 890 Cal, from Wendy's official online menu. The price at your local restaurant may be different.`,
+  },
+  {
+    q: "How much is a Dave's Single at Wendy's?",
     a: `$5.59 — ${priceBasis}, Carryout, checked on order.wendys.com. It has 560 Cal, from Wendy's official online menu. The price at your local restaurant may be different.`,
   },
   {
-    q: 'How many items are on this page right now?',
-    a: `There are ${total} verified items in the data list: ${verifiedPrices} with a verified price and ${breakfastCount} breakfast items with verified calories but no verified price yet.`,
+    q: "What time does Wendy's stop serving breakfast?",
+    a: "At the latest, 10:30 AM, according to Wendy's official breakfast FAQ on wendys.com — but this Columbus restaurant's own location page says breakfast ends at 11:00 AM today (Sunday, 22 Nov 2026). Both figures are shown in the Hours section and are not reconciled. Individual restaurants may stop earlier, so check your local Wendy's.",
   },
   {
     q: "What time does Wendy's serve breakfast?",
     a: "From Wendy's official breakfast FAQ on wendys.com: most Wendy's start serving breakfast at 6:30 AM, and breakfast ends at the latest at 10:30 AM. Delivery for most restaurants begins at 8:00 AM local time. Check your local Wendy's for its exact hours — and note the flag in the Hours section: this Columbus restaurant's own page says breakfast ends at 11:00 AM today, which disagrees with the national 10:30 AM latest end.",
   },
   {
-    q: "What time does Wendy's stop serving breakfast?",
-    a: "At the latest, 10:30 AM, according to Wendy's official breakfast FAQ on wendys.com — but this Columbus restaurant's own location page says breakfast ends at 11:00 AM today (Sunday, 22 Nov 2026). Both figures are shown in the Hours section and are not reconciled. Individual restaurants may stop earlier, so check your local Wendy's.",
+    q: 'How many items are on this page right now?',
+    a: `There are ${total} verified items in the data list: ${verifiedPrices} with a verified price and ${breakfastCount} breakfast items with verified calories but no verified price yet.`,
   },
   {
     q: 'Why do breakfast items have no price?',
@@ -65,8 +69,20 @@ const faqs = [
     a: 'Use the “Report a wrong price” note in the footer. Say which item it is, the figure shown here, the figure you saw, where you saw it, and the date. Corrections are only made from an official Wendy\'s page.',
   },
   {
-    q: 'How much is a Biggie Bag?',
+    q: "How much is a Biggie Bag at Wendy's?",
     a: `Each Biggie Bag is $6.00 — ${priceBasis}, checked 22 Nov 2026: a sandwich, plus 4 PC Nuggets, a Jr. Fry and a Small Soft Drink. The Biggie Bundle is $8.00, and Biggie Bites is $4.00 for any 2 picks. No total calories are shown for any bundle, so bundle totals honestly say “Not verified yet”.`,
+  },
+  {
+    q: "How much is a Frosty at Wendy's?",
+    a: `A Classic Chocolate Frosty is $1.39 for a Junior (190 Cal), $2.49 for a Small (310 Cal), $3.19 for a Medium (390 Cal) and $3.49 for a Large (510 Cal) — ${priceBasis}. A Vanilla Frosty costs the same at every size.`,
+  },
+  {
+    q: "How much are Wendy's chicken nuggets?",
+    a: `Chicken Nuggets are $2.19 for 4 pc (170 Cal), $3.19 for 6 pc (260 Cal) and $4.99 for 10 pc (430 Cal) — ${priceBasis}.`,
+  },
+  {
+    q: "Does Wendy's still have the 4 for $4?",
+    a: `Not at this restaurant. The classic 4 for $4 was not listed at the Columbus restaurant used for prices on this page. Wendy's national FAQ says it 'has evolved into Wendy's Biggie Deals' — Biggie Bags are $6.00 here.`,
   },
   {
     q: 'Why does the same item show different calories in different places?',
@@ -93,8 +109,8 @@ const faqs = [
     a: 'This page cannot say — no McDonald\'s prices were found for any item on mcdonalds.com, at the Columbus restaurant or nationally. The official site sends you to the McDonald\'s app for prices, so every McDonald\'s price here says “Not verified yet — price only in the McDonald\'s app”, and no price winner is named. Calories are compared instead.',
   },
   {
-    q: 'What are the cheapest fries?',
-    a: `Among the fries on this page, the cheapest is ${cheapestFries.name} at $${cheapestFries.price.toFixed(2)} (${cheapestFries.calories} Cal) — ${priceBasis}.`,
+    q: "How much are Wendy's fries?",
+    a: `Natural-Cut Fries are $1.79 for a Junior (210 Cal), $2.39 for a Small (260 Cal), $2.99 for a Medium (350 Cal) and $3.39 for a Large (470 Cal) — ${priceBasis}. The cheapest fries on this page are the ${cheapestFries.name} at $${cheapestFries.price.toFixed(2)} (${cheapestFries.calories} Cal).`,
   },
   {
     q: 'How much are Seasoned Potatoes?',
