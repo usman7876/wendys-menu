@@ -221,6 +221,43 @@ export function itemPhoto(name) {
   const match = PHOTOS.find((p) => p.test(name));
   return match ? match.src : null;
 }
+
+// Photos for deal bundles, combos and value items, which are not in the
+// 150-item menu list. Exact names only — a combo is a sandwich + fries +
+// drink, so it gets its own photo, never the single sandwich's photo.
+const DEAL_PHOTOS = [
+  { name: 'Biggie Bites', src: '/images/biggie-bites.webp' },
+  { name: 'Jr. Cheeseburger Biggie Bag', src: '/images/biggie-bag-jr-cheeseburger.webp' },
+  { name: 'Crispy Chicken Biggie Bag', src: '/images/biggie-bag-crispy-chicken.webp' },
+  { name: 'Double Stack Biggie Bag', src: '/images/biggie-bag-double-stack.webp' },
+  { name: 'Jr. Bacon Cheeseburger Biggie Bag', src: '/images/biggie-bag-jr-bacon-cheeseburger.webp' },
+  { name: 'Biggie Bundle', src: '/images/biggie-bundle.webp' },
+  { name: 'Jr. Hamburger', src: '/images/ev-jr-hamburger.webp' },
+  { name: 'Jr. Cheeseburger', src: '/images/ev-jr-cheeseburger.webp' },
+  { name: 'Crispy Chicken Sandwich', src: '/images/ev-crispy-chicken-sandwich.webp' },
+  { name: 'Jr. Cheeseburger Deluxe', src: '/images/ev-jr-cheeseburger-deluxe.webp' },
+  { name: 'Crispy Chicken BLT', src: '/images/ev-crispy-chicken-blt.webp' },
+  { name: 'Jr. Bacon Cheeseburger', src: '/images/ev-jr-bacon-cheeseburger.webp' },
+  { name: 'Double Stack', src: '/images/ev-double-stack.webp' },
+  { name: 'Bacon Double Stack', src: '/images/ev-bacon-double-stack.webp' },
+  { name: "Dave's Combo", src: '/images/combo-daves.webp' },
+  { name: '10 PC Chicken Nugget Combo', src: '/images/combo-10pc-nuggets.webp' },
+  { name: 'Son of Baconator Combo', src: '/images/combo-son-of-baconator.webp' },
+  { name: 'Classic Chicken Sandwich Combo', src: '/images/combo-classic-chicken.webp' },
+  { name: 'Spicy Chicken Sandwich Combo', src: '/images/combo-spicy-chicken.webp' },
+  { name: 'Grilled Chicken Wrap Combo', src: '/images/combo-grilled-chicken-wrap.webp' },
+  { name: '3 PC Tenders Combo', src: '/images/combo-3pc-tenders.webp' },
+  { name: 'Big Bacon Classic Combo', src: '/images/combo-big-bacon-classic.webp' },
+  { name: 'Asiago Ranch Club Sandwich, Classic Combo', src: '/images/combo-asiago-ranch-club.webp' },
+  { name: '4 PC Tenders Combo', src: '/images/combo-4pc-tenders.webp' },
+  { name: 'Baconator Combo', src: '/images/combo-baconator.webp' },
+  { name: 'Frosty Key Tag', src: '/images/frosty-key-tag.webp' },
+  { name: 'Holiday Box', src: '/images/holiday-box.webp' },
+];
+export function dealPhoto(name) {
+  const match = DEAL_PHOTOS.find((p) => p.name === name);
+  return match ? match.src : null;
+}
 export function categoryStats(items) {
   const out = {};
   for (const cat of categories(items)) {
