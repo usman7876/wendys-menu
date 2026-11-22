@@ -77,7 +77,7 @@ const PHOTO_CAPTION = 'Original AI-generated image — not an official photo';
 
   <section class="board" aria-labelledby="popular-heading">
     <h2 id="popular-heading">Popular prices</h2>
-    <p class="board-sub">The items people ask about most, taken from the same verified data list as everything else on this page. Every price carries its basis label, so a one-restaurant price is never presented as a national price.</p>
+    <p class="board-sub">The items people ask about most, taken from the same verified data list as everything else on this page. All prices are for one restaurant only — 799 S. High St, Columbus, OH, 22 Nov 2026.</p>
     <PopularTable items={items} priceBasis={meta.price_basis} />
   </section>
 
@@ -90,17 +90,14 @@ const PHOTO_CAPTION = 'Original AI-generated image — not an official photo';
     <h3>Breakfast</h3>
     <p class="board-sub">Morning menu · calories from Wendy's official online menu · prices: Not verified yet</p>
     <div class="hours">
-      <p><strong>Breakfast hours</strong> — from Wendy's official breakfast FAQ on wendys.com:</p>
-      <p>Most Wendy's start serving breakfast at <b>6:30 AM</b>. Breakfast ends at the latest at <b>10:30 AM</b>. Delivery for most restaurants begins at <b>8:00 AM</b> local time.</p>
-      <p>Breakfast is only served in the morning. Wendy's advises you to check your local Wendy's for its breakfast hours, because times are set by each restaurant. No mobile-app cut-off time is stated on that official page, so none is printed here.</p>
-      <p><strong>At this Columbus restaurant:</strong> the location page says breakfast ends at <b>11:00 AM today</b> (Sunday, 22 Nov 2026) — which disagrees with the national latest end of 10:30 AM. Both figures are shown in the <a href="#hours">Hours section</a>, labelled separately, and are not reconciled. No breakfast start time is shown for this restaurant.</p>
+      <p><strong>Breakfast hours</strong> — most Wendy's start at <b>6:30 AM</b> and breakfast ends at the latest at <b>10:30 AM</b> (official breakfast FAQ, wendys.com). At this Columbus restaurant, the location page says breakfast ends at <b>11:00 AM today</b> — see the Hours section for the flag.</p>
     </div>
     {breakfastItems.map((item) => <ItemCard item={item} priceBasis={meta.price_basis} />)}
   </section>
 
   <section class="board" id="menu" aria-labelledby="menu-heading">
     <h2 id="menu-heading">Full menu</h2>
-    <p class="board-sub">The whole verified menu on one board: one line per dish, with the price at the end of the dotted line and the price basis under every price. Type part of an item's name and the board filters as you type, or tap a category button.</p>
+    <p class="board-sub">The whole verified menu on one board: one line per dish, name and calories on the left, price at the end of the dotted line. All prices are for one restaurant only — 799 S. High St, Columbus, OH, 22 Nov 2026. Type part of an item's name and the board filters as you type, or tap a category button.</p>
     <SearchBox />
     <CategoryChips items={items} />
     <p id="no-match" hidden>No items match that search. Try a shorter word, or clear the search box to see everything again.</p>
@@ -160,23 +157,26 @@ const PHOTO_CAPTION = 'Original AI-generated image — not an official photo';
   </section>
 
   <section class="board" id="sources" aria-labelledby="sources-heading">
-    <h2 id="sources-heading">Sources</h2>
-    <Sources items={items} stage5={stage5} />
+    <details class="board-details">
+      <summary>Sources — every figure's official page</summary>
+      <Sources items={items} stage5={stage5} />
+    </details>
   </section>
 
   <section class="board" id="about" aria-labelledby="about-heading">
-    <h2 id="about-heading">About this site</h2>
-    <p class="board-sub">What this site is, and what it is not.</p>
+    <details class="board-details">
+      <summary>About this site — what it is, and what it is not</summary>
     <p><strong>What this site is:</strong> an independent, fan-run reference for people in the USA who want one quick answer — a price, a calorie count, or breakfast hours — before they visit a Wendy's restaurant.</p>
     <p><strong>What it is not:</strong> it is not the official Wendy's website, it is not run by Wendy's or any franchisee, it does not sell food, and it does not take orders. You cannot buy anything here.</p>
     <p><strong>How it works:</strong> every item, price, calorie count, table and FAQ answer on this page is built from one single verified data list, checked on Wendy's official online menu on 22 Nov 2026. Nothing is typed twice, so the numbers cannot contradict each other. If a figure has not been verified, the page says “Not verified yet” instead of guessing.</p>
     <p><strong>Why prices carry a long label:</strong> Wendy's publishes no national price list, and each restaurant sets its own prices. Every price here is therefore labelled “one restaurant only — 799 S. High St, Columbus, OH, 22 Nov 2026”, so you always know exactly what a price means — and what it does not mean. The price at your local restaurant may be different.</p>
     <p><strong>Images:</strong> this site uses no Wendy's logo and no official Wendy's food photos. The food photos on this page are original AI-generated images in a natural food-photography style, and every one is captioned “Original AI-generated image — not an official photo”, so no visitor mistakes them for official photos.</p>
+    </details>
   </section>
 
   <section class="board" id="how-we-source-prices" aria-labelledby="sourcing-heading">
-    <h2 id="sourcing-heading">How we source prices</h2>
-    <p class="board-sub">In plain English — how every figure on this page got here.</p>
+    <details class="board-details">
+      <summary>How we source prices — in plain English</summary>
     <ol>
       <li><strong>Wendy's publishes no national price list.</strong> There is no single official price for a Dave's Single that applies across the USA. Wendy's itself says pricing may vary by location, and that to see prices you should visit order.wendys.com or the Wendy's app after selecting a location. Any site showing one “national” price without naming a restaurant is not showing you an official figure.</li>
       <li><strong>So every price here comes from one named restaurant.</strong> All prices on this page are for <strong>one restaurant only — Wendy's, 799 S. High Street, Columbus, OH 43206, Carryout</strong> — checked on <strong>22 Nov 2026</strong> on Wendy's official online ordering menu, order.wendys.com. That is why every price carries the label “one restaurant only — 799 S. High St, Columbus, OH, 22 Nov 2026”. Your local restaurant may charge more or less.</li>
@@ -194,37 +194,41 @@ const PHOTO_CAPTION = 'Original AI-generated image — not an official photo';
       <li><strong>The McDonald's comparison is calories only.</strong> No McDonald's prices were found on mcdonalds.com for any item — the site sends visitors to its app for prices — so every McDonald's price says “Not verified yet — price only in the McDonald's app” and no price winner is named. McDonald's calories are from its national product pages, and the tables compare similar types only, stating that the products, sizes and recipes differ.</li>
       <li><strong>Not found means not listed.</strong> Frosty-ccino was not found at this restaurant (not in the Frosty or Coffee categories), no standalone iced tea was found, and Seasoned Potatoes were not listed at this restaurant — so none of them carries an invented price. Frosty-ccino needs a morning re-check, because it is a breakfast item and every check so far was in the evening.</li>
     </ol>
+    </details>
   </section>
 
   <section class="board" id="privacy" aria-labelledby="privacy-heading">
-    <h2 id="privacy-heading">Privacy Policy</h2>
-    <p class="board-sub">Last updated: 22 November 2026</p>
+    <details class="board-details">
+      <summary>Privacy Policy — last updated 22 November 2026</summary>
     <p><strong>No accounts, no orders:</strong> this site has no sign-up, no login, no checkout and no order form. It never asks for your name, address, payment details or password.</p>
     <p><strong>Search stays on your device:</strong> the menu search box filters the list inside your own browser. What you type there is not sent to this site or stored anywhere.</p>
     <p><strong>No ad code yet:</strong> the boxes labelled “Advertisement” on this page are empty reserved spaces. There is no advertising code, and no advertiser tracking, on this page at the time of writing. If ads are added later, this policy will be updated first to say which ad service is used and what it collects.</p>
     <p><strong>External links:</strong> this page links out to Wendy's official pages (order.wendys.com and wendys.com) in the Sources list. Once you follow one of those links, you are on Wendy's website and its own privacy policy applies — this site cannot see what you do there.</p>
     <p><strong>Children:</strong> this is a general menu reference with no accounts and no data collection features aimed at children.</p>
     <p><strong>Changes:</strong> if this policy changes, the new version will replace this section and the “last updated” date above will change.</p>
+    </details>
   </section>
 
   <section class="board" id="terms" aria-labelledby="terms-heading">
-    <h2 id="terms-heading">Terms</h2>
-    <p class="board-sub">The rules for using this reference — last updated 22 November 2026</p>
+    <details class="board-details">
+      <summary>Terms — the rules for using this reference</summary>
     <p><strong>Reference only:</strong> this site is an independent, fan-run reference. It is not affiliated with, endorsed by, or sponsored by Wendy's or The Wendy's Company, and it does not take orders or sell food.</p>
     <p><strong>Prices are a dated snapshot, not live prices:</strong> every price was checked on 22 Nov 2026 at one restaurant only — 799 S. High St, Columbus, OH — on Wendy's official online menu. Prices vary by restaurant and franchisee and may have changed since that date. Always confirm the price at the restaurant before you order.</p>
     <p><strong>Calories and nutrition:</strong> calorie and nutrition figures are copied from Wendy's official online menu and are labelled “from Wendy's official online menu”. They describe the item as listed there; how an item is customised can change its figures. If you have an allergy or a medical need, rely on Wendy's official allergen and nutrition information, not on a fan site.</p>
     <p><strong>Accuracy:</strong> figures are copied carefully and each one carries its source and date, but mistakes can happen. The “Report a wrong price” link in the footer is there so errors can be fixed — corrections are only made from an official Wendy's page.</p>
     <p><strong>Trademarks:</strong> “Wendy's” and the item names on this page (such as Dave's Single, Baconator and Frosty) are trademarks of their respective owners. They are used here only to describe the brand and its menu.</p>
+    </details>
   </section>
 
   <section class="board" id="contact" aria-labelledby="contact-heading">
-    <h2 id="contact-heading">Contact</h2>
-    <p class="board-sub">The fastest way to reach this site is to report a wrong price.</p>
+    <details class="board-details">
+      <summary>Contact — report a wrong price</summary>
     <p><strong>Found a wrong price or calorie count?</strong> That is the most helpful message you can send. Use the “Report a wrong price” link in the footer below: check the Sources list first, then note the item name, the figure shown here, the figure you saw, where you saw it (the restaurant or official page), and the date.</p>
     <p><strong>How corrections are made:</strong> a figure is only changed when it can be checked on an official Wendy's page. Reports based on other menu websites are not used, because those sites disagree with each other — see “How we source prices”.</p>
     <p><strong>Please do not send:</strong> orders, complaints about a restaurant visit, or job applications. This is a fan reference site with no connection to any restaurant — for those, contact Wendy's directly through its official website, wendys.com.</p>
     <p><strong>Response time:</strong> this is a small fan-run site, checked and updated by hand. Reports are read when the data is next re-checked against the official menu, and the data date at the top of the page always shows when that last happened.</p>
     <p>There is no contact email or form on this site yet — the footer note above is the way to report a wrong price. Do not invent a contact address.</p>
+    </details>
   </section>
 
   <AdSlot />
