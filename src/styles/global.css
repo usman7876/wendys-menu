@@ -236,6 +236,14 @@ th { font-size: 0.8rem; text-transform: uppercase; letter-spacing: 0.5px; color:
 .faq-item summary { cursor: pointer; font-weight: 700; font-size: 1.05rem; }
 .faq-item p { margin: 8px 0 0; }
 
+/* Collapsible boards: long reference text (full nutrition table, sources,
+   sourcing essay, About, Privacy, Terms, Contact) sits behind a tap-to-open
+   heading, so the page reads short on first sight and nothing is removed. */
+.board-details { border-top: 1px solid var(--line); padding: 8px 0; }
+.board-details summary { cursor: pointer; font-weight: 700; font-size: 1.2rem; padding: 10px 0; }
+.board-details summary::marker { color: var(--teal); }
+.board-details > summary + * { margin-top: 4px; }
+
 /* Ad slots: empty reserved spaces, no ad code */
 .ad-slot {
   border: 1px dashed var(--muted);
