@@ -69,3 +69,37 @@ export function caloriesByCategory(items) {
     };
   });
 }
+
+// Per-category header stats, computed from the data only: item count,
+// verified price range (min/max of verified prices only) and the average
+// verified calories. For a calorie range (e.g. Coca-Cola Freestyle 0–434)
+// the midpoint stands in for the average. A category with no verified
+// prices gets minPrice/maxPrice null; one with no verified calories gets
+// avgCalories null. Nothing here is hard-coded or estimated from outside.
+export function categoryStats(items) {
+  const out = {};
+  for (const cat of categories(items)) {
+    const inCat = items.filter((i) => i.category === cat);
+    const prices = inCat
+      .filter((i) => i.price !== null && i.price !== undefined)
+      .map((i) => i.price);
+    const cals = inCat
+      .map((i) => {
+        if (i.calories !== null && i.calories !== undefined) return i.calories;
+        if (i.calories_low !== undefined && i.calories_high !== undefined) {
+          return (i.calories_low + i.calories_high) / 2;
+        }
+        return null;
+      })
+      .filter((c) => c !== null);
+    out[cat] = {
+      count: inCat.length,
+      minPrice: prices.length ? Math.min(...prices) : null,
+      maxPrice: prices.length ? Math.max(...prices) : null,
+      avgCalories: cals.length
+        ? Math.round(cals.reduce((a, b) => a + b, 0) / cals.length)
+        : null,
+    };
+  }
+  return out;
+}
