@@ -2,7 +2,7 @@
 // Wendy's vs McDonald's: calories only. McDonald's prices were not found
 // anywhere on mcdonalds.com — the site sends you to the app for prices —
 // so no price winner is ever named. Wendy's figures come from menu.json;
-// McDonald's figures come from stage5.json.
+// McDonald's figures come from menu.json (comparison section).
 const { items, comparison, priceBasis } = Astro.props;
 const findWendys = (name) => items.find((i) => i.name === name);
 const findMc = (name) => comparison.items.find((i) => i.name === name);

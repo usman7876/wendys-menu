@@ -1,22 +1,27 @@
 ---
-// Footer: trust links, the "report a wrong price" note, and trademarks.
+// Footer: trust links (real pages now, not homepage anchors), the
+// "report a wrong price" note, and trademarks.
 const { itemCount } = Astro.props;
 ---
 <footer class="site-footer">
   <div class="wrap">
     <nav aria-label="Footer">
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
-      <a href="#privacy">Privacy Policy</a>
-      <a href="#terms">Terms</a>
-      <a href="#how-we-source-prices">How we source prices</a>
-      <a href="#sources">Sources</a>
-      <a href="#hours">Hours</a>
-      <a href="#comparison">Wendy's vs McDonald's</a>
+      <a href="/wendys-menu-prices">Full menu</a>
+      <a href="/wendys-breakfast-menu">Breakfast</a>
+      <a href="/wendys-nutrition">Nutrition</a>
+      <a href="/wendys-deals">Deals</a>
+      <a href="/wendys-hours">Hours</a>
+      <a href="/wendys-vs-mcdonalds">Wendy's vs McDonald's</a>
+      <a href="/how-we-source-prices">How we source prices</a>
+      <a href="/about">About</a>
+      <a href="/contact">Contact</a>
+      <a href="/privacy-policy">Privacy Policy</a>
+      <a href="/cookies-policy">Cookies</a>
+      <a href="/terms">Terms</a>
     </nav>
     <p>
       <strong>Report a problem:</strong> spotted a price or calorie count that looks wrong?
-      Check the Sources list first, then note the item name, the figure shown here,
+      <a href="/contact">Report a wrong price</a> — note the item name, the figure shown here,
       the figure you saw, where you saw it, and the date. Corrections are only made
       from an official Wendy's page — never from a guess.
     </p>

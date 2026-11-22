@@ -1,0 +1,21 @@
+---
+// Cursor-move tilt on photos: the card tilts slightly toward the cursor
+// and lifts, the photo zooms gently. Mouse/trackpad only, and off entirely
+// for visitors who ask for reduced motion. Touch/keyboard users get the
+// same lift from tap/focus through CSS (:hover / :focus-within).
+---
+<script>
+  const reduceMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const finePointer = matchMedia('(pointer: fine)').matches;
+  if (!reduceMotion && finePointer) {
+    document.querySelectorAll('.tilt').forEach((el) => {
+      el.addEventListener('pointermove', (e) => {
+        const r = el.getBoundingClientRect();
+        const x = (e.clientX - r.left) / r.width - 0.5;
+        const y = (e.clientY - r.top) / r.height - 0.5;
+        el.style.transform = `perspective(800px) rotateY(${x * 6}deg) rotateX(${-y * 6}deg) translateY(-4px)`;
+      });
+      el.addEventListener('pointerleave', () => { el.style.transform = ''; });
+    });
+  }
+</script>

@@ -1,5 +1,7 @@
 ---
-// Site header: brand, hamburger menu on phones, section links, theme toggle.
+// Site header: brand, theme toggle, hamburger on phones, and a grouped
+// mega-menu — Menu / Learn / About. Dropdowns open on click, close on
+// Escape and on link click, and work with keyboard (button + links).
 // The theme toggle switches between the warm cream look and the dark
 // charcoal look; the choice is saved in the visitor's own browser.
 ---
@@ -9,12 +11,41 @@
     <button class="theme-toggle" type="button" id="theme-toggle" aria-label="Switch colour theme">Charcoal theme</button>
     <button class="hamburger" type="button" id="nav-toggle" aria-label="Open menu" aria-expanded="false" aria-controls="main-nav">☰</button>
     <nav id="main-nav" aria-label="Main">
-      <a href="#menu">Menu</a>
-      <a href="#breakfast">Breakfast</a>
-      <a href="#nutrition">Nutrition</a>
-      <a href="#deals">Deals</a>
-      <a href="#about">About</a>
-      <a href="#contact">Contact</a>
+      <a href="/">Home</a>
+      <div class="nav-group">
+        <button class="nav-group-btn" type="button" aria-expanded="false" aria-haspopup="true">Menu</button>
+        <ul class="nav-dropdown">
+          <li><a href="/wendys-menu-prices">Full menu</a></li>
+          <li><a href="/wendys-breakfast-menu">Breakfast</a></li>
+          <li><a href="/wendys-burgers-menu">Burgers</a></li>
+          <li><a href="/wendys-chicken-menu">Chicken</a></li>
+          <li><a href="/wendys-sides-menu">Sides</a></li>
+          <li><a href="/wendys-desserts-menu">Desserts</a></li>
+          <li><a href="/wendys-drinks-menu">Drinks</a></li>
+        </ul>
+      </div>
+      <div class="nav-group">
+        <button class="nav-group-btn" type="button" aria-expanded="false" aria-haspopup="true">Learn</button>
+        <ul class="nav-dropdown">
+          <li><a href="/wendys-nutrition">Nutrition</a></li>
+          <li><a href="/wendys-calories">Calories</a></li>
+          <li><a href="/wendys-deals">Deals</a></li>
+          <li><a href="/wendys-hours">Hours</a></li>
+          <li><a href="/wendys-vs-mcdonalds">Wendy's vs McDonald's</a></li>
+          <li><a href="/how-we-source-prices">How we source prices</a></li>
+        </ul>
+      </div>
+      <div class="nav-group">
+        <button class="nav-group-btn" type="button" aria-expanded="false" aria-haspopup="true">About</button>
+        <ul class="nav-dropdown">
+          <li><a href="/about">About</a></li>
+          <li><a href="/editorial-team">Editorial team</a></li>
+          <li><a href="/contact">Contact</a></li>
+          <li><a href="/privacy-policy">Privacy</a></li>
+          <li><a href="/cookies-policy">Cookies</a></li>
+          <li><a href="/terms">Terms</a></li>
+        </ul>
+      </div>
     </nav>
   </div>
 </header>
@@ -27,9 +58,42 @@
     navToggle.setAttribute('aria-expanded', String(open));
     navToggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
   });
-  // Close the menu after tapping a link.
+
+  // Grouped dropdowns: one open at a time; Escape closes; a link click
+  // closes the whole menu (and the mobile panel).
+  const groups = header.querySelectorAll('.nav-group');
+  function closeGroups() {
+    groups.forEach((g) => {
+      g.classList.remove('open');
+      g.querySelector('.nav-group-btn').setAttribute('aria-expanded', 'false');
+    });
+  }
+  groups.forEach((g) => {
+    const btn = g.querySelector('.nav-group-btn');
+    btn.addEventListener('click', (e) => {
+      e.stopPropagation();
+      const wasOpen = g.classList.contains('open');
+      closeGroups();
+      if (!wasOpen) {
+        g.classList.add('open');
+        btn.setAttribute('aria-expanded', 'true');
+      }
+    });
+  });
+  document.addEventListener('click', (e) => {
+    if (!header.contains(e.target)) closeGroups();
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') {
+      closeGroups();
+      header.classList.remove('nav-open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      navToggle.setAttribute('aria-label', 'Open menu');
+    }
+  });
   header.querySelectorAll('nav a').forEach((a) => {
     a.addEventListener('click', () => {
+      closeGroups();
       header.classList.remove('nav-open');
       navToggle.setAttribute('aria-expanded', 'false');
       navToggle.setAttribute('aria-label', 'Open menu');

@@ -1,0 +1,45 @@
+---
+// Shared body for the five food-category pages (Burgers, Chicken, Sides,
+// Desserts, Drinks). Breakfast has its own page because it also carries
+// the breakfast-hours facts. Every figure comes from menu.json via
+// helpers — nothing is hard-coded here.
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from './Breadcrumbs.astro';
+import ItemCard from './ItemCard.astro';
+import AdSlot from './AdSlot.astro';
+import RelatedLinks from './RelatedLinks.astro';
+import TiltScript from './TiltScript.astro';
+import { categoryStats, formatPrice, itemPhoto } from '../utils/menuStats.js';
+
+const { category, items, title, description, related } = Astro.props;
+const stats = categoryStats(items);
+const s = stats[category];
+const statsParts = [`${s.count} items`];
+if (s.minPrice !== null) statsParts.push(`${formatPrice(s.minPrice)}–${formatPrice(s.maxPrice)}`);
+if (s.avgCalories !== null) statsParts.push(`avg ${s.avgCalories} cal`);
+const photoItem = items.find((i) => itemPhoto(i.name) !== null);
+const photo = photoItem ? itemPhoto(photoItem.name) : null;
+---
+<BaseLayout title={title} description={description} itemCount={items.length}>
+  <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Menu', href: '/wendys-menu-prices' }, { label: category }]} />
+  <section class="board page-head" aria-labelledby="page-title">
+    <h1 id="page-title">{category} Menu</h1>
+    <p class="board-sub">{statsParts.join(' · ')} — all figures from the verified data, checked 22 Nov 2026 at one restaurant only: 799 S. High St, Columbus, OH.</p>
+    {photo && (
+      <figure class="hero-photo tilt" tabindex="0">
+        <img src={photo} alt={`${photoItem.name} — original AI-generated image, not an official photo`} width="1920" height="1280" loading="lazy" decoding="async" />
+        <figcaption>{photoItem.name} · Original AI-generated image — not an official photo</figcaption>
+      </figure>
+    )}
+    <p class="basis">Prices are for <strong>one restaurant only — 799 S. High St, Columbus, OH, 22 Nov 2026</strong>. Wendy's publishes no national price list, so your local restaurant may charge more or less. Anything not verified says “Not verified yet”.</p>
+    <p><a href="/wendys-menu-prices">← Back to the full menu</a></p>
+  </section>
+
+  <div class="menu-grid">
+    {items.map((item) => <ItemCard item={item} avgCalories={s.avgCalories} />)}
+  </div>
+
+  <AdSlot />
+  <RelatedLinks links={related} />
+</BaseLayout>
+<TiltScript />
