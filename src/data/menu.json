@@ -33,7 +33,16 @@
    "source_url": "https://order.wendys.com/us/en/menu/100/30000",
    "price_low": null,
    "price_high": null,
-   "price_median": null
+   "price_median": null,
+   "allergens": [
+    "Milk",
+    "Egg",
+    "Sesame",
+    "Soy",
+    "Wheat"
+   ],
+   "allergens_checked": "2026-11-27",
+   "note": "Allergens checked 27 Nov 2026: Milk, Egg, Sesame, Soy, Wheat."
   },
   {
    "name": "Dave's Double",
@@ -75,7 +84,15 @@
    "source_url": "https://order.wendys.com/us/en/menu/101/30013",
    "price_low": null,
    "price_high": null,
-   "price_median": null
+   "price_median": null,
+   "allergens": [
+    "Milk",
+    "Egg",
+    "Sesame",
+    "Wheat"
+   ],
+   "allergens_checked": "2026-11-27",
+   "note": "Allergens checked 27 Nov 2026: Milk, Egg, Sesame, Wheat."
   },
   {
    "name": "Classic Chicken Sandwich",
@@ -103,7 +120,12 @@
    "source_url": "https://order.wendys.com/us/en/menu/101/32065",
    "price_low": null,
    "price_high": null,
-   "price_median": null
+   "price_median": null,
+   "allergens": [
+    "Wheat"
+   ],
+   "allergens_checked": "2026-11-27",
+   "note": "Allergens checked 27 Nov 2026 (no dipping sauce): Wheat only. Allergen page URL https://order.wendys.com/us/en/menu/101/30635 differs from this item's menu URL."
   },
   {
    "name": "Chicken Nuggets — 6 pc",
@@ -299,7 +321,13 @@
    "source_url": "https://order.wendys.com/us/en/menu/107/30053",
    "price_low": null,
    "price_high": null,
-   "price_median": null
+   "price_median": null,
+   "allergens": [
+    "Milk",
+    "Soy"
+   ],
+   "allergens_checked": "2026-11-27",
+   "note": "Allergens checked 27 Nov 2026: Milk, Soy. Ingredients tab adds: CONTAINS: MILK (ALL OF UNITED STATES) AND SOY (ALASKA AND HAWAII ONLY)."
   },
   {
    "name": "Classic Chocolate Frosty — Medium",

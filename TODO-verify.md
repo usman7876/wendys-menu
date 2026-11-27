@@ -42,14 +42,19 @@ Note: competitors list breakfast prices from the national menu (e.g. $3.69–$4.
 - No total bundle calories shown for Biggie / combos — per-component calories only, so bundle totals say "Not verified yet".
 - No McDonald's prices found anywhere on mcdonalds.com — comparison page is calories only.
 
-## 4. Done 27 Nov 2026 — Kids Menu + Price Calculator
+## 4. Allergens — 4 of 155 items verified 27 Nov 2026
+- Verified from the Nutrition tab "Allergens*" section on order.wendys.com: Dave's Single (Milk, Egg, Sesame, Soy, Wheat), Spicy Chicken Sandwich (Milk, Egg, Sesame, Wheat), Chicken Nuggets — 4 pc with no dipping sauce (Wheat only), Classic Chocolate Frosty — Small (Milk, Soy; Ingredients tab: SOY Alaska/Hawaii only).
+- Remaining 151 items: allergens NOT verified yet. Full per-item audit still to do, item by item from the official Nutrition tab — do not copy third-party tables.
+- Nuggets allergen URL (https://order.wendys.com/us/en/menu/101/30635) differs from its menu URL in menu.json (…/101/32065) — flagged in the item note.
+
+## 5. Done 27 Nov 2026 — Kids Menu + Price Calculator
 - Kids Menu page — DONE. 5 Kids' Meals verified at Columbus 27 Nov 2026: Kids' 4PC Nuggets $4.69, Kids' 4 PC. Spicy Nuggets $4.69, Kids' Hamburger $4.19, Kids' Cheeseburger $4.49, Kids' 2 PC. Tenders $5.99. Calories shown are default meal totals (Jr Fries + Milk + toy). Page: /wendys-kids-menu.
 - Price Calculator page — DONE. /wendys-price-calculator, 135 priced items, totals computed in code from menu.json only.
 - Still missing:
-  - Allergen Guide page — only a nutrition page exists; allergen summary + link to official PDF still needed.
+  - Allergen Guide page — DONE 27 Nov 2026 (/wendys-allergens, 4 items verified, rest pending audit above).
   - Flagship "Wendy's Prices 2026" pattern — /wendys-menu-prices is a category listing only. Still missing: stat tiles, at-a-glance table, group-cost table, "how to pay less", 13 FAQs, methodology section.
 
-## 5. Monthly re-check (1st of each month)
+## 6. Monthly re-check (1st of each month)
 - Re-check all 135 verified prices at 799 S. High St, Columbus, OH on order.wendys.com.
 - Update `menu.json` meta.price_checked / data_date and the "Checked" label on every page.
 - Re-check breakfast prices in the morning, and re-check Frosty-ccino.

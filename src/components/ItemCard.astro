@@ -29,6 +29,7 @@ const nutrients = [
     <p class="card-name">{item.name}</p>
     <p class="card-price">{price !== null ? price : <span class="not-verified">Not verified yet</span>}</p>
     <p class="card-cal">{calLabel !== null ? calLabel : 'Calories: Not verified yet'}</p>
+    {item.allergens && <p class="card-cal">Allergens: {item.allergens.join(', ')} (checked 27 Nov 2026)</p>}
     {item.note && <p class="card-note">{item.note}</p>}
     {item.price !== null && (
       <p class="card-source">799 S. High St, Columbus, OH · {item.price_checked === '2026-11-27' ? '27 Nov 2026' : '22 Nov 2026'}</p>

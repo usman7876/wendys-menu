@@ -1,0 +1,131 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import AdSlot from '../components/AdSlot.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import menuData from '../data/menu.json';
+
+// Allergen Guide: a summary of Wendy's own official allergen page only.
+// This site does NOT list allergens per item, because no per-item
+// allergen figure has been verified from an official US source.
+// No third-party allergen table, no old PDF, and no UK data is used here.
+// Source: https://www.wendys.com/nutrition-allergens, checked 27 Nov 2026.
+const { items } = menuData;
+const verifiedAllergens = items.filter((i) => i.allergens);
+const faqs = [
+  {
+    q: "What are the 9 major allergens Wendy's lists in the USA?",
+    a: "Milk, Eggs, Fish, Crustacean Shellfish, Tree Nuts, Peanuts, Wheat, Soybean and Sesame — the nine major food allergens as defined by the US Food and Drug Administration (FDA), as listed on Wendy's official Nutrition & Food Allergens page.",
+  },
+  {
+    q: 'Can Wendy’s guarantee a menu item is completely free of allergens?',
+    a: 'No. Wendy’s says cross contact is possible due to common handling and preparation areas in its restaurants, and it is unable to guarantee that any menu item can be completely free of allergens.',
+  },
+  {
+    q: 'Can I ask Wendy’s to leave an ingredient off my order?',
+    a: 'Yes. Wendy’s says many menu items can be customized to leave off ingredients you are trying to avoid, like cheese or condiments, when ordering through its website or app, or by asking at the restaurant.',
+  },
+];
+---
+<BaseLayout
+  title="Wendy's Allergens 2026 | The 9 Major Allergens"
+  description="Wendy's allergen guide for the USA: the 9 major allergens Wendy's lists, the cross-contact warning, and how to check any item on the official menu."
+  itemCount={items.length}
+  path="/wendys-allergens"
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Nutrition', href: '/wendys-nutrition' }, { label: 'Allergens' }]}
+  faqs={faqs}
+>
+  <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Nutrition', href: '/wendys-nutrition' }, { label: 'Allergens' }]} />
+  <section class="board page-head" aria-labelledby="page-title">
+    <h1 id="page-title">Wendy's Allergens 2026</h1>
+    <p class="board-sub">The 9 major allergens Wendy's lists on its US menu — and how to check any item before you order.</p>
+    <p class="basis">Source: <a href="https://www.wendys.com/nutrition-allergens" target="_blank" rel="noopener">Wendy's official Nutrition &amp; Food Allergens page ↗</a>, checked 27 Nov 2026. <strong>Only 4 items have verified allergens so far</strong> — see the table below. The other 151 items have not been checked yet, so no allergen is printed for them. If you have an allergy, check the official item page or ask at the restaurant; do not rely on a fan site.</p>
+  </section>
+
+  <section class="board" aria-labelledby="nine-heading">
+    <h2 id="nine-heading">The 9 major allergens on the US menu</h2>
+    <p>Wendy's identifies the major nine food allergens as defined by the US Food and Drug Administration (FDA) on its US menu:</p>
+    <ul>
+      <li><strong>Milk</strong></li>
+      <li><strong>Eggs</strong></li>
+      <li><strong>Fish</strong></li>
+      <li><strong>Crustacean Shellfish</strong></li>
+      <li><strong>Tree Nuts</strong></li>
+      <li><strong>Peanuts</strong></li>
+      <li><strong>Wheat</strong></li>
+      <li><strong>Soybean</strong></li>
+      <li><strong>Sesame</strong></li>
+    </ul>
+    <p class="basis">Canada is different: Wendy's lists 12 priority allergens there, adding Mustard and Sulphites (and naming Sesame Seeds). This site is for the USA menu only, so the Canadian list does not apply here.</p>
+  </section>
+
+  <section class="board" aria-labelledby="cross-heading">
+    <h2 id="cross-heading">Cross contact: the warning to read first</h2>
+    <p>Wendy's provides known instances of allergens, but cross contact is possible due to common handling and preparation areas in its restaurants. <strong>Wendy's is unable to guarantee that any menu item can be completely free of allergens.</strong> Customers with allergies and sensitivities should exercise judgment when ordering.</p>
+    <p>That means an item can be flagged for an allergen even when that allergen is not an ingredient in it, because of shared grills, fryers and preparation areas — and an item with no flag on one day can still carry a risk. For a severe allergy, verify with the restaurant staff before ordering, and see the Food Allergy Research &amp; Education website at <a href="http://www.foodallergy.org" target="_blank" rel="noopener">foodallergy.org ↗</a>, which Wendy's itself links to.</p>
+  </section>
+
+  <section class="board" aria-labelledby="verified-heading">
+    <h2 id="verified-heading">Verified so far: {verifiedAllergens.length} items</h2>
+    <p>These four items were checked on 27 Nov 2026 on order.wendys.com, on each item's Nutrition tab under “Allergens*”. Wendy's shows them as “Dairy / Milk” where this table says “Milk”. The other {items.length - verifiedAllergens.length} items on this site have not had their allergens checked yet — do not assume they are free of any allergen.</p>
+    <table>
+      <thead>
+        <tr><th>Item</th><th>Allergens shown</th></tr>
+      </thead>
+      <tbody>
+        {verifiedAllergens.map((item) => (
+          <tr>
+            <td><a href={item.source_url} target="_blank" rel="noopener">{item.name} ↗</a></td>
+            <td>{item.allergens.join(', ')}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+    <p class="basis">Notes: Chicken Nuggets — 4 pc was checked with no dipping sauce, so the result is for the nuggets alone; a sauce can add allergens. Classic Chocolate Frosty — Small: the Ingredients tab adds “CONTAINS: MILK (ALL OF UNITED STATES) AND SOY (ALASKA AND HAWAII ONLY)” — so the Soy listing may not apply in Ohio. The footnote on each official item page reads: “We provide known instances of allergens; however, cross contact is possible due to common handling and preparation of food items in our kitchens.”</p>
+  </section>
+
+  <section class="board" aria-labelledby="how-heading">
+    <h2 id="how-heading">How to check an item before you order</h2>
+    <ol>
+      <li><strong>On the official menu:</strong> open the item on order.wendys.com or in the Wendy's app and look for its allergen information, next to its nutrition information. Wendy's says it provides allergen information on its website, in its restaurants and on its app.</li>
+      <li><strong>Ask at the restaurant:</strong> staff can answer ingredient questions for the item you want, including what it is cooked with and what can be left off.</li>
+      <li><strong>Customize the order:</strong> many items can be customized to leave off ingredients you are trying to avoid, like cheese or condiments — you can make those changes when ordering through the website or app, or by asking at the restaurant.</li>
+    </ol>
+    <p class="basis">If the official item page does not show allergen information for the item you want, do not assume it is free of that allergen — ask first.</p>
+  </section>
+
+  <section class="board" aria-labelledby="not-listed-heading">
+    <h2 id="not-listed-heading">What this page does not list — and why</h2>
+    <ul>
+      <li><strong>Only 4 items verified so far.</strong> Allergens have been checked item by item for the four items in the table above only. The other 151 items have not been checked yet, so no allergen is printed for them — here or on their cards. A table copied from another menu site would be unverified.</li>
+      <li><strong>No official US allergen PDF.</strong> No current US nutrition/allergen PDF was found on wendys.com on 27 Nov 2026 — the official allergen information is on the web page linked above and on individual item pages. The PDFs found in search are old (2007, 2009) or from other sites, and are not used here.</li>
+      <li><strong>No UK data.</strong> Wendy's publishes nutrition and allergen documents for the United Kingdom, for a different menu with different recipes and allergen lists (including celery and mustard). Nothing from the UK menu is used on this USA site.</li>
+      <li><strong>No third-party allergen tables.</strong> Other menu sites publish their own allergen lists, but their figures disagree with each other and are rarely dated or tied to an official source, so they are not used here.</li>
+    </ul>
+    <p class="basis">The official item pages do show an allergen section — each item page has Nutrition and Ingredients tabs, and the Nutrition tab includes an “Allergens*” section. A full check of all 155 items has not been done yet; until it is, this page stays a guide with 4 verified examples, not a full table.</p>
+  </section>
+
+  <section class="board" aria-labelledby="faq-heading">
+    <h2 id="faq-heading">Questions people ask</h2>
+    <details class="faq-item">
+      <summary>What are the 9 major allergens Wendy's lists in the USA?</summary>
+      <p>Milk, Eggs, Fish, Crustacean Shellfish, Tree Nuts, Peanuts, Wheat, Soybean and Sesame — the nine major food allergens as defined by the US Food and Drug Administration (FDA).</p>
+    </details>
+    <details class="faq-item">
+      <summary>Can Wendy's guarantee a menu item is completely free of allergens?</summary>
+      <p>No. Wendy's says cross contact is possible due to common handling and preparation areas, and it is unable to guarantee that any menu item can be completely free of allergens.</p>
+    </details>
+    <details class="faq-item">
+      <summary>Can I ask Wendy's to leave an ingredient off my order?</summary>
+      <p>Yes. Wendy's says many items can be customized to leave off ingredients you are trying to avoid, like cheese or condiments, through its website or app, or by asking at the restaurant.</p>
+    </details>
+  </section>
+
+  <AdSlot />
+  <RelatedLinks links={[
+    { href: '/wendys-nutrition', label: "Wendy's nutrition — protein, fat, carbs and sodium" },
+    { href: '/wendys-menu-prices', label: "Wendy's full menu — all 155 items with prices" },
+    { href: '/wendys-calories', label: "Wendy's calories — lowest and highest per category" },
+    { href: '/how-we-source-prices', label: 'How we source prices' },
+  ]} />
+</BaseLayout>
