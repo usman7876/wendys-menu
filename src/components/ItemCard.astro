@@ -31,7 +31,7 @@ const nutrients = [
     <p class="card-cal">{calLabel !== null ? calLabel : 'Calories: Not verified yet'}</p>
     {item.note && <p class="card-note">{item.note}</p>}
     {item.price !== null && (
-      <p class="card-source">799 S. High St, Columbus, OH · 22 Nov 2026</p>
+      <p class="card-source">799 S. High St, Columbus, OH · {item.price_checked === '2026-11-27' ? '27 Nov 2026' : '22 Nov 2026'}</p>
     )}
     <details class="card-nutrition">
       <summary>Nutrition and compare</summary>

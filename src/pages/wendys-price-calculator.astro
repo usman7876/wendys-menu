@@ -1,0 +1,194 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import AdSlot from '../components/AdSlot.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import menuData from '../data/menu.json';
+import { itemsByCategory, formatPrice } from '../utils/menuStats.js';
+
+// Price calculator: every row comes from src/data/menu.json at build time.
+// No price is typed here. Items with price null are NOT listed as
+// selectable — they are counted below and named on the full menu as
+// "Not verified yet", never guessed.
+// Formula (in the browser script below, not by hand):
+//   totalPrice = sum(price_i * qty_i) for each selected item i
+//   totalCalories = sum(calories_i * qty_i) for selected items with
+//   a verified single calorie figure; items with a calorie range or
+//   no figure are excluded from the calorie total and flagged.
+const { meta, items } = menuData;
+const calculable = items.filter((i) => i.price !== null);
+const notCalculable = items.filter((i) => i.price === null);
+const byCategory = itemsByCategory(calculable);
+const cats = Object.keys(byCategory);
+---
+<BaseLayout
+  title="Wendy's Price Calculator 2026 | Add Up Your Order"
+  description="Add up a Wendy's order before you go: pick items and quantities, get a pre-tax total from verified Columbus prices checked 22 Nov 2026."
+  itemCount={items.length}
+  path="/wendys-price-calculator"
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Menu', href: '/wendys-menu-prices' }, { label: 'Price calculator' }]}
+>
+  <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Menu', href: '/wendys-menu-prices' }, { label: 'Price calculator' }]} />
+  <section class="board page-head" aria-labelledby="page-title">
+    <h1 id="page-title">Wendy's Price Calculator 2026</h1>
+    <p class="board-sub">Pick items and quantities, get a total. All {calculable.length} items below have a verified price.</p>
+    <p class="basis">Prices are for <strong>one restaurant only — 799 S. High St, Columbus, OH, 22 Nov 2026</strong>, Carryout, from order.wendys.com. Wendy's publishes no national price list, so your local restaurant may charge more or less. This total is <strong>before tax</strong> and does not include tip, delivery fees, or deals and combos — see the <a href="/wendys-deals">Deals page</a> for Biggie Bags and combos, which are priced separately.</p>
+    <p class="basis">{notCalculable.length} items on the full menu have no verified price and are not in this calculator — they say “Not verified yet” on the <a href="/wendys-menu-prices">full menu</a>. They are never guessed here.</p>
+  </section>
+
+  <section class="board calc-total" aria-labelledby="total-heading" aria-live="polite">
+    <h2 id="total-heading">Your total</h2>
+    <div class="stats">
+      <div class="stat"><b id="calc-total-price">$0.00</b><span>total, before tax</span></div>
+      <div class="stat"><b id="calc-total-cal">—</b><span>total calories*</span></div>
+      <div class="stat"><b id="calc-total-items">0</b><span>items picked</span></div>
+    </div>
+    <p class="basis" id="calc-note">Nothing picked yet. Use the + buttons below, or type a quantity.</p>
+    <p class="basis">* Calories are added only for items with a verified single calorie figure. Items with a calorie range or no figure are left out of the calorie total and flagged below.</p>
+    <p><button class="btn btn-secondary" type="button" id="calc-clear">Clear all</button></p>
+  </section>
+
+  <div class="search-bar">
+    <form class="search-box" action="#" method="get" role="search" onsubmit="return false;">
+      <label for="calc-search" style="position:absolute;left:-9999px">Search the calculator</label>
+      <input id="calc-search" name="q" type="search" placeholder={`Search ${calculable.length} priced items…`} autocomplete="off" />
+    </form>
+    <div class="chips" role="group" aria-label="Filter by category">
+      <button class="chip" type="button" data-category="All" aria-pressed="true">All</button>
+      {cats.map((c) => (
+        <button class="chip" type="button" data-category={c} aria-pressed="false">{c}</button>
+      ))}
+    </div>
+  </div>
+
+  <p id="calc-no-match" hidden>No items match that search. Try a shorter word, or clear the search box.</p>
+
+  <div id="calc-board">
+    {cats.map((category) => (
+      <section class="board calc-group" data-category={category}>
+        <h2>{category}</h2>
+        <div class="calc-list">
+          {byCategory[category].map((item) => (
+            <div class="calc-row" data-name={item.name.toLowerCase()} data-category={item.category}>
+              <div class="calc-info">
+                <p class="calc-name">{item.name}</p>
+                <p class="calc-meta">{formatPrice(item.price)}{item.calories !== null && item.calories !== undefined ? ` · ${item.calories} Cal` : item.calories_low !== undefined ? ` · ${item.calories_low}–${item.calories_high} Cal (range — not added to calorie total)` : ' · Calories: Not verified yet'}</p>
+              </div>
+              <div class="calc-qty" data-price={item.price} data-calories={item.calories !== null && item.calories !== undefined ? item.calories : ''} data-name={item.name}>
+                <button class="calc-btn" type="button" data-step="-1" aria-label={`One fewer ${item.name}`}>−</button>
+                <label>
+                  <span style="position:absolute;left:-9999px">Quantity of {item.name}</span>
+                  <input class="calc-input" type="number" inputmode="numeric" min="0" max="99" step="1" value="0" />
+                </label>
+                <button class="calc-btn" type="button" data-step="1" aria-label={`One more ${item.name}`}>+</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </section>
+    ))}
+  </div>
+
+  <section class="board" aria-labelledby="how-total-heading">
+    <h2 id="how-total-heading">How the total is worked out</h2>
+    <p>Total price = the price of each item × how many you picked, added up. Total calories = the same, but only for items with one verified calorie figure. Nothing is typed in by hand — every price on this page comes from the same <code>menu.json</code> file as the full menu, so the calculator and the menu can never disagree.</p>
+    <p class="basis">Estimate only. Prices vary by location, and the restaurant's price on the day may differ from the 22 Nov 2026 check. Tax, tip and delivery are not included.</p>
+  </section>
+
+  <AdSlot />
+  <RelatedLinks links={[
+    { href: '/wendys-menu-prices', label: "Wendy's full menu — all items with prices" },
+    { href: '/wendys-deals', label: "Wendy's deals — Biggie Bags, Everyday Value and combos" },
+    { href: '/wendys-kids-menu', label: "Wendy's Kids Menu — Kids' Meals with prices" },
+    { href: '/how-we-source-prices', label: 'How we source prices' },
+  ]} />
+</BaseLayout>
+
+<script>
+  // Totals are computed in code from the data-price / data-calories
+  // attributes rendered from menu.json — never typed by hand.
+  // totalPrice = sum(price_i * qty_i); totalCalories = sum(cal_i * qty_i)
+  // for items with a single verified calorie figure only.
+  const inputs = [...document.querySelectorAll('.calc-input')];
+  const totalPriceEl = document.getElementById('calc-total-price');
+  const totalCalEl = document.getElementById('calc-total-cal');
+  const totalItemsEl = document.getElementById('calc-total-items');
+  const noteEl = document.getElementById('calc-note');
+  const search = document.getElementById('calc-search');
+  const chips = [...document.querySelectorAll('.chip')];
+  const noMatch = document.getElementById('calc-no-match');
+  let activeCategory = 'All';
+
+  function money(n) { return '$' + n.toFixed(2); }
+
+  function updateTotals() {
+    let price = 0, cal = 0, count = 0, calExcluded = 0;
+    inputs.forEach((input) => {
+      const qty = Math.max(0, Math.min(99, parseInt(input.value, 10) || 0));
+      if (qty === 0) return;
+      const box = input.closest('.calc-qty');
+      price += parseFloat(box.getAttribute('data-price')) * qty;
+      count += qty;
+      const calRaw = box.getAttribute('data-calories');
+      if (calRaw !== '') cal += parseInt(calRaw, 10) * qty;
+      else calExcluded += qty;
+    });
+    totalPriceEl.textContent = money(price);
+    totalCalEl.textContent = count === 0 ? '—' : cal.toLocaleString() + ' Cal';
+    totalItemsEl.textContent = String(count);
+    noteEl.textContent = count === 0
+      ? 'Nothing picked yet. Use the + buttons below, or type a quantity.'
+      : calExcluded > 0
+        ? `${count} item${count === 1 ? '' : 's'} picked. ${calExcluded} item${calExcluded === 1 ? '' : 's'} have no single verified calorie figure, so they are not in the calorie total.`
+        : `${count} item${count === 1 ? '' : 's'} picked. Total is before tax.`;
+  }
+
+  inputs.forEach((input) => {
+    input.addEventListener('input', () => {
+      let v = parseInt(input.value, 10);
+      if (Number.isNaN(v)) v = 0;
+      input.value = String(Math.max(0, Math.min(99, v)));
+      updateTotals();
+    });
+    const box = input.closest('.calc-qty');
+    box.querySelectorAll('.calc-btn').forEach((btn) => {
+      btn.addEventListener('click', () => {
+        const step = parseInt(btn.getAttribute('data-step'), 10);
+        let v = parseInt(input.value, 10) || 0;
+        input.value = String(Math.max(0, Math.min(99, v + step)));
+        updateTotals();
+      });
+    });
+  });
+
+  document.getElementById('calc-clear').addEventListener('click', () => {
+    inputs.forEach((i) => { i.value = '0'; });
+    updateTotals();
+  });
+
+  function applyFilter() {
+    const q = (search.value || '').trim().toLowerCase();
+    let visible = 0;
+    document.querySelectorAll('#calc-board .calc-row').forEach((el) => {
+      const name = el.getAttribute('data-name') || '';
+      const cat = el.getAttribute('data-category') || '';
+      const ok = (activeCategory === 'All' || cat === activeCategory) && (!q || name.includes(q));
+      el.style.display = ok ? '' : 'none';
+      if (ok) visible++;
+    });
+    document.querySelectorAll('#calc-board .calc-group').forEach((g) => {
+      const anyVisible = [...g.querySelectorAll('.calc-row')].some((el) => el.style.display !== 'none');
+      g.style.display = anyVisible ? '' : 'none';
+    });
+    noMatch.hidden = visible !== 0;
+  }
+  search.addEventListener('input', applyFilter);
+  chips.forEach((chip) => {
+    chip.addEventListener('click', () => {
+      activeCategory = chip.getAttribute('data-category');
+      chips.forEach((c) => c.setAttribute('aria-pressed', String(c === chip)));
+      applyFilter();
+    });
+  });
+  updateTotals();
+</script>

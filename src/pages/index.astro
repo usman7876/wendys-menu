@@ -38,7 +38,7 @@ const catCards = Object.entries(byCategory).map(([category, catItems]) => {
 ---
 <BaseLayout
   title="Wendy's Menu with Prices 2026 (USA)"
-  description="Wendy's menu with prices and calories for all 150 items — checked 22 Nov 2026 at one Columbus restaurant. Search the menu and filter by category."
+  description="Wendy's menu with prices and calories for all 155 items — checked 22–27 Nov 2026 at one Columbus restaurant. Search the menu and filter by category."
   itemCount={items.length}
   path="/"
   isHome
@@ -47,7 +47,7 @@ const catCards = Object.entries(byCategory).map(([category, catItems]) => {
 >
   <section class="hero" aria-labelledby="page-title">
     <h1 id="page-title">Wendy's Menu with Prices 2026 (USA)</h1>
-    <p class="lede">This is the Wendy's menu with prices and calories for all 150 items — every price checked 22 Nov 2026 at one restaurant in Columbus, Ohio, on Wendy's official online menu.</p>
+    <p class="lede">This is the Wendy's menu with prices and calories for all 155 items — every price checked 22–27 Nov 2026 at one restaurant in Columbus, Ohio, on Wendy's official online menu.</p>
     <figure class="hero-photo tilt" tabindex="0">
       <img src="/images/hero.webp" alt="Cheeseburger, fries and a chocolate Frosty" width="1920" height="1280" decoding="async" fetchpriority="high" />
     </figure>
@@ -81,7 +81,7 @@ const catCards = Object.entries(byCategory).map(([category, catItems]) => {
 
   <section class="board" aria-labelledby="browse-heading">
     <h2 id="browse-heading">Browse by category</h2>
-    <p class="board-sub">Six parts of the menu, each with its own count, price range and average calories — all worked out from the verified data.</p>
+    <p class="board-sub">Seven parts of the menu, each with its own count, price range and average calories — all worked out from the verified data.</p>
     <div class="cat-grid">
       {catCards.map((c) => (
         <a class="cat-card tilt" href={`/${c.slug}`} tabindex="0">

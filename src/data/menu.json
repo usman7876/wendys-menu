@@ -15,9 +15,10 @@
    "latest_end": "10:30 AM",
    "delivery_begins": "8:00 AM"
   },
-  "note": "Prices are from one restaurant only. Wendy's publishes no national price list; prices vary by location. Breakfast prices are not verified and are null. Any value not verified is null and renders as 'Not verified yet'. The Oatmeal Bar was not found on the official site and is not listed as a menu item. Stage 5 added 22 Nov 2026 (Deals, Wendy's vs McDonald's, Frosty Fusion/Swirl, Drinks, Hours, Sides): 150 items in total. Frosty-ccino was not found at the Columbus restaurant and is not listed as a menu item; a morning re-check is needed. Calorie ranges (calories_low/calories_high) are shown exactly as on Wendy's site where no single figure is given. Where Wendy's own pages disagree, both figures are shown and flagged, never reconciled.",
+  "note": "Prices are from one restaurant only. Wendy's publishes no national price list; prices vary by location. Breakfast prices are not verified and are null. Any value not verified is null and renders as 'Not verified yet'. The Oatmeal Bar was not found on the official site and is not listed as a menu item. Stage 5 added 22 Nov 2026 (Deals, Wendy's vs McDonald's, Frosty Fusion/Swirl, Drinks, Hours, Sides): 150 items in total. Frosty-ccino was not found at the Columbus restaurant and is not listed as a menu item; a morning re-check is needed. Calorie ranges (calories_low/calories_high) are shown exactly as on Wendy's site where no single figure is given. Where Wendy's own pages disagree, both figures are shown and flagged, never reconciled. Kids' Meals added 27 Nov 2026 (5 items, $4.19–$5.99, checked 27 Nov 2026 at the same Columbus restaurant, category page order.wendys.com/us/en/menu/173): prices are from the category tiles, item pages show no price; calories shown are the default meal total (Jr Fries + Milk + toy) and change with side/drink choices. National menu shows no Kids' Meal prices or calories.",
   "stage5_date": "2026-11-22",
-  "stage5_items_added": 124
+  "stage5_items_added": 124,
+  "kids_checked": "2026-11-27"
  },
  "items": [
   {
@@ -2198,6 +2199,86 @@
    "price_low": null,
    "price_high": null,
    "price_median": null
+  },
+  {
+   "name": "Kids' 4PC Nuggets",
+   "category": "Kids",
+   "price": 4.69,
+   "calories": 470,
+   "protein_g": null,
+   "fat_g": null,
+   "carbs_g": null,
+   "sodium_mg": null,
+   "source_url": "https://order.wendys.com/us/en/menu/173/32021",
+   "note": "Default meal total 470 Cal (Jr Fries + Milk + toy). Entree only 170 Cal. Category tile shows 260–630 Cal — total changes with side and drink choices. Price from the Kids' Meal category page at this restaurant; item pages show no price.",
+   "price_low": null,
+   "price_high": null,
+   "price_median": null,
+   "price_checked": "2026-11-27"
+  },
+  {
+   "name": "Kids' 4 PC. Spicy Nuggets",
+   "category": "Kids",
+   "price": 4.69,
+   "calories": 490,
+   "protein_g": null,
+   "fat_g": null,
+   "carbs_g": null,
+   "sodium_mg": null,
+   "source_url": "https://order.wendys.com/us/en/menu/173/32022",
+   "note": "Default meal total 490 Cal (Jr Fries + Milk + toy). Entree only 190 Cal. Category tile shows 260–640 Cal — total changes with side and drink choices. Price from the Kids' Meal category page at this restaurant; item pages show no price.",
+   "price_low": null,
+   "price_high": null,
+   "price_median": null,
+   "price_checked": "2026-11-27"
+  },
+  {
+   "name": "Kids' Hamburger",
+   "category": "Kids",
+   "price": 4.19,
+   "calories": 530,
+   "protein_g": null,
+   "fat_g": null,
+   "carbs_g": null,
+   "sodium_mg": null,
+   "source_url": "https://order.wendys.com/us/en/menu/173/32023",
+   "note": "Default meal total 530 Cal (Jr Fries + Milk + toy). Entree only 230 Cal. Category tile shows no calories — total changes with side and drink choices. Price from the Kids' Meal category page at this restaurant; item pages show no price.",
+   "price_low": null,
+   "price_high": null,
+   "price_median": null,
+   "price_checked": "2026-11-27"
+  },
+  {
+   "name": "Kids' Cheeseburger",
+   "category": "Kids",
+   "price": 4.49,
+   "calories": 570,
+   "protein_g": null,
+   "fat_g": null,
+   "carbs_g": null,
+   "sodium_mg": null,
+   "source_url": "https://order.wendys.com/us/en/menu/173/32024",
+   "note": "Default meal total 570 Cal (Jr Fries + Milk + toy). Entree only 270 Cal. Category tile shows no calories — total changes with side and drink choices. Price from the Kids' Meal category page at this restaurant; item pages show no price.",
+   "price_low": null,
+   "price_high": null,
+   "price_median": null,
+   "price_checked": "2026-11-27"
+  },
+  {
+   "name": "Kids' 2 PC. Tenders",
+   "category": "Kids",
+   "price": 5.99,
+   "calories": 580,
+   "protein_g": null,
+   "fat_g": null,
+   "carbs_g": null,
+   "sodium_mg": null,
+   "source_url": "https://order.wendys.com/us/en/menu/173/32025",
+   "note": "Default meal total 580 Cal (Jr Fries + Milk + toy). Entree only 280 Cal. Category tile shows no calories — total changes with side and drink choices. Price from the Kids' Meal category page at this restaurant; item pages show no price.",
+   "price_low": null,
+   "price_high": null,
+   "price_median": null,
+   "price_checked": "2026-11-27"
   }
  ],
  "deals": {

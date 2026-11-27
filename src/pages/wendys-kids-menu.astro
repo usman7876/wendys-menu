@@ -1,0 +1,70 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import Breadcrumbs from '../components/Breadcrumbs.astro';
+import ItemCard from '../components/ItemCard.astro';
+import AdSlot from '../components/AdSlot.astro';
+import RelatedLinks from '../components/RelatedLinks.astro';
+import TiltScript from '../components/TiltScript.astro';
+import menuData from '../data/menu.json';
+import { categoryStats } from '../utils/menuStats.js';
+
+// Kids Menu has its own page (not the shared CategoryPage) because its
+// prices were checked on a different date (27 Nov 2026, not 22 Nov) and
+// its calories are default-meal totals that change with side/drink choices.
+// Every figure below comes from menu.json — nothing is hard-coded here.
+const { meta, items } = menuData;
+const kidsItems = items.filter((i) => i.category === 'Kids');
+const stats = categoryStats(items);
+const s = stats['Kids'];
+---
+<BaseLayout
+  title="Wendy's Kids Menu Prices 2026 (USA)"
+  description="Wendy's Kids' Meals: 5 meals $4.19–$5.99 with calories, checked 27 Nov 2026 at one Columbus restaurant. Each meal is a main, side, drink and toy."
+  itemCount={items.length}
+  path="/wendys-kids-menu"
+  crumbs={[{ label: 'Home', href: '/' }, { label: 'Menu', href: '/wendys-menu-prices' }, { label: 'Kids Menu' }]}
+  itemList={kidsItems}
+>
+  <Breadcrumbs crumbs={[{ label: 'Home', href: '/' }, { label: 'Menu', href: '/wendys-menu-prices' }, { label: 'Kids Menu' }]} />
+  <section class="board page-head" aria-labelledby="page-title">
+    <h1 id="page-title">Wendy's Kids Menu Prices 2026</h1>
+    <p class="board-sub">{kidsItems.length} Kids' Meals · {s.minPrice !== null ? `$${s.minPrice.toFixed(2)}–$${s.maxPrice.toFixed(2)}` : 'prices not verified'} · checked 27 Nov 2026 at one restaurant only: 799 S. High St, Columbus, OH.</p>
+    <p class="basis">Every Kids' Meal is a main, a side, a drink and a toy for one price. Prices below are for <strong>one restaurant only — 799 S. High St, Columbus, OH, 27 Nov 2026</strong>, Carryout, from the Kids' Meal category page on order.wendys.com. Wendy's publishes no national price list, so your local restaurant may charge more or less. The national menu shows no Kids' Meal prices or calories.</p>
+    <p class="basis"><strong>Prices come from the category tiles.</strong> The item detail pages show no dollar price — the “Add” button shows no amount — so the category page is the price source. Anything not verified says “Not verified yet”.</p>
+  </section>
+
+  <section class="board" aria-labelledby="whats-in-heading">
+    <h2 id="whats-in-heading">What is in a Kids' Meal?</h2>
+    <p>Each of the five meals below includes the same four parts. The choices shown are the ones in the ordering builder at this restaurant on 27 Nov 2026.</p>
+    <ul>
+      <li><strong>Main:</strong> 4 PC Nuggets, 4 PC Spicy Nuggets, Hamburger, Cheeseburger, or 2 PC Tenders.</li>
+      <li><strong>Side:</strong> Jr. Natural-Cut Fries (210 Cal) or Apple Bites (35 Cal).</li>
+      <li><strong>Drink:</strong> Milk (90 Cal) is the default. Other choices in the builder: Chocolate Milk (120 Cal), Bottled Water (0 Cal), Coca-Cola (150 Cal), Coca-Cola Zero Sugar (0 Cal), Dr Pepper (150 Cal), Diet Dr Pepper (0 Cal), Fanta Orange (150 Cal), Hi-C Flashin' Fruit Punch (150 Cal), Lemonade (150 Cal), Sprite (140 Cal), Barq's Root Beer (160 Cal), Strawberry Lemonade (170 Cal).</li>
+      <li><strong>Toy:</strong> Kids' Meal Toy (Age 3+), Toddler Toy (Under age 3), or a Jr. Vanilla / Classic Chocolate Frosty (190 Cal each) instead of a toy.</li>
+      <li><strong>Sauce (nuggets and tenders only):</strong> one dipping sauce included — Wendy's Signature, Scorchin' Hot, Honey BBQ, Creamy Ranch, Sweet Chili, Honey Mustard, Ketchup, or no sauce. Extra sauces are $0.50 each.</li>
+    </ul>
+  </section>
+
+  <section class="board" aria-labelledby="calories-heading">
+    <h2 id="calories-heading">About the calories</h2>
+    <p>The calorie figure on each card is the <strong>default meal total</strong> — Jr. Fries + Milk + toy. The total changes if you swap the side or drink: swapping Jr. Fries for Apple Bites on the Kids' 4PC Nuggets changed the total from 470 to 290 Cal, as shown on the site. The entree alone is lower (170 Cal for the 4PC Nuggets, 190 Cal for Spicy Nuggets, 230 Cal for the Hamburger, 270 Cal for the Cheeseburger, 280 Cal for the Tenders) — see the note on each card.</p>
+    <p class="flag"><strong>Flagged, not reconciled:</strong> with Apple Bites, the builder showed 290 Cal, while the parts shown (170 + 35 + 90) add to 295 Cal. The 290 Cal figure is reported exactly as shown.</p>
+    <p>The two nugget meals also show a range on their category tiles — 260–630 Cal for 4PC Nuggets, 260–640 Cal for Spicy Nuggets. There is no single fixed meal total: it depends on the side, drink, sauce and toy choices.</p>
+  </section>
+
+  <div class="menu-grid">
+    {kidsItems.map((item) => <ItemCard item={item} avgCalories={s.avgCalories} />)}
+  </div>
+
+  <p class="basis"><a href="/wendys-menu-prices">← Back to the full menu</a> · <a href="/wendys-price-calculator">Add up an order with the price calculator →</a></p>
+
+  <AdSlot />
+  <RelatedLinks links={[
+    { href: '/wendys-menu-prices', label: "Wendy's full menu — all 155 items with prices" },
+    { href: '/wendys-price-calculator', label: "Wendy's price calculator — add up your order" },
+    { href: '/wendys-deals', label: "Wendy's deals — Biggie Bags, Everyday Value and combos" },
+    { href: '/wendys-nutrition', label: "Wendy's nutrition — protein, fat, carbs and sodium" },
+    { href: '/how-we-source-prices', label: 'How we source prices' },
+  ]} />
+</BaseLayout>
+<TiltScript />

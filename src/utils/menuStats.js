@@ -85,6 +85,7 @@ export function categorySlug(category) {
     Sides: 'wendys-sides-menu',
     Desserts: 'wendys-desserts-menu',
     Drinks: 'wendys-drinks-menu',
+    Kids: 'wendys-kids-menu',
   };
   return slugs[category] || 'wendys-menu-prices';
 }

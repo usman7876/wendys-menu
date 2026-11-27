@@ -629,3 +629,48 @@ footer.site-footer nav a:hover { color: var(--accent); text-decoration: underlin
   font-size: 0.92rem;
   text-align: left;
 }
+
+/* Price calculator: one row per priced item, with - / qty / + controls.
+   Mobile-first: rows stack, steppers stay at least 44px tall. */
+.calc-total { text-align: center; }
+.calc-total .stats { justify-content: center; }
+.calc-list { display: grid; gap: 10px; }
+.calc-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  align-items: center;
+  justify-content: space-between;
+  background: var(--card);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.calc-info { flex: 1 1 200px; }
+.calc-name { font-weight: 700; margin: 0; }
+.calc-meta { font-size: 0.9rem; color: var(--muted); margin: 2px 0 0; }
+.calc-qty { display: flex; align-items: center; gap: 8px; }
+.calc-btn {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 1px solid var(--line);
+  background: var(--board-bg);
+  color: var(--ink);
+  font-size: 1.25rem;
+  font-weight: 700;
+  cursor: pointer;
+}
+.calc-btn:hover { border-color: var(--accent); color: var(--accent); }
+.calc-input {
+  width: 64px;
+  min-height: 44px;
+  text-align: center;
+  font-size: 1rem;
+  font-family: 'Inter', system-ui, sans-serif;
+  border: 1px solid var(--line);
+  border-radius: 10px;
+  background: var(--card);
+  color: var(--ink);
+}
+.calc-input:focus { outline: 3px solid var(--accent); outline-offset: 1px; }
